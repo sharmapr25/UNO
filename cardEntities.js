@@ -60,3 +60,26 @@ var cardsInfo = {
 };
 
 exports.allCards = genrateAllCard(cardsInfo);
+
+//----------------------------------------------GenerateDeck-----------------------------------------------//
+
+var GenerateDeck = function (allCards) {
+	this.cards = allCards;
+};
+
+GenerateDeck.prototype = {
+	isFull:function () {
+		return (this.cards.length == 108);
+	},
+	isEmpty:function () {
+		return (this.cards.length == 0);
+	},
+	shuffleCards:function () {
+		return new GenerateDeck(lodash.shuffle(this.cards));
+	},
+	drawCard:function () {
+		return this.cards.shift();
+	}
+};
+
+exports.GenerateDeck = GenerateDeck;
