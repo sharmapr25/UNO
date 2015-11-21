@@ -101,3 +101,24 @@ GenerateDeck.prototype = {
 };
 
 exports.GenerateDeck = GenerateDeck;
+
+//----------------------------------------------DrawPile------------------------------------------------------//
+
+var DrawPile = function (allCards) {
+	this.cards = allCards;
+};
+
+DrawPile.prototype ={
+	drawCards : function (number) {
+		var drawnCard = [];
+		for (var i = 0; i < number; i++) {
+			drawnCard.push(this.cards.shift());
+		};
+		return drawnCard;
+	},
+	isEmpty : function () {
+		return (this.cards.length == 0);
+	}
+};
+
+exports.DrawPile = DrawPile;
