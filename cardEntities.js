@@ -59,6 +59,10 @@ var cardsInfo = {
 	wildCard:{speciality:['Wild','WildDrawFour'],points:50}
 };
 
+exports.allCards = genrateAllCard(cardsInfo);
+
+//--------------------------------------------------------------------------------------------------------------//
+
 var DiscardPile = function(cards) {
 	this.cards = cards;
 };
@@ -73,5 +77,27 @@ DiscardPile.prototype = {
 	}
 };
 
-exports.allCards = genrateAllCard(cardsInfo);
 exports.DiscardPile = DiscardPile;
+
+//----------------------------------------------GenerateDeck-----------------------------------------------//
+
+var GenerateDeck = function (allCards) {
+	this.cards = allCards;
+};
+
+GenerateDeck.prototype = {
+	isFull:function () {
+		return (this.cards.length == 108);
+	},
+	isEmpty:function () {
+		return (this.cards.length == 0);
+	},
+	shuffleCards:function () {
+		return new GenerateDeck(lodash.shuffle(this.cards));
+	},
+	drawCard:function () {
+		return this.cards.shift();
+	}
+};
+
+exports.GenerateDeck = GenerateDeck;
