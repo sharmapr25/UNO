@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var lodash = require('lodash');
-var allCards = require('../entities.js').allCards;
+var allCards = require('../cardEntities.js').allCards;
 
 //-------------------------------------------------------------------------------------------------------------//
 
@@ -51,7 +51,7 @@ describe('allCards', function(){
 
 			it('there should be only 1 ZERO number card', function(){
 				var redNumberCards = lodash.filter(allCards, lodash.matches({ speciality: null, colour: 'Red'}));;
-				expect(redNumberCards).to.deep.include.members([{colour : 'Red', number : 0, speciality : null}]);
+				expect(redNumberCards).to.deep.include.members([{colour : 'Red', number : 0, speciality : null, points: 0}]);
 				var redZero = 0;
 				redNumberCards.forEach(function(card){
 					if(card.number == 0)
@@ -84,7 +84,7 @@ describe('allCards', function(){
 			it('there should be only 1 ZERO number card', function(){
 				var blueNumberCards = lodash.filter(allCards, lodash.matches({ speciality: null, colour: 'Blue'}));;
 
-				expect(blueNumberCards).to.deep.include.members([{colour : 'Blue', number : 0, speciality : null}]);
+				expect(blueNumberCards).to.deep.include.members([{colour : 'Blue', number : 0, speciality : null, points: 0}]);
 				var blueZero = 0;
 				blueNumberCards.forEach(function(card){
 					if(card.number == 0)
@@ -117,7 +117,7 @@ describe('allCards', function(){
 
 			it('there should be only 1 ZERO number card', function(){
 				var greenNumberCards = lodash.filter(allCards, lodash.matches({ speciality: null, colour: 'Green'}));;
-				expect(greenNumberCards).to.deep.include.members([{colour : 'Green', number : 0, speciality : null}]);
+				expect(greenNumberCards).to.deep.include.members([{colour : 'Green', number : 0, speciality : null, points: 0}]);
 				var greenZero = 0;
 				greenNumberCards.forEach(function(card){
 					if(card.number == 0)
@@ -149,7 +149,7 @@ describe('allCards', function(){
 
 			it('there should be only 1 ZERO number card', function(){
 				var yellowNumberCards = lodash.filter(allCards, lodash.matches({ speciality: null, colour: 'Yellow'}));;
-				expect(yellowNumberCards).to.deep.include.members([{colour : 'Yellow', number : 0, speciality : null}]);
+				expect(yellowNumberCards).to.deep.include.members([{colour : 'Yellow', number : 0, speciality : null, points: 0}]);
 				var yellowZero = 0;
 				yellowNumberCards.forEach(function(card){
 					if(card.number == 0)
