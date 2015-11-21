@@ -1,50 +1,39 @@
-var discard_pile = require('../../cardEntities.js').DiscardPile;
+var DiscardPile = require('../../cardEntities.js').DiscardPile;
 var lodash = require('lodash');
-var assert = require('chai').assert;
 var expect = require('chai').expect;
-
-//DO NOT WRITE ANYTHING OUTSIDE THE TESTING FRAMEWORK..CODE NEEDS TO BE TESTED..KINDLY MOVE IT INSIDE..
-
-// var sampleCards = [{color:'red',number:1,speciality:null},
-// 				{color:null,number:null,speciality:'wildDrawFour'},
-// 				{color:'yellow',number:null,speciality:'reverse'}]
-
-// var discardPile = new discard_pile(sampleCards);
-
-// var fieldsOfDiscardCard=function(discardCards){
-// 	return discardCards.cards.filter(function(card){
-// 		return Object.keys(card)==['color','number','speciality']
-// 	})
-// }
 
 describe('discardPile', function(){
 	it('should be a contructor', function(){
-		expect(discardPile).to.be.instanceof(discard_pile);
+		var discardPile = new DiscardPile([1]);
+		expect(discardPile).to.be.instanceof(DiscardPile);
 	});
 
 	it('should contain only one field named "cards" in it', function(){
+		var discardPile = new DiscardPile([1]);
 		expect(discardPile).to.have.any.keys('cards');
 	});
 })
 
-describe('discardPile',function(){
-	it('should generate the discardPile',function(){
-		assert.deepEqual(sampleCards,discardPile.cards);
-	})
+describe('discardPile.prototype',function(){
+	it('should have only 2 functions', function(){
+		expect(DiscardPile.prototype).to.include.keys('addCard', 'getTopMostCard');
+	});
 
-	describe('addCard',function(){
-		it('should add one card in discard pile',function(){ 
-			var discard_pile_length = discardPile.cards.length;
-			var newCard = {color:'green',number:9,speciality:null};
-			discardPile.addCard(newCard);
-			expect(discard_pile_length + 1).to.equal(discardPile.cards.length);
-		})	
-	})
+	it('should have a addCard function that will add the provided card at the top of the pile', function(){
+		var discardPile = new DiscardPile([1]);
+		expect(discardPile.cards).to.eql([1]);
+		discardPile.addCard(2);
+		expect(discardPile.cards).to.eql([2,1]);
+		discardPile.addCard(100);
+		expect(discardPile.cards).to.eql([100,2,1]);
+	});
 
-	describe('get top most card',function(){
-		it('should give topmost card from the discardPile',function(){
-			expect({color:'green',number:9,speciality:null}).to.deep.equal(discardPile.getTopMostCard());
-		})
-	})
+	it('should have a getTopMostCard function that will tell which is the topmost card', function(){
+		var discardPile = new DiscardPile([1]);
+		expect(discardPile.cards).to.eql([1]);
+		expect(discardPile.getTopMostCard()).to.equal(1);
+		discardPile.addCard(2);
+		expect(discardPile.getTopMostCard()).to.equal(2);
+	});
 });
 

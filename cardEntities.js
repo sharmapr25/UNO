@@ -61,6 +61,24 @@ var cardsInfo = {
 
 exports.allCards = genrateAllCard(cardsInfo);
 
+//--------------------------------------------------------------------------------------------------------------//
+
+var DiscardPile = function(cards) {
+	this.cards = cards;
+};
+
+DiscardPile.prototype = {
+	addCard : function(card){
+		this.cards.unshift(card);
+	},
+
+	getTopMostCard : function() {
+		return this.cards[0];
+	}
+};
+
+exports.DiscardPile = DiscardPile;
+
 //----------------------------------------------GenerateDeck-----------------------------------------------//
 
 var GenerateDeck = function (allCards) {
