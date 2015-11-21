@@ -1,0 +1,17 @@
+After end the game: 
+	* winner declares: who haven't any cards.
+
+	* every player get rank  : base on score players get rank
+							 : winner get rank first
+							 : remaining players get rank base on points
+
+	* player who have highest rank rather than other,get high rank except winner. 
+
+
+Points:-----------
+	All number cards(0-9)                 Face Value
+1)	Draw Two							  20 Points
+2)	Reverse								  20 Points
+3)	Skip								  20 Points
+4)	Wild								  50 Points
+5)	Wild Draw Four						  50 Points

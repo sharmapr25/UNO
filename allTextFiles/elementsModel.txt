@@ -1,0 +1,51 @@
+The elements that are required in UNO game :
+	croupier
+	players
+	Deck
+
+Deck..
+	should represent all cards as a collection
+
+	should do the following tasks by itself:
+		specify whether the deck is full ?
+		specify whether the deck is empty or not
+		shuffle the cards
+		gives the topMost card from the deck
+
+players..
+	should contain all the names of the players as the collection
+
+	should do the following tasks by itself:
+		specify which player's turn is this
+		specify who was the previous player
+		specify who is the next player
+
+		change the turn of the player
+
+		//in the case of skip card if the player plays a skip card..call the change players turn once again will skip the next player
+
+drawPile..
+	should contain the all the cards in sequence
+
+	should do the following tasks
+		specify whether the deck is empty or not
+		gives the topMost card from the deck
+		gives the topMost 2 cards from the deck
+		gives the topMost 4 cards from the deck
+
+discardPile..
+	should contain all the discarded cards as a collection
+
+	should do the following tasks
+		add a new card the pile
+		tell which is the topMost card and the properties of the topmost card from the pile
+
+userSelection..
+	should contain the following things:
+		card that the player played
+		colour that it changed to.. if the user played any one of the wild card
+		say UNO
+
+		user can draw card
+
+cruopier(Server) will take care of all the transactions

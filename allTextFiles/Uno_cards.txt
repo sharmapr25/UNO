@@ -1,0 +1,36 @@
+There are total 108 cards.
+
+19 Numbered Cards of Each colour
+	Red
+	Blue
+	Green
+	Yellow
+	
+	(19 * 4 = 76)
+
+	These 19 cards are [0 to 9](10 cards) and [1 to 9](9 cards)
+
+There are 3 special cards
+	draw two
+	Skip
+	Reverse
+
+	There will be 6 special cards of each colour
+
+	Red 3 special cards * 2 = 6
+	Blue 3 special cards * 2 = 6
+	Green 3 special cards * 2 = 6
+	Yellow 3 special cards * 2 = 6
+
+	total there are (6 * 4) 24 special cards
+
+There are 2 wild cards
+	wild
+	wild draw four
+
+	wild * 4 = 4
+	wild draw four * 4 = 4
+	
+	there will be total 8 wild cards
+
+Hence, in a pack of UNO there are 108 cards 76 + 24 + 8 = 108
