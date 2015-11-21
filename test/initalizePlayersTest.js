@@ -1,4 +1,4 @@
-var InitializePlayers = require('../entities.js').InitializePlayers;
+var InitializePlayers = require('../playerEntities.js').InitializePlayers;
 var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 
