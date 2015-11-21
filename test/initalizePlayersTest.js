@@ -1,5 +1,5 @@
-var InitializePlayers = require('../uno/InitializePlayers.js').InitializePlayers;
-var allCards = require('../uno/generateAllCards.js').allCards;
+var InitializePlayers = require('../entities.js').InitializePlayers;
+var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//

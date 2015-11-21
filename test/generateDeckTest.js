@@ -1,5 +1,5 @@
-var GenerateDeck = require('../uno/generateDeck.js').GenerateDeck;
-var allCards = require('../uno/generateAllCards.js').allCards;
+var GenerateDeck = require('../entities.js').GenerateDeck;
+var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//

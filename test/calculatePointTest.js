@@ -1,5 +1,5 @@
-var calculate_point = require('../uno/calculatePoint.js').calculatePoint;
-var allCards = require('../uno/generateAllCards.js').allCards;
+var calculate_point = require('../entities.js').calculatePoint;
+var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 var lodash = require('lodash');
 

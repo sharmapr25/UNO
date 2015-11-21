@@ -1,5 +1,5 @@
-var canPlayerPlayTheCard = require('../uno/canPlayerPlayTheCard.js').canPlayerPlayTheCard;
-var allCards = require('../uno/generateAllCards.js').allCards;
+var canPlayerPlayTheCard = require('../entities.js').canPlayerPlayTheCard;
+var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 
 describe('canPlayerPlayTheCard', function(){

@@ -1,4 +1,4 @@
-var distributeCards = require('../uno/distributeCards.js').distributeCards;
+var distributeCards = require('../entities.js').distributeCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//

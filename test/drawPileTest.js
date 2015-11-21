@@ -1,5 +1,5 @@
-var DrawPile = require('../uno/drawPile.js').DrawPile;
-var allCards = require('../uno/generateAllCards.js').allCards;
+var DrawPile = require('../entities.js').DrawPile;
+var allCards = require('../entities.js').allCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//

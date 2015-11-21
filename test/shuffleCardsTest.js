@@ -1,7 +1,12 @@
-var shuffled=require('../uno/shuffleCards.js').shuffledCards;
-var allCards=require('../uno/generateAllCards.js').allCards;
-var cardsLength = allCards.length;
-var shuffledCards = shuffled(allCards);
+var shuffled=require('../entities.js').shuffledCards;
+var allCards=require('../entities.js').allCards;
+
+//PLEASE DO NOT WRITE THE CODE OUTSIDE THE TESTING FRAMEWORK..
+//HARD TO TEST THE CODE
+//PLEASE MOVE IT INSIDE..
+
+// var cardsLength = allCards.length;
+// var shuffledCards = shuffled(allCards);
 
 var assert=require('chai').assert;
 var expect=require('chai').expect;
