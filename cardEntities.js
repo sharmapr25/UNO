@@ -59,4 +59,19 @@ var cardsInfo = {
 	wildCard:{speciality:['Wild','WildDrawFour'],points:50}
 };
 
+var DiscardPile = function(cards) {
+	this.cards = cards;
+};
+
+DiscardPile.prototype = {
+	addCard : function(card){
+		this.cards.unshift(card);
+	},
+
+	getTopMostCard : function() {
+		return this.cards[0];
+	}
+};
+
 exports.allCards = genrateAllCard(cardsInfo);
+exports.DiscardPile = DiscardPile;
