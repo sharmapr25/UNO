@@ -2,7 +2,6 @@ var InitializePlayers = function(allPlayers){
 	this.players = allPlayers;
 };
 
-
 InitializePlayers.prototype = {
 	currentPlayer : function () {
 		return this.players[0];
@@ -18,6 +17,5 @@ InitializePlayers.prototype = {
 		this.players.push(recentPlayer); 
 	}
 };
-
 
 exports.InitializePlayers = InitializePlayers;
