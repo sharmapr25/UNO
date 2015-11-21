@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var lodash = require('lodash');
-var allCards = require('../cardEntities.js').allCards;
+var allCards = require('../../cardEntities.js').allCards;
 
 //-------------------------------------------------------------------------------------------------------------//
 

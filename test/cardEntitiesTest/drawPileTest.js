@@ -1,5 +1,5 @@
-var DrawPile = require('../entities.js').DrawPile;
-var allCards = require('../entities.js').allCards;
+var DrawPile = require('../../playerEntities.js').DrawPile;
+var allCards = require('../../playerEntities.js').allCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//
