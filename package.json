@@ -1,0 +1,19 @@
+{
+  "name": "uno",
+  "version": "1.0.0",
+  "description": "a simple card based UNO game",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piolAtif/UNO.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piolAtif/UNO/issues"
+  },
+  "homepage": "https://github.com/piolAtif/UNO#readme"
+}
