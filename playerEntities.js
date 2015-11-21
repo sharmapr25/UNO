@@ -15,6 +15,10 @@ InitializePlayers.prototype = {
 	changePlayersTurn : function () {
 		var recentPlayer = this.players.shift();
 		this.players.push(recentPlayer); 
+	},
+	changeDirection : function(){
+		var playersExceptCurrentPlayer = this.players.splice(1);
+		this.players = this.players.concat(playersExceptCurrentPlayer.reverse());
 	}
 };
 
