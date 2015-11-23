@@ -13,7 +13,7 @@ var main = function(){
 			filePath = '../public/htmlFiles/login.html';
 		else
 			filePath = '../' + request.url;
-		
+
 		fs.readFile(filePath, function(err, data){
 			if(data){
 				response.statusCode = 200;
@@ -25,6 +25,20 @@ var main = function(){
 				response.end();
 			};
 
+		});
+	};
+
+	//---------------------------------------POST_HANDLER---------------------------------------//
+
+	var addUser = function(name, ip){
+		usersInformation.push({name : name, ip : ip});
+	};
+
+	var isUserExists = function(request){
+		var currentIP = request.connection.remoteAddress;
+		console.log('Checking for', currentIP);
+		return usersInformation.some(function(user){
+			return (user.ip == currentIP);
 		});
 	};
 
@@ -40,13 +54,17 @@ var main = function(){
 					data += d;
 				});
 				request.on('end', function(){
-					console.log('user sent the following:',data);
-
-					usersInformation.push({name : data.substr(5), ip : request.connection.remoteAddress});
-					var dataToBeSent =  { isGameStarted : isGameStarted,
-										  numberOfPlayers : usersInformation.length,
-										};
-					response.end(JSON.stringify(dataToBeSent));
+					if(!isUserExists(request)){
+						addUser(data.substr(5), request.connection.remoteAddress);
+						var dataToBeSent =  { isGameStarted : isGameStarted,
+										  	  numberOfPlayers : usersInformation.length,
+											};
+						response.end(JSON.stringify(dataToBeSent));
+					}else{
+						var dataToBeSent =  { alreadyConnected : true };
+						response.end(JSON.stringify(dataToBeSent));
+					};
+					
 					if(usersInformation.length == 3) isGameStarted = true;
 					console.log(usersInformation);
 				});

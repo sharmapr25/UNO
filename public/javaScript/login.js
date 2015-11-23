@@ -4,7 +4,11 @@ var alreadyGameStarted = function(){
 
 var playersInformation = function(comments){
 	return '<h4> Number of Players in The Game :'+comments.numberOfPlayers+'</h4>';
-}
+};
+
+var alreadyConnected = function(){
+	return 'Already Connected Boss..!!';
+};
 
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
@@ -15,7 +19,9 @@ var sendConnectionRequest = function(){
 	        console.log(comments);
 	        if(comments.isGameStarted == true){
 		      	document.querySelector('#current_game_information').innerHTML = alreadyGameStarted();
-	        }else{
+	        }else if(comments.alreadyConnected == true){
+	        	document.querySelector('#current_game_information').innerHTML = alreadyConnected();;
+	    	}else{
 	        	document.querySelector('#current_game_information').innerHTML = playersInformation(comments);
 	        }
 	    };
