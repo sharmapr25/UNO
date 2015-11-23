@@ -1,4 +1,4 @@
-var removeCardFromTheUsersCards = require('../../serverRequirement.js').server.removeCardFromTheUsersCards;
+var removeCardFromTheUsersCards = require('../../serverUtilities.js').server.removeCardFromTheUsersCards;
 var expect = require('chai').expect;
 
 describe('removeCardFromTheUsersCards', function(){
