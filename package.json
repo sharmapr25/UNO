@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha"
-  },
+      },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/piolAtif/UNO.git"
   },
-  "author": "",
+  "author": "uno_team",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/piolAtif/UNO/issues"
