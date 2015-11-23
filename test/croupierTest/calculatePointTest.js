@@ -1,6 +1,6 @@
-var calculate_point = require('../../serverUtilities.js').server.calculatePoints;
+var calculate_point = require('../../server/serverUtilities.js').server.calculatePoints;
 
-var allCards = require('../../cardEntities.js').allCards;
+var allCards = require('../../entities/cardEntities.js').allCards;
 var expect = require('chai').expect;
 var lodash = require('lodash');
 
