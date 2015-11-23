@@ -5,15 +5,21 @@ var main = function(){
 	var usersInformation = [];
 	var isGameStarted = false;
 
-	//-----------------------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------------------//
+	var sendUpdatedData = function(request, response){
+		if(usersInformation.length != 3){
+			var data =  { isGameStarted : isGameStarted,
+						  numberOfPlayers : usersInformation.length,
+						};
+			sendResponse(response, data);
+		}else{
+			response.statusCode = 200;
+			console.log('dummy data sent');
+			response.end('public/htmlFiles/unoTable.html');
+		}
+	};
 
-	var handle_get_request = function(request, response){
-		console.log('requested files', request.url);
-		if(request.url == '/') 
-			filePath = '../public/htmlFiles/login.html';
-		else
-			filePath = '../' + request.url;
-
+	var serveFile = function(fileName, request, response){
 		fs.readFile(filePath, function(err, data){
 			if(data){
 				response.statusCode = 200;
@@ -22,10 +28,20 @@ var main = function(){
 			}else if(err){
 				console.log('file not found..!',request.url);
 				response.statusCode = 404;
-				response.end();
+				response.end('File Not Found..!');
 			};
-
 		});
+	};
+
+
+	var handle_get_request = function(request, response){
+		console.log('requested files', request.url);
+		filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '../' + request.url;
+		if(request.url == '/updated_data'){
+			sendUpdatedData(request, response);
+		}else{
+			serveFile(filePath, request, response);
+		}
 	};
 
 	//---------------------------------------POST_HANDLER---------------------------------------//
@@ -40,6 +56,10 @@ var main = function(){
 		return usersInformation.some(function(user){
 			return (user.ip == currentIP);
 		});
+	};
+
+	var sendResponse = function(response, data){
+		response.end(JSON.stringify(data));
 	};
 
 	var handle_post_request = function(request, response){
@@ -59,10 +79,10 @@ var main = function(){
 						var dataToBeSent =  { isGameStarted : isGameStarted,
 										  	  numberOfPlayers : usersInformation.length,
 											};
-						response.end(JSON.stringify(dataToBeSent));
+						sendResponse(response, dataToBeSent);
 					}else{
 						var dataToBeSent =  { alreadyConnected : true };
-						response.end(JSON.stringify(dataToBeSent));
+						sendResponse(response, dataToBeSent);
 					};
 					
 					if(usersInformation.length == 3) isGameStarted = true;
@@ -72,6 +92,8 @@ var main = function(){
 		};
 
 	};
+
+	//-------------------------------------------------------------------------------------------//
 
 	var requestHandler = function(request, response){
 		console.log(request.method, request.url);
