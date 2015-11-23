@@ -2,7 +2,6 @@ var DrawPile = require('../../cardEntities.js').DrawPile;
 var allCards = require('../../cardEntities.js').allCards;
 var expect = require('chai').expect;
 
-console.log('hey hello',DrawPile);
 //--------------------------------------------------------------------------------------------------------------//
 
 describe('DrawPile', function() {
