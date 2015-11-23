@@ -10,9 +10,9 @@ var main = function(){
 	var handle_get_request = function(request, response){
 		console.log('requested files', request.url);
 		if(request.url == '/') 
-			filePath = './public/htmlFiles/login.html';
+			filePath = '../public/htmlFiles/login.html';
 		else
-			filePath = '.' + request.url;
+			filePath = '../' + request.url;
 		
 		fs.readFile(filePath, function(err, data){
 			if(data){
