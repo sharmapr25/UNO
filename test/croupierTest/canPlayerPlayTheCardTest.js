@@ -1,4 +1,4 @@
-var canPlayerPlayTheCard = require('../../serverRequirement.js').server.validateCard;
+var canPlayerPlayTheCard = require('../../serverUtilities.js').server.validateCard;
 var allCards = require('../../cardEntities.js').allCards;
 var expect = require('chai').expect;
 
