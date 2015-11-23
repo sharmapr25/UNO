@@ -4,13 +4,8 @@
   "description": "a simple card based UNO game",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-    "test": "mocha"
-      },
-=======
     "test": "mocha --recursive"
   },
->>>>>>> 2f0de635f553a972c38e5e2ccb8f4663c3573cda
   "repository": {
     "type": "git",
     "url": "git+https://github.com/piolAtif/UNO.git"
