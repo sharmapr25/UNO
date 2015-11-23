@@ -4,21 +4,21 @@ var makePlayersField = function (players) {
 	var playersCard = {};
 	players.forEach(function (singlePlayer) {
 		playersCard[singlePlayer] = [];
-	})
+	});
 	return playersCard;
 };
 
 server.distributeCards = function (playersName,allcards) {
-	var remainCards = allcards;
+	var remainingCards = allcards;
 	var presentPlayers = makePlayersField(playersName);
 
 	for (var i = 0; i < 7; i++) {
 		for(var prop in presentPlayers){
-			presentPlayers[prop].push(remainCards.shift());
-		}
+			presentPlayers[prop].push(remainingCards.shift());
+		};
 	};
 
-	return [presentPlayers,remainCards];
+	return [presentPlayers,remainingCards];
 };
 
 server.calculatePoints = function (playersCard) {
@@ -32,7 +32,9 @@ server.calculatePoints = function (playersCard) {
 };
 
 server.removeCardFromTheUsersCards = function (cardToremove,userCards) {
-	return userCards.filter(function(card){ return !(JSON.stringify(card) == JSON.stringify(cardToremove));});
+	return userCards.filter(function(card){ 
+		return !(JSON.stringify(card) == JSON.stringify(cardToremove));
+	});
 };
 
 server.validateCard = function (player_card,card_on_deck) {
@@ -43,5 +45,6 @@ server.validateCard = function (player_card,card_on_deck) {
 					player_card.speciality == 'WildDrawFour'						
 				  ];
 	return (matches.indexOf(true) >= 0);
-}
+};
+
 exports.server = server;
