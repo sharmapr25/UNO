@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Log in</title>
+	<style>
+		#login_page_image {
+		 	width: 500px;
+		 	position:absolute;
+		   	left:35%;
+		   	top:5%;
+		   	margin-left:-10px;
+		   	margin-top:-10px;
+		}
+		.login{
+			
+		}
+	</style>
+
+	<script type="text/javascript">
+		var sendConnectionRequest = function(){
+			alert('sent');
+			var req = new XMLHttpRequest();
+			req.onreadystatechange = function() {
+			    if (req.readyState == 4 && req.status == 200) {
+			        var comments = JSON.parse(req.responseText);
+			      	// document.querySelector('#comments').innerHTML = generateTable(comments);
+			      	// document.querySelector('input[name="name"]').value = '';
+			      	// document.querySelector('textarea[name="comment"]').value = '';
+			    }
+			};
+			req.open('POST', 'comment', true);
+			req.send('name='+document.querySelector('input[name="name"]').value+'&comment='+document.querySelector('textarea[name="comment"]').value);
+		};
+
+		window.onload = function(){
+			document.querySelector('button').onclick = sendConnectionRequest;
+		};
+	</script>
+</head>
+<body>
+	<img src="./images/login_page_uno_image.png" id='login_page_image'>
+	<div class="login">
+		Enter Your Name : <input type="text" name="user_name"><br>
+		<button type="button">Submit</button>
+	</div>
+</body>
+</html>
