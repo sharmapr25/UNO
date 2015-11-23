@@ -1,4 +1,4 @@
-var DiscardPile = require('../../cardEntities.js').DiscardPile;
+var DiscardPile = require('../../entities/cardEntities.js').DiscardPile;
 var lodash = require('lodash');
 var expect = require('chai').expect;
 

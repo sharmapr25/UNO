@@ -47,6 +47,7 @@ InitializePlayers.prototype = {
 			playerInfo.previousPlayer = this.nextPlayer;
 			playerInfo.nextPlayer = this.previousPlayer;
 		};
+		
 		return playerInfo;
 	}
 };
