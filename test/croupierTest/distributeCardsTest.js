@@ -1,4 +1,4 @@
-var distributeCards = require('../entities.js').distributeCards;
+var distributeCards = require('../../serverRequirement.js').server.distributeCards;
 var expect = require('chai').expect;
 
 //--------------------------------------------------------------------------------------------------------------//
