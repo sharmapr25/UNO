@@ -1,3 +1,10 @@
+var generateTable  = function(userInfo) {
+	var user_info = userInfo.map(function (eachUser) {
+		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.numberofcards+"</td></tr>";
+	});
+	return "<table align='right'>"+user_info.join('')+"</table>";
+};
+
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
