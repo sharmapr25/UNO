@@ -47,4 +47,11 @@ server.validateCard = function (player_card,card_on_deck) {
 	return (matches.indexOf(true) >= 0);
 };
 
+server.addressGenrator = function (card) {
+	var type,colour;
+	(card.speciality) ? (type = card.speciality.toLowerCase()) : (type = card.number);
+	(card.colour) ? (colour = card.colour.toLowerCase()+"_") : (colour = "");
+	return "/public/images/allCards/"+colour+type+".png";
+};
+
 exports.server = server;
