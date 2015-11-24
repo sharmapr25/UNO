@@ -9,6 +9,7 @@ var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
 var distributeCards =  require('./serverUtilities.js').server.distributeCards;
 var DiscardPile = require('../entities/cardEntities.js').DiscardPile;
 var DrawPile = require('../entities/cardEntities.js').DrawPile;
+var InitializePlayers = require('../entities/playerEntities.js').InitializePlayers;
 
 //-------------------------------------------------------------------------------------//
 
@@ -27,7 +28,7 @@ var main = function(){
 			startUno();
 			response.statusCode = 200;
 			response.end('public/htmlFiles/unoTable.html');
-		};
+		}
 	};
 	var mapName = function(ip){
 		var name;
@@ -35,16 +36,29 @@ var main = function(){
 			if(user.ip.toString() == ip.toString()) name = user.name;
 		});
 		return name;
-	}
+	};
+
 	var getUserCards = function(ip){
 		var name = mapName(ip);
 		return user_cards[name];
+	};
+
+	var getAllUserCardsLength = function(){
+		var cardInfo = [];
+		user_names.forEach(function(userName){
+			cardInfo.push({name : userName, noOfCards : user_cards[userName].length});
+		});
+		return cardInfo;
 	};
 
 	var sendAllInformationOfTable = function(request,response){
 		var dataToSend = {};
 		dataToSend.cardOnTable = discard_pile.getTopMostCard();
 		dataToSend.userCards = getUserCards(request.connection.remoteAddress);
+		dataToSend.allUsersCardsLength = getAllUserCardsLength();
+		dataToSend.currentPlayer = players.currentPlayer;
+		dataToSend.nextPlayer = players.nextPlayer;
+		dataToSend.previousPlayer = players.previousPlayer;
 		sendResponse(response, dataToSend);
 	};
 
@@ -65,9 +79,13 @@ var main = function(){
 	var handle_get_request = function(request, response){
 		console.log('requested files', request.url);
 		filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '../' + request.url;
-		if(request.url == '/updated_login_data'){
+		if(request.url == '/' && isGameStarted){
+			response.statusCode = 404;
+			response.end('Game has already been started..!');
+		}
+		else if(request.url == '/updated_login_data'){
 			sendUpdatedData(request, response);
-		}else if(request.url== '/public/htmlFiles/all_information_on_table'){
+		}else if(request.url == '/public/htmlFiles/all_information_on_table'){
 			sendAllInformationOfTable(request,response);
 		}else{
 			serveFile(filePath, request, response);
@@ -146,10 +164,14 @@ var main = function(){
 	var discard_pile;
 	var draw_pile;
 
+	var players;
+
 	var startUno = function(){
 		var shuffledCards = lodash.shuffle(allCards);
 		var deck = new GenerateDeck(shuffledCards);
 		user_names = getUserName(usersInformation);
+		players = new InitializePlayers(user_names);
+		user_names = players.players;
 		var dataAfterDistribution = distributeCards(user_names,shuffledCards);
 		user_cards = dataAfterDistribution[0];
 		var remainingCards = dataAfterDistribution[1];
