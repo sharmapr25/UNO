@@ -54,7 +54,7 @@ var getUpdatedData = function(){
 	    	};
 	    };
 	};
-	req.open('GET', 'updated_data', true);
+	req.open('GET', 'updated_login_data', true);
 	req.send();
 };
 

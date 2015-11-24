@@ -1,5 +1,16 @@
 var http = require('http');
 var fs = require('fs');
+var lodash = require('lodash');
+
+//-------------------------------------------------------------------------------------//
+
+var allCards = require('../entities/cardEntities.js').allCards;
+var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
+var distributeCards =  require('./serverUtilities.js').server.distributeCards;
+var DiscardPile = require('../entities/cardEntities.js').DiscardPile;
+var DrawPile = require('../entities/cardEntities.js').DrawPile;
+
+//-------------------------------------------------------------------------------------//
 
 var main = function(){
 	var usersInformation = [];
@@ -13,17 +24,34 @@ var main = function(){
 						};
 			sendResponse(response, data);
 		}else{
+			startUno();
 			response.statusCode = 200;
-			console.log('dummy data sent');
 			response.end('public/htmlFiles/unoTable.html');
-		}
+		};
+	};
+	var mapName = function(ip){
+		var name;
+		usersInformation.forEach(function(user){
+			if(user.ip.toString() == ip.toString()) name = user.name;
+		});
+		return name;
+	}
+	var getUserCards = function(ip){
+		var name = mapName(ip);
+		return user_cards[name];
+	};
+
+	var sendAllInformationOfTable = function(request,response){
+		var dataToSend = {};
+		dataToSend.cardOnTable = discard_pile.getTopMostCard();
+		dataToSend.userCards = getUserCards(request.connection.remoteAddress);
+		sendResponse(response, dataToSend);
 	};
 
 	var serveFile = function(fileName, request, response){
 		fs.readFile(filePath, function(err, data){
 			if(data){
 				response.statusCode = 200;
-				console.log(response.statusCode);
 				response.end(data);
 			}else if(err){
 				console.log('file not found..!',request.url);
@@ -37,14 +65,15 @@ var main = function(){
 	var handle_get_request = function(request, response){
 		console.log('requested files', request.url);
 		filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '../' + request.url;
-		if(request.url == '/updated_data'){
+		if(request.url == '/updated_login_data'){
 			sendUpdatedData(request, response);
+		}else if(request.url== '/public/htmlFiles/all_information_on_table'){
+			sendAllInformationOfTable(request,response);
 		}else{
 			serveFile(filePath, request, response);
-		}
+		};
 	};
-
-	//---------------------------------------POST_HANDLER---------------------------------------//
+	//-----------------------------------POST_HANDLER---------------------------------------//
 
 	var addUser = function(name, ip){
 		usersInformation.push({name : name, ip : ip});
@@ -102,6 +131,38 @@ var main = function(){
 		else if(request.method == 'POST')
 			handle_post_request(request, response);
 	};
+
+	//-------------------------------------------------------------------------------------------//
+	var getUserName = function(allInformation){
+		return allInformation.map(function(user){
+			return user.name;
+		});
+	};
+
+	//-------------------------------------UNO_DECK DATA---------------------------------------------//
+
+	var user_names;
+	var user_cards;
+	var discard_pile;
+	var draw_pile;
+
+	var startUno = function(){
+		var shuffledCards = lodash.shuffle(allCards);
+		var deck = new GenerateDeck(shuffledCards);
+		user_names = getUserName(usersInformation);
+		var dataAfterDistribution = distributeCards(user_names,shuffledCards);
+		user_cards = dataAfterDistribution[0];
+		var remainingCards = dataAfterDistribution[1];
+		var cardForDiscardPile = remainingCards.shift();
+		discard_pile = new DiscardPile([cardForDiscardPile]);
+		draw_pile = new DrawPile(remainingCards);
+		console.log("user cards is here.....",user_cards);
+		console.log("draw pile is herreee...", draw_pile.cards);
+		console.log("discard pile is remaining ", discard_pile.cards);
+	};
+
+
+	//-------------------------------------------------------------------------------------------//
 
 	var server = http.createServer(requestHandler);
 	server.listen(3000);
