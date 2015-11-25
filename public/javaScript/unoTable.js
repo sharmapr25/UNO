@@ -10,7 +10,7 @@ var generateTable  = function(userInfo) {
 		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.noOfCards+"</td></tr>";
 	});
 	var tableHead = "<tr><th>Name&nbsp;&nbsp;&nbsp;</th><th>Number Of Card</th></tr>"
-	return "<table align='right'>"+tableHead+user_info.join('')+"</table>";
+	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
 };
 
 var flag = true;
@@ -82,17 +82,8 @@ var sendConnectionRequest = function(){
 		  		iDiv.id = 'all_user_cards_info';
 		  		document.body.appendChild(iDiv);
 
-
 		   		var iDiv = document.createElement('div');
 			  	iDiv.id = 'All_pile';
-			  	document.body.appendChild(iDiv);
-
-	        	var iDiv = document.createElement('div');
-			  	iDiv.id = 'User_Cards_Name';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'my_cards';
 			  	document.body.appendChild(iDiv);
 
 			  	var iDiv = document.createElement('div');
@@ -105,6 +96,14 @@ var sendConnectionRequest = function(){
 
 			  	var iDiv = document.createElement('div');
 			  	iDiv.id = 'previous_player';
+			  	document.body.appendChild(iDiv);
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'User_Cards_Name';
+			  	document.body.appendChild(iDiv);
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'my_cards';
 			  	document.body.appendChild(iDiv);
 
 			  	//say UNO
