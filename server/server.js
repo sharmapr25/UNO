@@ -6,11 +6,13 @@ var lodash = require('lodash');
 
 var allCards = require('../entities/cardEntities.js').allCards;
 var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
-var distributeCards =  require('./serverUtilities.js').server.distributeCards;
+var distributeCards = require('./serverUtilities.js').server.distributeCards;
 var DiscardPile = require('../entities/cardEntities.js').DiscardPile;
 var DrawPile = require('../entities/cardEntities.js').DrawPile;
 var InitializePlayers = require('../entities/playerEntities.js').InitializePlayers;
+var canPlayerPlayTheCard = require('./serverUtilities.js').server.validateCard;
 
+console.log(canPlayerPlayTheCard);
 //-------------------------------------------------------------------------------------//
 
 var main = function(){
@@ -19,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 2){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -138,17 +140,46 @@ var main = function(){
 				});
 			};
 		}else if(request.url == '/public/htmlFiles/play_card'){
-			console.log('user requested to play the card..!!');
-			var data = '';
-				request.on('data', function(d){
-					data += d;
-				});
-				request.on('end', function(){
-					console.log(JSON.parse(data));
-				});
-				sendAllInformationOfTable(request, response);
+			if(currentPlayer == mapName(request.connection.remoteAddress)){
+				var data = '';
+					request.on('data', function(d){
+						data += d;
+					});
+					request.on('end', function(){
+						console.log(JSON.parse(data));
+						var userPlay = JSON.parse(data);
+						var cardPlayed = userPlay.playedCard;
+						// canPlayerPlayTheCard(cardPlayed, discard_pile.getTopMostCard())
+						if(true){
+							var playerName = mapName(request.connection.remoteAddress);
+							var playerCards = user_cards[playerName];
+							user_cards[playerName] = removeSelectedCard(cardPlayed, playerCards);
+							discard_pile.addCard(cardPlayed);
+							players.changePlayersTurn();
+							currentPlayer = players.currentPlayer;
+
+							var dataToSend = {};
+							dataToSend.status = 'successful';
+							sendResponse(response, dataToSend);
+						}else{
+							var dataToSend = {};
+							dataToSend.status = 'can not play the card';
+							sendResponse(response, dataToSend);
+						}
+					});
+			}else{
+				var dataToSend = {};
+				dataToSend.status = 'not your turn';
+				sendResponse(response, dataToSend);	
+			}
 		};
 
+	};
+
+	var removeSelectedCard = function(card, allCards){
+		return  allCards.filter(function(eachCard){
+			return !(JSON.stringify(eachCard) == JSON.stringify(card));
+		});
 	};
 
 	//-------------------------------------------------------------------------------------------//
@@ -177,12 +208,15 @@ var main = function(){
 
 	var players;
 
+	var currentPlayer;
+
 	var startUno = function(){
 		var shuffledCards = lodash.shuffle(allCards);
 		var deck = new GenerateDeck(shuffledCards);
 		user_names = getUserName(usersInformation);
 		players = new InitializePlayers(user_names);
 		user_names = players.players;
+		currentPlayer = players.currentPlayer;
 		var dataAfterDistribution = distributeCards(user_names,shuffledCards);
 		user_cards = dataAfterDistribution[0];
 		var remainingCards = dataAfterDistribution[1];
