@@ -43,8 +43,15 @@ var sendRequestToPlayCard = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
-	        var comments = JSON.parse(req.responseText);
-	        console.log(comments);
+	        var responseStatus = JSON.parse(req.responseText).status;
+			switch(responseStatus){
+				case 'can not play the card':
+					alert('Invalid Card..!!!');
+					break;
+				case 'not your turn':
+					alert('not your turn');
+			};
+	        sendConnectionRequest();
 	    };
 	};
 	req.open('POST', 'play_card', true);
@@ -52,7 +59,7 @@ var sendRequestToPlayCard = function(){
 };
 
 var updateIndex = function(id){
-	indexOfPlayedcard = (id[id.length-1]-1);
+	indexOfPlayedcard = id[id.length-1];
 };
 
 var sendConnectionRequest = function(){
@@ -91,7 +98,7 @@ var sendConnectionRequest = function(){
 			  	var iDiv = document.createElement('button');
 			  	iDiv.id = 'say_UNO';
 			  	iDiv.onclick = function(){ 
-			  		alert('Say UNO..!!');
+			  		alert('yeahhh..said UNO..!!');
 			  		saidUNO = true;
 			  	};
 			  	document.body.appendChild(iDiv);
@@ -101,7 +108,7 @@ var sendConnectionRequest = function(){
 			  	var iDiv = document.createElement('button');
 			  	iDiv.id = 'catch_UNO';
 			  	iDiv.onclick = function(){ 
-			  		alert('Catch UNO..!!');
+			  		alert('Call to catch UNO..!!');
 			  		catchedUNO = true;
 			  	};
 			  	document.body.appendChild(iDiv);
@@ -111,7 +118,7 @@ var sendConnectionRequest = function(){
 			  	var iDiv = document.createElement('button');
 			  	iDiv.id = 'draw';
 			  	iDiv.onclick = function(){ 
-			  		alert('Draw cardss..!!');
+			  		alert('Draw cardsss..!!');
 			  		drawCard = true;
 			  	};
 			  	document.body.appendChild(iDiv);
@@ -121,7 +128,6 @@ var sendConnectionRequest = function(){
 				var iDiv = document.createElement('button');
 			  	iDiv.id = 'submit';
 			  	iDiv.onclick = function(){ 
-			  		alert('Sending Data..!!!');
 			  		sendRequestToPlayCard();
 			  	};
 			  	document.body.appendChild(iDiv);
@@ -142,7 +148,7 @@ var sendConnectionRequest = function(){
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
-	    		imgRef += '<img id="card_num:'+(i+1)+'" onclick="updateIndex(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		imgRef += '<img id="card_num:'+i+'" onclick="updateIndex(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
 		  	document.getElementById('my_cards').innerHTML = imgRef;
 	    };
