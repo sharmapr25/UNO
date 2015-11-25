@@ -19,7 +19,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 3){
+		if(usersInformation.length != 2){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -62,7 +62,8 @@ var main = function(){
 		sendResponse(response, dataToSend);
 	};
 
-	var serveFile = function(fileName, request, response){
+	var serveFile = function(filePath, request, response){
+		console.log('Gaurav is requesting', filePath);
 		fs.readFile(filePath, function(err, data){
 			if(data){
 				response.statusCode = 200;
@@ -78,7 +79,7 @@ var main = function(){
 
 	var handle_get_request = function(request, response){
 		console.log('requested files', request.url);
-		filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '../' + request.url;
+		filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '..' + request.url;
 		if(request.url == '/' && isGameStarted){
 			response.statusCode = 404;
 			response.end('Game has already been started..!');
