@@ -137,6 +137,16 @@ var main = function(){
 					console.log(usersInformation);
 				});
 			};
+		}else if(request.url == '/public/htmlFiles/play_card'){
+			console.log('user requested to play the card..!!');
+			var data = '';
+				request.on('data', function(d){
+					data += d;
+				});
+				request.on('end', function(){
+					console.log(JSON.parse(data));
+				});
+				sendAllInformationOfTable(request, response);
 		};
 
 	};
