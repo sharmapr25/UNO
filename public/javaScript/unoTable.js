@@ -94,7 +94,19 @@ var sendConnectionRequest = function(){
 			  	var iDiv = document.createElement('div');
 			  	iDiv.id = 'my_cards';
 			  	document.body.appendChild(iDiv);
-			  	
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'current_player';
+			  	document.body.appendChild(iDiv);
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'next_player';
+			  	document.body.appendChild(iDiv);
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'previous_player';
+			  	document.body.appendChild(iDiv);
+
 			  	//say UNO
 			  	var iDiv = document.createElement('button');
 			  	iDiv.id = 'say_UNO';
@@ -152,6 +164,11 @@ var sendConnectionRequest = function(){
 	    		imgRef += '<img id="card_num:'+i+'" onclick="updateIndex(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
 		  	document.getElementById('my_cards').innerHTML = imgRef;
+
+			document.getElementById('current_player').innerHTML = "<h3>"+"Current Player :"+comments.currentPlayer+"</h3>";
+			document.getElementById('next_player').innerHTML = "<h3>"+"Current Player :"+comments.nextPlayer+"</h3>";
+			document.getElementById('previous_player').innerHTML = "<h3>"+"Current Player :"+comments.previousPlayer+"</h3>";
+
 	    };
 	};
 	req.open('GET', 'all_information_on_table', true);
