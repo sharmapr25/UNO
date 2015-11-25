@@ -5,6 +5,7 @@ var addressGenrator = function (card) {
 	return "/public/images/allCards/"+colour+type+".png";
 };
 
+exports.addressGenrator = addressGenrator;
 
 var generateTable  = function(userInfo) {
 	var user_info = userInfo.map(function (eachUser) {
@@ -23,10 +24,13 @@ var sendConnectionRequest = function(){
 	        console.log('Current Turn',comments.currentPlayer);
 	        console.log('Next Turn', comments.nextPlayer);
 	        console.log('Previous Turn', comments.previousPlayer);
+
 	        document.querySelector('#all_user_cards_info').innerHTML = generateTable(comments.allUsersCardsLength);
+	        
 	        var cardRef = '<img src="/public/images/allCards/close_face.png">';
 	        cardRef += '<img src="'+addressGenrator(comments.cardOnTable)+'">';
 	        document.querySelector('#All_pile').innerHTML = cardRef;
+	    	
 	    	var imgRef = '';
 	    	for(var i=0; i<comments.userCards.length; i++){
 	    		imgRef += '<img src="'+addressGenrator(comments.userCards[i])+'">';

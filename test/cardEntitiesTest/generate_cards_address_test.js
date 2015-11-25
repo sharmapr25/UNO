@@ -1,4 +1,4 @@
-var addressGenrator = require('../../server/serverUtilities.js').server.addressGenrator;
+var addressGenrator = require('../../public/javaScript/unoTable.js').addressGenrator;
 var lodash = require('lodash');
 var expect = require('chai').expect;
 
