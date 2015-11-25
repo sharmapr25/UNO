@@ -11,6 +11,7 @@ var DiscardPile = require('../entities/cardEntities.js').DiscardPile;
 var DrawPile = require('../entities/cardEntities.js').DrawPile;
 var InitializePlayers = require('../entities/playerEntities.js').InitializePlayers;
 var canPlayerPlayTheCard = require('./serverUtilities.js').server.validateCard;
+var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
 console.log(canPlayerPlayTheCard);
 //-------------------------------------------------------------------------------------//
@@ -108,6 +109,22 @@ var main = function(){
 		});
 	};
 
+	var isEndOfGame = function(){
+		var end = false;
+		user_names.forEach(function(name){
+			if(user_cards[name].length == 0) end = true;
+		});
+		return end;
+	};
+
+	var calculateRanking = function(){
+		// var ranks = [];
+		// user_names.forEach(function(name){
+		// 	ranks.points = calculatePoints(user_cards[name]);
+		// 	ranks.name = name;
+		// });
+	};
+
 	var sendResponse = function(response, data){
 		response.end(JSON.stringify(data));
 	};
@@ -157,10 +174,15 @@ var main = function(){
 							discard_pile.addCard(cardPlayed);
 							players.changePlayersTurn();
 							currentPlayer = players.currentPlayer;
-
-							var dataToSend = {};
-							dataToSend.status = 'successful';
-							sendResponse(response, dataToSend);
+							if(isEndOfGame()){
+								var dataToSend = {};
+								dataToSend.status = 'Game end';
+								sendResponse(response, dataToSend);	
+							}else{
+								var dataToSend = {};
+								dataToSend.status = 'successful';
+								sendResponse(response, dataToSend);	
+							}
 						}else{
 							var dataToSend = {};
 							dataToSend.status = 'can not play the card';
@@ -171,7 +193,7 @@ var main = function(){
 				var dataToSend = {};
 				dataToSend.status = 'not your turn';
 				sendResponse(response, dataToSend);	
-			}
+			};
 		};
 
 	};

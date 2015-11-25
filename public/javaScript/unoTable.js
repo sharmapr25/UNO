@@ -51,6 +51,10 @@ var sendRequestToPlayCard = function(){
 					break;
 				case 'not your turn':
 					alert('not your turn');
+					break;
+				case 'Game end' :
+	        		sendConnectionRequest();
+					alert('Game End');
 			};
 	        sendConnectionRequest();
 	    };
