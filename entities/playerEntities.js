@@ -4,13 +4,13 @@ var InitializePlayers = function(allPlayers,direction){
 
 	Object.defineProperties(this,{
 		currentPlayer : {value : this.players[0],writable : true},
-		nextPlayer : {value : this.players[1],writable : true},
+		nextPlayer : {value : (this.players.length>1)?this.players[1]:this.players[0],writable : true},
 		previousPlayer : {value : this.players[this.players.length - 1],writable : true}
 	})
 };
 
-var getElementIndex = function (allPlayers,currentPlayer,direction) {
-	var index = allPlayers.indexOf(currentPlayer);
+var getElementIndex = function (allPlayers,player,direction) {
+	var index = allPlayers.indexOf(player);
 	if(direction){
 		if ((index+1) == allPlayers.length) {
 			return index = 0;
@@ -26,29 +26,24 @@ var getElementIndex = function (allPlayers,currentPlayer,direction) {
 
 InitializePlayers.prototype = {
 	changePlayersTurn : function () {
-		var playerInfo = new InitializePlayers(this.players,this.direction);
-
-		if (playerInfo.direction) {
-			playerInfo.currentPlayer = this.players[getElementIndex(this.players,this.currentPlayer,true)];
-			playerInfo.nextPlayer = this.players[getElementIndex(this.players,this.nextPlayer,true)];
-			playerInfo.previousPlayer = this.players[getElementIndex(this.players,this.previousPlayer,true)];
-		}else{
-			playerInfo.currentPlayer = this.players[getElementIndex(this.players,this.currentPlayer,false)];
-			playerInfo.nextPlayer = this.players[getElementIndex(this.players,this.nextPlayer,false)];
-			playerInfo.previousPlayer = this.players[getElementIndex(this.players,this.previousPlayer,false)];
+		if (this.players.length>0) {
+			if (this.direction) {
+				this.currentPlayer = this.players[getElementIndex(this.players,this.currentPlayer,this.direction)];
+				this.nextPlayer = this.players[getElementIndex(this.players,this.nextPlayer,this.direction)];
+				this.previousPlayer = this.players[getElementIndex(this.players,this.previousPlayer,this.direction)];
+			}else{
+				this.currentPlayer = this.players[getElementIndex(this.players,this.currentPlayer,this.direction)];
+				this.nextPlayer = this.players[getElementIndex(this.players,this.nextPlayer,this.direction)];
+				this.previousPlayer = this.players[getElementIndex(this.players,this.previousPlayer,this.direction)];
+			};
 		};
-
-		return playerInfo;
 	},
 	changeDirection : function(){
-		var playerInfo = new InitializePlayers(this.players,this.direction);
-
 		if (!this.direction) {
-			playerInfo.previousPlayer = this.nextPlayer;
-			playerInfo.nextPlayer = this.previousPlayer;
+			var temp = this.nextPlayer
+			this.nextPlayer = this.previousPlayer;
+			this.previousPlayer = temp;
 		};
-		
-		return playerInfo;
 	}
 };
 

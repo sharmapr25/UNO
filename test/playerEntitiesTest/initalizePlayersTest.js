@@ -20,87 +20,120 @@ describe('InitializePlayers', function(){
 	});
 
 	describe('InitializePlayers.prototype',function(){
-		describe('current player',function(){
-				it('should contain currentPlayer function which will return the name of the currentPlayer', function(){
-				var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
+		describe('single player',function(){	
+			it('currentPlayer should be equal to nextPlayer and previous player if player number is one',function(){
+				var players = new InitializePlayers(['john']);
 				expect(players.currentPlayer).to.equal('john');
-			});
-
-			it('changePlayersTurn change the turn of currentPlayer by increasing the index when the direction is true',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
-				var re_init_players=players.changePlayersTurn();
-				expect(re_init_players.direction).to.equal(true);
-				expect('laxmi').to.equal(re_init_players.currentPlayer);
-			})	
-
-			it('changePlayersTurn changes the turn of currentPlayer by decreasing the index when the direction is false',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
-				var re_init_players=players.changePlayersTurn();
-				expect(re_init_players.direction).to.equal(false);
-				expect('sourav').to.equal(re_init_players.currentPlayer);
-	
+				expect(players.previousPlayer).to.equal('john');
+				expect(players.nextPlayer).to.equal('john');
 			})
+		})
 
-		});
-
-		describe('previousPlayer',function(){
-			it('should contain previousPlayer function which will return the name of the previousPlayer', function(){
-				var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
-				expect(players.previousPlayer).to.equal('nani');
-			});
-
-			it('changePlayersTurn change the turn of previousPlayer by increasing the index',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
-				var re_init_players=players.changePlayersTurn();
-				expect('gaurav').to.equal(re_init_players.previousPlayer);
-			});
-			
-			it('changePlayersTurn changes the turn of previousPlayerPlayer by decreasing the index when the direction is false',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
-				var re_init_players=players.changePlayersTurn();
-				expect(re_init_players.direction).to.equal(false);
-				expect('joshaf').to.equal(re_init_players.previousPlayer);
+		describe('two players',function(){
+			it('nextPlayer should be equal to previousPlayer and previousPlayer should be same if players number are two',function(){
+				var players = new InitializePlayers(['john','gaurav']);
+				expect(players.currentPlayer).to.equal('john');
+				expect(players.nextPlayer).to.equal('gaurav');
+				expect(players.previousPlayer).to.equal('gaurav');
+				expect(players.previousPlayer).to.equal(players.nextPlayer);
 			})
-		});
+		})
 
-		describe('nextPlayer',function(){
-			it('should contain nextPlayer function which will return the name of the nextPlayer', function(){
-				var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
-				expect(players.nextPlayer).to.equal('johny');
+		describe('multiple player',function(){
+
+			describe('current player',function(){
+					it('should contain currentPlayer function which will return the name of the currentPlayer', function(){
+					var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
+					expect(players.currentPlayer).to.equal('john');
+					expect(players.nextPlayer).to.equal('johny');
+					expect(players.previousPlayer).to.equal('nani');
+				});
+
+				it('changePlayersTurn change the turn of currentPlayer by increasing the index when the direction is true',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
+					players.changePlayersTurn();
+					expect(players.direction).to.equal(true);
+					expect('laxmi').to.equal(players.currentPlayer);
+					expect(players.nextPlayer).to.equal('joshaf');
+					expect(players.previousPlayer).to.equal('gaurav');
+				});
+
+				it('changePlayersTurn changes the turn of currentPlayer by decreasing the index when the direction is false',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
+					players.changePlayersTurn();
+					expect(players.direction).to.equal(false);
+					expect('sourav').to.equal(players.currentPlayer);
+					expect(players.nextPlayer).to.equal('gaurav');
+					expect(players.previousPlayer).to.equal('joshaf');
+				});
+
 			});
 
-			it('changePlayersTurn change the turn of nextPlayer by increasing the index',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
-				var re_init_players=players.changePlayersTurn();
-				expect('joshaf').to.equal(re_init_players.nextPlayer);
-			})
+			describe('previousPlayer',function(){
+				it('should contain previousPlayer function which will return the name of the previousPlayer', function(){
+					var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
+					expect(players.previousPlayer).to.equal('nani');
+					expect(players.currentPlayer).to.equal('john');
+					expect(players.nextPlayer).to.equal('johny');
+				});
 
-			it('changePlayersTurn changes the turn of nextPlayer by decreasing the index when the direction is false',function(){
-				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
-				var re_init_players = players.changePlayersTurn();
-				expect(re_init_players.direction).to.equal(false);
-				expect('gaurav').to.equal(re_init_players.nextPlayer);
-	
-			})	
-		});
+				it('changePlayersTurn change the turn of previousPlayer by increasing the index',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
+					players.changePlayersTurn();
+					expect('gaurav').to.equal(players.previousPlayer);
+					expect(players.currentPlayer).to.equal('laxmi');
+					expect(players.nextPlayer).to.equal('joshaf');
+				});
+				
+				it('changePlayersTurn changes the turn of previousPlayerPlayer by decreasing the index when the direction is false',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
+					players.changePlayersTurn();
+					expect(players.direction).to.equal(false);
+					expect('joshaf').to.equal(players.previousPlayer);
+					expect(players.currentPlayer).to.equal('sourav');
+					expect(players.nextPlayer).to.equal('gaurav');
+				});
+			});
+
+			describe('nextPlayer',function(){
+				it('should contain nextPlayer function which will return the name of the nextPlayer', function(){
+					var players = new InitializePlayers(['john', 'johny', 'kaka', 'nani' ],true);
+					expect(players.nextPlayer).to.equal('johny');
+				});
+
+				it('changePlayersTurn change the turn of nextPlayer by increasing the index',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
+					players.changePlayersTurn();
+					expect('joshaf').to.equal(players.nextPlayer);
+				});
+
+				it('changePlayersTurn changes the turn of nextPlayer by decreasing the index when the direction is false',function(){
+					var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
+					players.changePlayersTurn();
+					expect(players.direction).to.equal(false);
+					expect('gaurav').to.equal(players.nextPlayer);
+		
+				});
+			});
+		})
 
 		describe('changeDirection',function() {
 			it('after changed direction nextPlayer and previousPlayer should be interchanged when direction is false',function(){
 				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],false);
-				 var re_init_direction = players.changeDirection();
-				 expect('gaurav').to.equal(re_init_direction.currentPlayer);
-				 expect('laxmi').to.equal(re_init_direction.previousPlayer);
-				 expect('sourav').to.equal(re_init_direction.nextPlayer);
+				 players.changeDirection();
+				 expect('gaurav').to.equal(players.currentPlayer);
+				 expect('laxmi').to.equal(players.previousPlayer);
+				 expect('sourav').to.equal(players.nextPlayer);
 
-			})
+			});
 			it('direction of nextPlayer and previousPlayer should not be interchanged when direction is true',function(){
 				var players = new InitializePlayers(['gaurav','laxmi','joshaf','sourav'],true);
-				 var re_init_direction = players.changeDirection();
-				 expect('gaurav').to.equal(re_init_direction.currentPlayer);
-				 expect('sourav').to.equal(re_init_direction.previousPlayer);
-				 expect('laxmi').to.equal(re_init_direction.nextPlayer);
+				 players.changeDirection();
+				 expect('gaurav').to.equal(players.currentPlayer);
+				 expect('sourav').to.equal(players.previousPlayer);
+				 expect('laxmi').to.equal(players.nextPlayer);
 
-			})
+			});
 		});
 	});
 
