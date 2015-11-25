@@ -9,7 +9,8 @@ var generateTable  = function(userInfo) {
 	var user_info = userInfo.map(function (eachUser) {
 		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.noOfCards+"</td></tr>";
 	});
-	return "<table align='right'>"+user_info.join('')+"</table>";
+	var tableHead = "<tr><th>Name&nbsp;&nbsp;&nbsp;</th><th>Number Of Card</th></tr>"
+	return "<table align='right'>"+tableHead+user_info.join('')+"</table>";
 };
 
 var flag = true;
