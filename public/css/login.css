@@ -1,11 +1,21 @@
+h1 {
+    color: brown;
+    text-align: center;
+}
+
+.login {
+	background: white;
+    text-align: center;
+}
+
+#current_game_information {
+	color: Green;
+}
+
 #login_page_image {
- 	width: 500px;
- 	position:absolute;
+ 	width: 60%;
    	left:35%;
    	top:5%;
    	margin-left:-10px;
    	margin-top:-10px;
-}
-.login{
-	
 }
