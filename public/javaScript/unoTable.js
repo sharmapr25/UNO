@@ -13,23 +13,32 @@ var generateTable  = function(userInfo) {
 };
 
 var flag = true;
+
 var saidUNO = false;
 var catchedUNO = false;
 var drawCard = false;
-var playedCard = null;
+
+var userCards;
+
+var indexOfPlayedcard = 0;
 
 var sendRequestToPlayCard = function(){
 	var dataToSend = {};
 	dataToSend.saidUNO = saidUNO;
 	dataToSend.catchedUNO = catchedUNO;
 	dataToSend.drawCard = drawCard;
-	dataToSend.playedCard = playedCard;
-	
+	if(indexOfPlayedcard)
+		dataToSend.playedCard = userCards[indexOfPlayedcard];
+	else{
+		alert('please select a card to play..!!');
+		return;
+	};
+
 	saidUNO = false;
 	catchedUNO = false;
 	drawCard = false;
-	playedCard = null;
 
+	indexOfPlayedcard = 0;
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -42,6 +51,9 @@ var sendRequestToPlayCard = function(){
 	req.send(JSON.stringify(dataToSend));
 };
 
+var updateIndex = function(id){
+	indexOfPlayedcard = (id[id.length-1]-1);
+};
 
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
@@ -49,7 +61,7 @@ var sendConnectionRequest = function(){
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
 	        var comments = JSON.parse(req.responseText);
-	        console.log('Other Player Cards',comments.allUsersCardsLength);
+	        userCards = comments.userCards;
 	        console.log('Current Turn',comments.currentPlayer);
 	        console.log('Next Turn', comments.nextPlayer);
 	        console.log('Previous Turn', comments.previousPlayer);
@@ -129,10 +141,9 @@ var sendConnectionRequest = function(){
 		  	document.getElementById('User_Cards_Name').innerHTML = '<h3>'+'Players Cards :'+'</h3>'
 
 	    	var imgRef = '';
-	    	for(var i=1; i <= comments.userCards.length; i++){
-	    		imgRef += '<img id="card_num:'+i+'"src="'+addressGenrator(comments.userCards[i])+'">';
-	    	};
-			
+	    	for(var i=0; i < comments.userCards.length; i++){
+	    		imgRef += '<img id="card_num:'+(i+1)+'" onclick="updateIndex(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    	};			
 		  	document.getElementById('my_cards').innerHTML = imgRef;
 	    };
 	};
