@@ -56,7 +56,11 @@ var sendRequestToPlayCard = function(){
 				case 'Game end' :
 	        		sendConnectionRequest();
 					var ranks = response.ranks;
-					setTimeout(alert(ranks),1000);
+					var alertText = 'Game End' + '\n';
+		        	ranks.forEach(function(ranker, index){
+		        		alertText += index+1 + '. ' + ranker.name + ' : ' + ranker.points + '\n';
+		        	});
+		        	alert(alertText);
 			};
 	        sendConnectionRequest();
 	    };
@@ -79,7 +83,15 @@ var sendConnectionRequest = function(){
 	        console.log('Current Turn',comments.currentPlayer);
 	        console.log('Next Turn', comments.nextPlayer);
 	        console.log('Previous Turn', comments.previousPlayer);
-	        
+	        	
+	        if(comments.isEndOfGame){
+	        	var alertText = 'Game End' + '\n';
+	        	comments.ranks.forEach(function(ranker, index){
+	        		alertText += index+1 + '. ' + ranker.name + ' : ' + ranker.points + '\n';
+	        	});
+	        	alert(alertText);
+	        };
+
 	        if(flag){
 	        	var e = document.getElementById('loading');
 	        	document.body.removeChild(e);
@@ -171,9 +183,8 @@ var sendConnectionRequest = function(){
 		  	document.getElementById('my_cards').innerHTML = imgRef;
 
 			document.getElementById('current_player').innerHTML = "<h3>"+"Current Player :"+comments.currentPlayer+"</h3>";
-			document.getElementById('next_player').innerHTML = "<h3>"+"Current Player :"+comments.nextPlayer+"</h3>";
-			document.getElementById('previous_player').innerHTML = "<h3>"+"Current Player :"+comments.previousPlayer+"</h3>";
-
+			document.getElementById('next_player').innerHTML = "<h3>"+"Next Player :"+comments.nextPlayer+"</h3>";
+			document.getElementById('previous_player').innerHTML = "<h3>"+"Previous Player :"+comments.previousPlayer+"</h3>";
 	    };
 	};
 	req.open('GET', 'all_information_on_table', true);

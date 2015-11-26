@@ -22,7 +22,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -62,6 +62,12 @@ var main = function(){
 		dataToSend.currentPlayer = players.currentPlayer;
 		dataToSend.nextPlayer = players.nextPlayer;
 		dataToSend.previousPlayer = players.previousPlayer;
+		var end = isEndOfGame();
+		if(end){
+			dataToSend.isEndOfGame = isEndOfGame();
+			dataToSend.ranks = calculateRanking();
+		};
+
 		sendResponse(response, dataToSend);
 	};
 
@@ -255,7 +261,6 @@ var main = function(){
 		console.log("draw pile is herreee...", draw_pile.cards);
 		console.log("discard pile is remaining ", discard_pile.cards);
 	};
-
 
 	//-------------------------------------------------------------------------------------------//
 
