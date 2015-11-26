@@ -22,6 +22,7 @@ server.distributeCards = function (playersName,allcards) {
 };
 
 server.calculatePoints = function (playersCard) {
+	if(playersCard.length == 0) return 0;
 	if (playersCard.length == 1) {return playersCard[0].points}
 	else{
 		var result = playersCard.reduce(function (card1,card2) {

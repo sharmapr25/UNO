@@ -22,7 +22,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 2){
+		if(usersInformation.length != 1){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -118,11 +118,16 @@ var main = function(){
 	};
 
 	var calculateRanking = function(){
-		// var ranks = [];
-		// user_names.forEach(function(name){
-		// 	ranks.points = calculatePoints(user_cards[name]);
-		// 	ranks.name = name;
-		// });
+		var ranks = [];
+		user_names.forEach(function(name){
+			ranks.push({name : name, points : calculatePoints(user_cards[name])});
+		});
+		ranks.sort(function(player1, player2){
+			return (player1.points > player2.points)
+				? 1
+				: (player1.points < player2.points) ? -1 : 0 
+		});
+		return ranks;
 	};
 
 	var sendResponse = function(response, data){
@@ -177,6 +182,7 @@ var main = function(){
 							if(isEndOfGame()){
 								var dataToSend = {};
 								dataToSend.status = 'Game end';
+								dataToSend.ranks = calculateRanking();
 								sendResponse(response, dataToSend);	
 							}else{
 								var dataToSend = {};

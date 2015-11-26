@@ -44,7 +44,8 @@ var sendRequestToPlayCard = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
-	        var responseStatus = JSON.parse(req.responseText).status;
+	        var response = JSON.parse(req.responseText);
+	        var responseStatus = response.status
 			switch(responseStatus){
 				case 'can not play the card':
 					alert('Invalid Card..!!!');
@@ -54,7 +55,8 @@ var sendRequestToPlayCard = function(){
 					break;
 				case 'Game end' :
 	        		sendConnectionRequest();
-					alert('Game End');
+					var ranks = response.ranks;
+					setTimeout(alert(ranks),1000);
 			};
 	        sendConnectionRequest();
 	    };
