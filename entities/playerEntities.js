@@ -1,6 +1,6 @@
-var InitializePlayers = function(allPlayers,direction){
+var InitializePlayers = function(allPlayers){
 	this.players = allPlayers;
-	this.direction = direction;
+	this.direction = true;
 
 	Object.defineProperties(this,{
 		currentPlayer : {value : this.players[0],writable : true},
@@ -39,6 +39,7 @@ InitializePlayers.prototype = {
 		};
 	},
 	changeDirection : function(){
+		this.direction = this.direction ? false : true;
 		if (!this.direction) {
 			var temp = this.nextPlayer
 			this.nextPlayer = this.previousPlayer;
