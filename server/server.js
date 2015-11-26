@@ -22,7 +22,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 3){
+		if(usersInformation.length != 1){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -211,9 +211,12 @@ var main = function(){
 	};
 
 	var removeSelectedCard = function(card, allCards){
-		return  allCards.filter(function(eachCard){
-			return !(JSON.stringify(eachCard) == JSON.stringify(card));
-		});
+		for(var i = 0; i < allCards.length; i++){
+			if(JSON.stringify(allCards[i]) == JSON.stringify(card)){
+				allCards.splice(i,1);
+				return allCards;
+			};
+		}
 	};
 
 	//-------------------------------------------------------------------------------------------//
