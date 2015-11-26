@@ -14,6 +14,7 @@ var generateTable  = function(userInfo) {
 };
 
 var flag = true;
+var showedRanks = false;
 
 var saidUNO = false;
 var catchedUNO = false;
@@ -55,12 +56,11 @@ var sendRequestToPlayCard = function(){
 					break;
 				case 'Game end' :
 	        		sendConnectionRequest();
-					var ranks = response.ranks;
-					var alertText = 'Game End' + '\n';
-		        	ranks.forEach(function(ranker, index){
-		        		alertText += index+1 + '. ' + ranker.name + ' : ' + ranker.points + '\n';
-		        	});
-		        	alert(alertText);
+		        	if(!showedRanks){
+		        		alert('Game End..!!');
+		        		showedRanks = true;
+		        		window.location = 'winners.html';
+		        	};
 			};
 	        sendConnectionRequest();
 	    };
@@ -85,11 +85,11 @@ var sendConnectionRequest = function(){
 	        console.log('Previous Turn', comments.previousPlayer);
 	        	
 	        if(comments.isEndOfGame){
-	        	var alertText = 'Game End' + '\n';
-	        	comments.ranks.forEach(function(ranker, index){
-	        		alertText += index+1 + '. ' + ranker.name + ' : ' + ranker.points + '\n';
-	        	});
-	        	alert(alertText);
+	        	if(!showedRanks) {
+	        		alert('Game End..!!');
+	        		showedRanks = true;
+		        	window.location = 'winners.html';
+	        	};
 	        };
 
 	        if(flag){

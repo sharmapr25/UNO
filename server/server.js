@@ -22,7 +22,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -54,6 +54,20 @@ var main = function(){
 		return cardInfo;
 	};
 
+	var generateTable  = function(userInfo) {
+		var user_info = userInfo.map(function (eachUser) {
+			return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.points+"</td></tr>";
+		});
+		var tableHead = "<tr><th>Name</th><th>Points</th></tr>"
+		return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
+	};
+
+	var storeRankOfPlayers = function(ranks){
+		var dataToWrite = generateTable(ranks);
+		var fileName = '../public/htmlFiles/winners.html';
+		fs.writeFileSync(fileName, dataToWrite);
+	};
+
 	var sendAllInformationOfTable = function(request,response){
 		var dataToSend = {};
 		dataToSend.cardOnTable = discard_pile.getTopMostCard();
@@ -66,6 +80,7 @@ var main = function(){
 		if(end){
 			dataToSend.isEndOfGame = isEndOfGame();
 			dataToSend.ranks = calculateRanking();
+			storeRankOfPlayers(dataToSend.ranks);
 		};
 
 		sendResponse(response, dataToSend);
