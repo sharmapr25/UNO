@@ -5,14 +5,14 @@ body{
 #say_UNO{
 	margin-left: 1100px;
 	margin-bottom : 30px;
-	height: 30px;
+	height: 20px;
 	width: 80px;
 	background-color: #a7cfdf; 
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
 }
 
 #catch_UNO{
-	height: 30px;
+	height: 20px;
 	width: 80px;
 	background-color: #a7cfdf;
 	margin-left: 7px;
@@ -21,7 +21,7 @@ body{
 }
 
 #draw{
-	height: 30px;
+	height: 20px;
 	width: 80px;
 	background-color: #a7cfdf;
 	margin-left: 7px;
@@ -29,10 +29,14 @@ body{
 
 }
 
+#table{
+	margin-left: 1100px;
+}
+
 #submit{
 	position: absolute;
     margin-left: 1175px;	
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 	width :100px;
 	border:4px solid #0F5F24 ;
 	-webkit-box-shadow: #878787 0px 2px 2px ;
@@ -63,10 +67,25 @@ body{
 
 #User_Cards_Name{
 	position: relative;
-	margin-top: 155px;
+	margin-top: 15px;
 }
 
 #my_cards{
     position: relative;
-    margin-top: 25px;
+    margin-top: 20px;
+}
+
+#current_player{
+	position: relative;
+    margin-left: 1100px;
+}
+
+#next_player{
+	position: relative;
+    margin-left: 1100px;
+}
+
+#previous_player{
+	position: relative;
+    margin-left: 1100px;
 }
