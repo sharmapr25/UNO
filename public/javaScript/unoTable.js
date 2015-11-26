@@ -186,7 +186,12 @@ var sendConnectionRequest = function(){
 			document.getElementById('next_player').innerHTML = "<h3>"+"Next Player :"+comments.nextPlayer+"</h3>";
 			document.getElementById('previous_player').innerHTML = "<h3>"+"Previous Player :"+comments.previousPlayer+"</h3>";
 	    };
+		if(req.status == 404){
+				var e = document.getElementById('loading');
+		       	e.innerHTML = req.responseText;
+		};
 	};
+
 	req.open('GET', 'all_information_on_table', true);
 	req.send();
 };

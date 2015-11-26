@@ -13,7 +13,6 @@ var InitializePlayers = require('../entities/playerEntities.js').InitializePlaye
 var canPlayerPlayTheCard = require('./serverUtilities.js').server.validateCard;
 var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
-console.log(canPlayerPlayTheCard);
 //-------------------------------------------------------------------------------------//
 
 var main = function(){
@@ -22,15 +21,18 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 3){
+		if(usersInformation.length != 2){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
 			sendResponse(response, data);
-		}else{
+		}else if(isUserExists(request)){
 			startUno();
 			response.statusCode = 200;
 			response.end('public/htmlFiles/unoTable.html');
+		}else{
+			var data =  { isGameStarted : true};
+			sendResponse(response, data);
 		}
 	};
 	var mapName = function(ip){
@@ -58,14 +60,19 @@ var main = function(){
 		var user_info = userInfo.map(function (eachUser) {
 			return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.points+"</td></tr>";
 		});
+		var greetText = '<tr><td colspan="2"><h1>Congratulation!!!!</h1></td></tr>';
 		var tableHead = "<tr><th>Name</th><th>Points</th></tr>"
-		return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
+		var endData = '</body></html>';
+		return "<table id='table'>"+greetText+tableHead+user_info.join('')+"</table>" + endData;
 	};
 
 	var storeRankOfPlayers = function(ranks){
 		var dataToWrite = generateTable(ranks);
 		var fileName = '../public/htmlFiles/winners.html';
-		fs.writeFileSync(fileName, dataToWrite);
+		var data = fs.readFileSync(fileName,'UTF-8');
+		var startIndex = data.indexOf('<table');
+		var dataAfter = data.substring(0,startIndex) + dataToWrite;
+		fs.writeFileSync(fileName, dataAfter);
 	};
 
 	var sendAllInformationOfTable = function(request,response){
@@ -87,7 +94,6 @@ var main = function(){
 	};
 
 	var serveFile = function(filePath, request, response){
-		console.log('Gaurav is requesting', filePath);
 		fs.readFile(filePath, function(err, data){
 			if(data){
 				response.statusCode = 200;
@@ -107,9 +113,14 @@ var main = function(){
 		if(request.url == '/' && isGameStarted){
 			response.statusCode = 404;
 			response.end('Game has already been started..!');
-		}
-		else if(request.url == '/updated_login_data'){
+		}else if(request.url == '/public/htmlFiles/all_information_on_table' && !isUserExists(request)){
+			response.statusCode = 404;
+			response.end('Oops..!! Something went wrong..!! GO TO LOGIN PAGE');
+		}else if(request.url == '/updated_login_data'){
 			sendUpdatedData(request, response);
+		}else if(request.url == '/public/htmlFiles/winners.html' && !isUserExists(request)){
+			response.statusCode = 404;
+			response.end('Sorry..!!! Login First..!!!');
 		}else if(request.url == '/public/htmlFiles/all_information_on_table'){
 			sendAllInformationOfTable(request,response);
 		}else{
@@ -178,7 +189,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 					
-					if(usersInformation.length == 3) isGameStarted = true;
+					if(usersInformation.length == 2) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
