@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 2){
+		if(usersInformation.length != 1){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -35,6 +35,7 @@ var main = function(){
 			sendResponse(response, data);
 		}
 	};
+
 	var mapName = function(ip){
 		var name;
 		usersInformation.forEach(function(user){
@@ -83,6 +84,7 @@ var main = function(){
 		dataToSend.currentPlayer = players.currentPlayer;
 		dataToSend.nextPlayer = players.nextPlayer;
 		dataToSend.previousPlayer = players.previousPlayer;
+		dataToSend.runningColour = runningColour;
 		var end = isEndOfGame();
 		if(end){
 			dataToSend.isEndOfGame = isEndOfGame();
@@ -157,9 +159,22 @@ var main = function(){
 		ranks.sort(function(player1, player2){
 			return (player1.points > player2.points)
 				? 1
-				: (player1.points < player2.points) ? -1 : 0 
+				: (player1.points < player2.points) ? -1 : 0
 		});
 		return ranks;
+	};
+
+	var checkForEndOfTheGameAndRespond = function(request, response){
+		if(isEndOfGame()){
+			var dataToSend = {};
+			dataToSend.status = 'Game end';
+			dataToSend.ranks = calculateRanking();
+			sendResponse(response, dataToSend);	
+		}else{
+			var dataToSend = {};
+			dataToSend.status = 'successful';
+			sendResponse(response, dataToSend);	
+		};
 	};
 
 	var sendResponse = function(response, data){
@@ -189,49 +204,133 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 					
-					if(usersInformation.length == 2) isGameStarted = true;
+					if(usersInformation.length == 1) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
 		}else if(request.url == '/public/htmlFiles/play_card'){
+			//check whether its a request to catch uno or to play a card..
+
+			var areSameColouredCards = function(card1, card2){
+				return ((card1.colour == card2.colour) && (card1.colour != null));
+			};
+
+			var areSameNumberedCards = function(card1, card2){
+				return (card1.number == card2.number);
+			};
+
+			var areSameSpecialityCards = function(card1, card2){
+				return ((card1.speciality == card2.speciality) && card1.speciality != null);
+			};
+
+			var isNumberedCard = function(card){
+				return (card.number != null);
+			};
+
+			var isReverseCard = function(card){
+				return (card.speciality == 'Reverse');
+			};
+
+			var isSkipCard = function(card){
+				return (card.speciality == 'Skip');
+			};
+
+			var isWildCard = function(card){
+				return (card.speciality == 'Wild');
+			};
+
+			var isWildDrawFourCard = function(card){
+				return (card.speciality == 'WildDrawFour');
+			};
+
+			var isDrawTwoCard = function(card){
+				return (card.speciality == 'DrawTwo');	
+			};
+
+			var drawAndGiveACardToPlayer = function(request, response){
+				var card = draw_pile.drawCards(1)[0];
+				var playerName = mapName(request.connection.remoteAddress);
+				var playerCards = user_cards[playerName];
+
+				playerCards.push(card);
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				
+				checkForEndOfTheGameAndRespond(request, response);
+			};
+
+			var playTheCardThatPlayerSelected = function(request, response, cardPlayed, newColour){
+				var playerName = mapName(request.connection.remoteAddress);
+				var playerCards = user_cards[playerName];
+				user_cards[playerName] = removeSelectedCard(cardPlayed, playerCards);
+				discard_pile.addCard(cardPlayed);
+				if(cardPlayed.speciality == 'WildDrawFour'){
+					var nextPlayerName = players.nextPlayer;
+					var four_cards = draw_pile.drawCards(4);
+					user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(four_cards);
+					players.changePlayersTurn();
+				};
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				checkForEndOfTheGameAndRespond(request, response);
+			};
+
+			var canNotPlayTheCard = function(response){
+				var dataToSend = {};
+				dataToSend.status = 'can not play the card';
+				sendResponse(response, dataToSend);
+			};
+
 			if(currentPlayer == mapName(request.connection.remoteAddress)){
 				var data = '';
-					request.on('data', function(d){
-						data += d;
-					});
-					request.on('end', function(){
-						console.log(JSON.parse(data));
-						var userPlay = JSON.parse(data);
-						var cardPlayed = userPlay.playedCard;
-						// canPlayerPlayTheCard(cardPlayed, discard_pile.getTopMostCard())
-						if(true){
-							var playerName = mapName(request.connection.remoteAddress);
-							var playerCards = user_cards[playerName];
-							user_cards[playerName] = removeSelectedCard(cardPlayed, playerCards);
-							discard_pile.addCard(cardPlayed);
+				request.on('data', function(d){
+					data += d;
+				});
+				request.on('end', function(){
+					console.log(JSON.parse(data));
+					var userPlay = JSON.parse(data);
+					var cardPlayed = userPlay.playedCard;
+					var discardedCard = discard_pile.getTopMostCard();
+
+					if(userPlay.drawCard == true && cardPlayed == undefined){
+						drawAndGiveACardToPlayer(request, response);
+						return;
+					};
+
+					console.log('comparing..!!!',cardPlayed.colour, discardedCard.colour);
+
+					if((discardedCard.speciality == 'Wild' || discardedCard.speciality == 'WildDrawFour') && ((cardPlayed.colour == runningColour) || (runningColour == ''))){
+						playTheCardThatPlayerSelected(request, response, cardPlayed);
+					}else if(isNumberedCard(cardPlayed)
+						&& (areSameColouredCards(cardPlayed, discardedCard)
+							|| areSameNumberedCards(cardPlayed, discardedCard))){
+						playTheCardThatPlayerSelected(request, response, cardPlayed);
+					}else if(isReverseCard(cardPlayed) 
+						&& (areSameSpecialityCards(cardPlayed, discardedCard)
+						|| areSameColouredCards(cardPlayed, discardedCard))){
+							players.changeDirection();
+							playTheCardThatPlayerSelected(request, response, cardPlayed);
+					}else if(isSkipCard(cardPlayed) 
+						&& (areSameColouredCards(cardPlayed, discardedCard)
+						|| areSameSpecialityCards(cardPlayed, discardedCard))){
 							players.changePlayersTurn();
-							currentPlayer = players.currentPlayer;
-							if(isEndOfGame()){
-								var dataToSend = {};
-								dataToSend.status = 'Game end';
-								dataToSend.ranks = calculateRanking();
-								sendResponse(response, dataToSend);	
-							}else{
-								var dataToSend = {};
-								dataToSend.status = 'successful';
-								sendResponse(response, dataToSend);	
-							}
-						}else{
-							var dataToSend = {};
-							dataToSend.status = 'can not play the card';
-							sendResponse(response, dataToSend);
-						}
-					});
-			}else{
-				var dataToSend = {};
-				dataToSend.status = 'not your turn';
-				sendResponse(response, dataToSend);	
+							playTheCardThatPlayerSelected(request, response, cardPlayed);
+					}else if(isWildCard(cardPlayed)){
+							runningColour = userPlay.colour;
+							console.log('user changed colour to', runningColour);
+							playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
+					}else if(isWildDrawFourCard(cardPlayed)){
+							runningColour = userPlay.colour;
+							console.log('user changed colour to', runningColour);
+							playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
+					}else if(isDrawTwoCard(cardPlayed)){
+						playTheCardThatPlayerSelected(request, response, cardPlayed);
+					}else{
+						canNotPlayTheCard(response);
+					};
+				});
 			};
+
 		};
 
 	};
@@ -271,7 +370,11 @@ var main = function(){
 
 	var players;
 
+	var runningColour;
+
 	var currentPlayer;
+
+	var plus_two_cards_count = 0;
 
 	var startUno = function(){
 		var shuffledCards = lodash.shuffle(allCards);
@@ -285,10 +388,9 @@ var main = function(){
 		var remainingCards = dataAfterDistribution[1];
 		var cardForDiscardPile = remainingCards.shift();
 		discard_pile = new DiscardPile([cardForDiscardPile]);
+		runningColour = (discard_pile.getTopMostCard().colour) ? (discard_pile.getTopMostCard().colour) : '';
+		console.log('Double handsome says', runningColour);
 		draw_pile = new DrawPile(remainingCards);
-		console.log("user cards is here.....",user_cards);
-		console.log("draw pile is herreee...", draw_pile.cards);
-		console.log("discard pile is remaining ", discard_pile.cards);
 	};
 
 	//-------------------------------------------------------------------------------------------//

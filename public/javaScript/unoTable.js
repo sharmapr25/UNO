@@ -19,10 +19,11 @@ var showedRanks = false;
 var saidUNO = false;
 var catchedUNO = false;
 var drawCard = false;
+var colour = false;
 
 var userCards;
 
-var indexOfPlayedcard = 0;
+var indexOfPlayedcard = 00;
 
 var sendRequestToPlayCard = function(){
 	var dataToSend = {};
@@ -31,10 +32,16 @@ var sendRequestToPlayCard = function(){
 	dataToSend.drawCard = drawCard;
 	if(indexOfPlayedcard)
 		dataToSend.playedCard = userCards[indexOfPlayedcard];
-	else{
+	else if(drawCard){
+	}else{
 		alert('please select a card to play..!!');
 		return;
 	};
+
+	if(colour){
+		dataToSend.colour = colour;
+		colour = false;
+	}
 
 	saidUNO = false;
 	catchedUNO = false;
@@ -70,7 +77,13 @@ var sendRequestToPlayCard = function(){
 };
 
 var updateIndex = function(id){
-	indexOfPlayedcard = id[id.length-1];
+	indexOfPlayedcard = id.substr(9);
+	if(userCards[indexOfPlayedcard].speciality == 'Wild' 
+		|| userCards[indexOfPlayedcard].speciality == 'WildDrawFour'){
+		    var retVal = prompt("Enter new Colour : ", "");
+			colour = retVal;
+	};
+
 };
 
 var sendConnectionRequest = function(){
@@ -83,7 +96,8 @@ var sendConnectionRequest = function(){
 	        console.log('Current Turn',comments.currentPlayer);
 	        console.log('Next Turn', comments.nextPlayer);
 	        console.log('Previous Turn', comments.previousPlayer);
-	        	
+	        console.log('Current running Colour', comments.runningColour);
+	        
 	        if(comments.isEndOfGame){
 	        	if(!showedRanks) {
 	        		alert('Game End..!!');
@@ -114,6 +128,10 @@ var sendConnectionRequest = function(){
 
 			  	var iDiv = document.createElement('div');
 			  	iDiv.id = 'previous_player';
+			  	document.body.appendChild(iDiv);
+
+			  	var iDiv = document.createElement('div');
+			  	iDiv.id = 'running_colour';
 			  	document.body.appendChild(iDiv);
 
 			  	var iDiv = document.createElement('div');
@@ -185,7 +203,10 @@ var sendConnectionRequest = function(){
 			document.getElementById('current_player').innerHTML = "<h3>"+"Current Player :"+comments.currentPlayer+"</h3>";
 			document.getElementById('next_player').innerHTML = "<h3>"+"Next Player :"+comments.nextPlayer+"</h3>";
 			document.getElementById('previous_player').innerHTML = "<h3>"+"Previous Player :"+comments.previousPlayer+"</h3>";
+			document.getElementById('running_colour').innerHTML = "<h3>"+"running colour :"+comments.runningColour+"</h3>";
+
 	    };
+
 		if(req.status == 404){
 				var e = document.getElementById('loading');
 		       	e.innerHTML = req.responseText;
