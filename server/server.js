@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -204,7 +204,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 					
-					if(usersInformation.length == 1) isGameStarted = true;
+					if(usersInformation.length == 3) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
@@ -275,6 +275,20 @@ var main = function(){
 				checkForEndOfTheGameAndRespond(request, response);
 			};
 
+			var doesNextPlayerHaveDrawTwo = function(request){
+				var nextPlayerName = players.nextPlayer;
+				return user_cards[nextPlayerName].some(function(card){
+					return isDrawTwoCard(card);
+				});
+			};
+
+			var givePenaltyCardToNextUser = function(request){
+				var nextPlayerName = players.nextPlayer;
+				user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(draw_pile.drawCards(plus_two_cards_count));
+				plus_two_cards_count = 0;
+				players.changePlayersTurn();
+			};
+
 			var canNotPlayTheCard = function(response){
 				var dataToSend = {};
 				dataToSend.status = 'can not play the card';
@@ -323,7 +337,13 @@ var main = function(){
 							runningColour = userPlay.colour;
 							console.log('user changed colour to', runningColour);
 							playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
-					}else if(isDrawTwoCard(cardPlayed)){
+					}else if(isDrawTwoCard(cardPlayed)
+						&& (areSameSpecialityCards(cardPlayed, discardedCard)
+							|| areSameColouredCards(cardPlayed, discardedCard))){
+							plus_two_cards_count += 2;							
+							if(!doesNextPlayerHaveDrawTwo(request)){
+								givePenaltyCardToNextUser(request);
+							};
 						playTheCardThatPlayerSelected(request, response, cardPlayed);
 					}else{
 						canNotPlayTheCard(response);
