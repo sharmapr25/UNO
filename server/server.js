@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 3){
+		if(usersInformation.length != 1){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -128,6 +128,7 @@ var main = function(){
 		}else{
 			serveFile(filePath, request, response);
 		};
+
 	};
 	//-----------------------------------POST_HANDLER---------------------------------------//
 
@@ -181,10 +182,10 @@ var main = function(){
 		response.end(JSON.stringify(data));
 	};
 
-	var handle_post_request = function(request, response){
-		console.log('post request', request.url, request.method);
-		if(request.url == '/login_user'){
-			if(isGameStarted){
+//---------------------------------LOGIN_USER_REQUEST---------------------------------//
+
+	var handle_login_user_request = function(request, response){
+		if(isGameStarted){
 				response.end('{"isGameStarted" : true}');
 			}else{
 				console.log('User requested to log in..!');
@@ -204,155 +205,168 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 					
-					if(usersInformation.length == 3) isGameStarted = true;
+					if(usersInformation.length == 1) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
-		}else if(request.url == '/public/htmlFiles/play_card'){
-			//check whether its a request to catch uno or to play a card..
+	};
 
-			var areSameColouredCards = function(card1, card2){
-				return ((card1.colour == card2.colour) && (card1.colour != null));
-			};
+//---------------------------------PLAY_CARD_REQUEST---------------------------------//
+	var areSameColouredCards = function(card1, card2){
+		return ((card1.colour == card2.colour) && (card1.colour != null));
+	};
 
-			var areSameNumberedCards = function(card1, card2){
-				return (card1.number == card2.number);
-			};
+	var areSameNumberedCards = function(card1, card2){
+		return (card1.number == card2.number);
+	};
 
-			var areSameSpecialityCards = function(card1, card2){
-				return ((card1.speciality == card2.speciality) && card1.speciality != null);
-			};
+	var areSameSpecialityCards = function(card1, card2){
+		return ((card1.speciality == card2.speciality) && card1.speciality != null);
+	};
 
-			var isNumberedCard = function(card){
-				return (card.number != null);
-			};
+	var isNumberedCard = function(card){
+		return (card.number != null);
+	};
 
-			var isReverseCard = function(card){
-				return (card.speciality == 'Reverse');
-			};
+	var isReverseCard = function(card){
+		return (card.speciality == 'Reverse');
+	};
 
-			var isSkipCard = function(card){
-				return (card.speciality == 'Skip');
-			};
+	var isSkipCard = function(card){
+		return (card.speciality == 'Skip');
+	};
 
-			var isWildCard = function(card){
-				return (card.speciality == 'Wild');
-			};
+	var isWildCard = function(card){
+		return (card.speciality == 'Wild');
+	};
 
-			var isWildDrawFourCard = function(card){
-				return (card.speciality == 'WildDrawFour');
-			};
+	var isWildDrawFourCard = function(card){
+		return (card.speciality == 'WildDrawFour');
+	};
 
-			var isDrawTwoCard = function(card){
-				return (card.speciality == 'DrawTwo');	
-			};
+	var isDrawTwoCard = function(card){
+		return (card.speciality == 'DrawTwo');	
+	};
 
-			var drawAndGiveACardToPlayer = function(request, response){
-				var card = draw_pile.drawCards(1)[0];
-				var playerName = mapName(request.connection.remoteAddress);
-				var playerCards = user_cards[playerName];
+	var drawAndGiveACardToPlayer = function(request, response){
+		var card = draw_pile.drawCards(1)[0];
+		var playerName = mapName(request.connection.remoteAddress);
+		var playerCards = user_cards[playerName];
 
-				playerCards.push(card);
-				players.changePlayersTurn();
-				currentPlayer = players.currentPlayer;
-				
-				checkForEndOfTheGameAndRespond(request, response);
-			};
+		playerCards.push(card);
+		players.changePlayersTurn();
+		currentPlayer = players.currentPlayer;
+		
+		checkForEndOfTheGameAndRespond(request, response);
+	};
 
-			var playTheCardThatPlayerSelected = function(request, response, cardPlayed, newColour){
-				var playerName = mapName(request.connection.remoteAddress);
-				var playerCards = user_cards[playerName];
-				user_cards[playerName] = removeSelectedCard(cardPlayed, playerCards);
-				discard_pile.addCard(cardPlayed);
-				if(cardPlayed.speciality == 'WildDrawFour'){
-					var nextPlayerName = players.nextPlayer;
-					var four_cards = draw_pile.drawCards(4);
-					user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(four_cards);
-					players.changePlayersTurn();
-				};
-				players.changePlayersTurn();
-				currentPlayer = players.currentPlayer;
-				checkForEndOfTheGameAndRespond(request, response);
-			};
-
-			var doesNextPlayerHaveDrawTwo = function(request){
-				var nextPlayerName = players.nextPlayer;
-				return user_cards[nextPlayerName].some(function(card){
-					return isDrawTwoCard(card);
-				});
-			};
-
-			var givePenaltyCardToNextUser = function(request){
-				var nextPlayerName = players.nextPlayer;
-				user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(draw_pile.drawCards(plus_two_cards_count));
-				plus_two_cards_count = 0;
-				players.changePlayersTurn();
-			};
-
-			var canNotPlayTheCard = function(response){
-				var dataToSend = {};
-				dataToSend.status = 'can not play the card';
-				sendResponse(response, dataToSend);
-			};
-
-			if(currentPlayer == mapName(request.connection.remoteAddress)){
-				var data = '';
-				request.on('data', function(d){
-					data += d;
-				});
-				request.on('end', function(){
-					console.log(JSON.parse(data));
-					var userPlay = JSON.parse(data);
-					var cardPlayed = userPlay.playedCard;
-					var discardedCard = discard_pile.getTopMostCard();
-
-					if(userPlay.drawCard == true && cardPlayed == undefined){
-						drawAndGiveACardToPlayer(request, response);
-						return;
-					};
-
-					console.log('comparing..!!!',cardPlayed.colour, discardedCard.colour);
-
-					if((discardedCard.speciality == 'Wild' || discardedCard.speciality == 'WildDrawFour') && ((cardPlayed.colour == runningColour) || (runningColour == ''))){
-						playTheCardThatPlayerSelected(request, response, cardPlayed);
-					}else if(isNumberedCard(cardPlayed)
-						&& (areSameColouredCards(cardPlayed, discardedCard)
-							|| areSameNumberedCards(cardPlayed, discardedCard))){
-						playTheCardThatPlayerSelected(request, response, cardPlayed);
-					}else if(isReverseCard(cardPlayed) 
-						&& (areSameSpecialityCards(cardPlayed, discardedCard)
-						|| areSameColouredCards(cardPlayed, discardedCard))){
-							players.changeDirection();
-							playTheCardThatPlayerSelected(request, response, cardPlayed);
-					}else if(isSkipCard(cardPlayed) 
-						&& (areSameColouredCards(cardPlayed, discardedCard)
-						|| areSameSpecialityCards(cardPlayed, discardedCard))){
-							players.changePlayersTurn();
-							playTheCardThatPlayerSelected(request, response, cardPlayed);
-					}else if(isWildCard(cardPlayed)){
-							runningColour = userPlay.colour;
-							console.log('user changed colour to', runningColour);
-							playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
-					}else if(isWildDrawFourCard(cardPlayed)){
-							runningColour = userPlay.colour;
-							console.log('user changed colour to', runningColour);
-							playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
-					}else if(isDrawTwoCard(cardPlayed)
-						&& (areSameSpecialityCards(cardPlayed, discardedCard)
-							|| areSameColouredCards(cardPlayed, discardedCard))){
-							plus_two_cards_count += 2;							
-							if(!doesNextPlayerHaveDrawTwo(request)){
-								givePenaltyCardToNextUser(request);
-							};
-						playTheCardThatPlayerSelected(request, response, cardPlayed);
-					}else{
-						canNotPlayTheCard(response);
-					};
-				});
-			};
-
+	var playTheCardThatPlayerSelected = function(request, response, cardPlayed, newColour){
+		var playerName = mapName(request.connection.remoteAddress);
+		var playerCards = user_cards[playerName];
+		user_cards[playerName] = removeSelectedCard(cardPlayed, playerCards);
+		discard_pile.addCard(cardPlayed);
+		if(cardPlayed.speciality == 'WildDrawFour'){
+			var nextPlayerName = players.nextPlayer;
+			var four_cards = draw_pile.drawCards(4);
+			user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(four_cards);
+			players.changePlayersTurn();
 		};
+		players.changePlayersTurn();
+		currentPlayer = players.currentPlayer;
+		checkForEndOfTheGameAndRespond(request, response);
+	};
 
+	var doesNextPlayerHaveDrawTwo = function(request){
+		var nextPlayerName = players.nextPlayer;
+		return user_cards[nextPlayerName].some(function(card){
+			return isDrawTwoCard(card);
+		});
+	};
+
+	var givePenaltyCardToNextUser = function(request){
+		var nextPlayerName = players.nextPlayer;
+		user_cards[nextPlayerName] = user_cards[nextPlayerName].concat(draw_pile.drawCards(plus_two_cards_count));
+		plus_two_cards_count = 0;
+		players.changePlayersTurn();
+	};
+
+	var canNotPlayTheCard = function(response){
+		var dataToSend = {};
+		dataToSend.status = 'can not play the card';
+		sendResponse(response, dataToSend);
+	};
+
+	var handleIfUserDrawedACard = function(request, response, userPlay, cardPlayed){
+		if(userPlay.drawCard == true && cardPlayed == undefined){
+			drawAndGiveACardToPlayer(request, response);
+			return;
+		};
+	};
+
+	var enforceRuleOnCard = function (request, response, cardPlayed, discardedCard) {
+		if((discardedCard.speciality == 'Wild' || discardedCard.speciality == 'WildDrawFour') && ((cardPlayed.colour == runningColour) || (runningColour == ''))){
+			playTheCardThatPlayerSelected(request, response, cardPlayed);
+		}else if(isNumberedCard(cardPlayed)
+			&& (areSameColouredCards(cardPlayed, discardedCard)
+				|| areSameNumberedCards(cardPlayed, discardedCard))){
+			playTheCardThatPlayerSelected(request, response, cardPlayed);
+		}else if(isReverseCard(cardPlayed) 
+			&& (areSameSpecialityCards(cardPlayed, discardedCard)
+			|| areSameColouredCards(cardPlayed, discardedCard))){
+				players.changeDirection();
+				playTheCardThatPlayerSelected(request, response, cardPlayed);
+		}else if(isSkipCard(cardPlayed) 
+			&& (areSameColouredCards(cardPlayed, discardedCard)
+			|| areSameSpecialityCards(cardPlayed, discardedCard))){
+				players.changePlayersTurn();
+				playTheCardThatPlayerSelected(request, response, cardPlayed);
+		}else if(isWildCard(cardPlayed)){
+				runningColour = userPlay.colour;
+				console.log('user changed colour to', runningColour);
+				playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
+		}else if(isWildDrawFourCard(cardPlayed)){
+				runningColour = userPlay.colour;
+				console.log('user changed colour to', runningColour);
+				playTheCardThatPlayerSelected(request, response, cardPlayed, runningColour);
+		}else if(isDrawTwoCard(cardPlayed)
+			&& (areSameSpecialityCards(cardPlayed, discardedCard)
+				|| areSameColouredCards(cardPlayed, discardedCard))){
+				plus_two_cards_count += 2;							
+				if(!doesNextPlayerHaveDrawTwo(request)){
+					givePenaltyCardToNextUser(request);
+				};
+			playTheCardThatPlayerSelected(request, response, cardPlayed);
+		}else{
+			canNotPlayTheCard(response);
+		};
+	};
+
+	var handle_play_card_request = function(request, response){
+		if(currentPlayer == mapName(request.connection.remoteAddress)){
+			var data = '';
+			request.on('data', function(d){
+				data += d;
+			});
+			request.on('end', function(){
+				console.log(JSON.parse(data));
+				var userPlay = JSON.parse(data);
+				var cardPlayed = userPlay.playedCard;
+				var discardedCard = discard_pile.getTopMostCard();
+				handleIfUserDrawedACard(request, response, userPlay, cardPlayed);
+				enforceRuleOnCard(request, response, cardPlayed, discardedCard);
+			});
+		};
+	}
+
+	//-----------------------------------------------------------------------------//
+
+	var handle_post_request = function(request, response){
+		console.log('post request', request.url, request.method);
+		if(request.url == '/login_user'){
+			handle_login_user_request(request, response);
+		}else if(request.url == '/public/htmlFiles/play_card'){
+			handle_play_card_request(request, response);
+		};
 	};
 
 	var removeSelectedCard = function(card, allCards){
