@@ -1,3 +1,7 @@
+body{
+	border-left: 4px solid red;
+	border-right: 4px solid red;
+}
 h1 {
     color: brown;
     text-align: center;
@@ -13,11 +17,16 @@ h1 {
 }
 
 #login_page_image {
- 	width: 60%;
+ 	width: 70%;
+ 	height: 650px;
    	left:35%;
    	top:5%;
    	margin-left:-10px;
    	margin-top:-10px;
+   	border: 6px solid white;
+   	outline-width: 4px;
+   	outline-style: solid;
+   	outline-color: red;
 }
 
 button {

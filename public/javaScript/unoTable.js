@@ -150,7 +150,7 @@ var sendConnectionRequest = function(){
 			  		saidUNO = true;
 			  	};
 			  	document.body.appendChild(iDiv);
-			  	document.getElementById('say_UNO').innerHTML = 'say UNO';
+			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
 
 			  	//catch UNO
 			  	var iDiv = document.createElement('button');
@@ -160,7 +160,7 @@ var sendConnectionRequest = function(){
 			  		catchedUNO = true;
 			  	};
 			  	document.body.appendChild(iDiv);
-			  	document.getElementById('catch_UNO').innerHTML = 'catch UNO';
+			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
 
 			  	//draw
 			  	var iDiv = document.createElement('button');
