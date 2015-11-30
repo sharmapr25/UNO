@@ -303,7 +303,8 @@ var main = function(){
 		};
 	};
 
-	var enforceRuleOnCard = function (request, response, cardPlayed, discardedCard) {
+	var enforceRuleOnCard = function (request, response, userPlay, discardedCard) {
+		var cardPlayed = userPlay.playedCard;
 		if((discardedCard.speciality == 'Wild' || discardedCard.speciality == 'WildDrawFour') && ((cardPlayed.colour == runningColour) || (runningColour == ''))){
 			playTheCardThatPlayerSelected(request, response, cardPlayed);
 		}else if(isNumberedCard(cardPlayed)
@@ -331,7 +332,9 @@ var main = function(){
 		}else if(isDrawTwoCard(cardPlayed)
 			&& (areSameSpecialityCards(cardPlayed, discardedCard)
 				|| areSameColouredCards(cardPlayed, discardedCard))){
-				plus_two_cards_count += 2;							
+				console.log('cards count was',plus_two_cards_count)							
+				plus_two_cards_count += 2;
+				console.log('cards count incremented to',plus_two_cards_count);
 				if(!doesNextPlayerHaveDrawTwo(request)){
 					givePenaltyCardToNextUser(request);
 				};
@@ -348,12 +351,13 @@ var main = function(){
 				data += d;
 			});
 			request.on('end', function(){
-				console.log(JSON.parse(data));
 				var userPlay = JSON.parse(data);
 				var cardPlayed = userPlay.playedCard;
 				var discardedCard = discard_pile.getTopMostCard();
-				handleIfUserDrawedACard(request, response, userPlay, cardPlayed);
-				enforceRuleOnCard(request, response, cardPlayed, discardedCard);
+				if(userPlay.drawCard)
+					handleIfUserDrawedACard(request, response, userPlay, cardPlayed);
+				else
+					enforceRuleOnCard(request, response, userPlay, discardedCard);
 			});
 		};
 	}
