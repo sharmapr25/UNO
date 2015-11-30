@@ -353,6 +353,8 @@ var main = function(){
 			request.on('end', function(){
 				var userPlay = JSON.parse(data);
 				var cardPlayed = userPlay.playedCard;
+				if(cardPlayed && !userPlay.drawCard)
+					runningColour = cardPlayed.colour;
 				var discardedCard = discard_pile.getTopMostCard();
 				if(userPlay.drawCard)
 					handleIfUserDrawedACard(request, response, userPlay, cardPlayed);
