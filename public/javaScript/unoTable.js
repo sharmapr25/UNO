@@ -13,90 +13,54 @@ var generateTable  = function(userInfo) {
 	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
 };
 
-var flag = true;
-var showedRanks = false;
+var createDiv = function(nameOfDiv){
+	var iDiv = document.createElement('div');
+	iDiv.id = nameOfDiv;
+	document.body.appendChild(iDiv);
+};
 
-var saidUNO = false;
-var catchedUNO = false;
-var drawCard = false;
-var colour = false;
-
-var userCards;
-
-var indexOfPlayedcard = 00;
-
-var sendRequestToPlayCard = function(){
-	var dataToSend = {};
-	dataToSend.saidUNO = saidUNO;
-	dataToSend.catchedUNO = catchedUNO;
-	dataToSend.drawCard = drawCard;
-	if(indexOfPlayedcard)
-		dataToSend.playedCard = userCards[indexOfPlayedcard];
-	else if(drawCard){
-	}else{
-		alert('please select a card to play..!!');
-		return;
-	};
-
-	if(colour){
-		dataToSend.colour = colour;
-		colour = false;
-	}
-
-	saidUNO = false;
-	catchedUNO = false;
-	drawCard = false;
-
-	indexOfPlayedcard = 0;
+var make_request_to_play_the_card = function(id){
+	var indexOfPlayedcard = id.substr(9);
+	var playedCard = userCards[indexOfPlayedcard];
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
-	        var response = JSON.parse(req.responseText);
-	        var responseStatus = response.status
-			switch(responseStatus){
-				case 'can not play the card':
-					alert('Invalid Card..!!!');
-					break;
-				case 'not your turn':
-					alert('not your turn');
-					break;
-				case 'Game end' :
-	        		sendConnectionRequest();
-		        	if(!showedRanks){
-		        		alert('Game End..!!');
-		        		showedRanks = true;
-		        		window.location = 'winners.html';
-		        	};
-			};
-	        sendConnectionRequest();
+	    	if(req.responseText == 'successful')
+	    		sendConnectionRequest();
+	    	else if(req.responseText == 'can_not_play_the_card')
+	    		alert('Invalid Card..!!!');
 	    };
 	};
 	req.open('POST', 'play_card', true);
-	req.send(JSON.stringify(dataToSend));
+	req.send(JSON.stringify(playedCard));
 };
 
-var updateIndex = function(id){
-	indexOfPlayedcard = id.substr(9);
-	if(userCards[indexOfPlayedcard].speciality == 'Wild' 
-		|| userCards[indexOfPlayedcard].speciality == 'WildDrawFour'){
-		    var retVal = prompt("Enter new Colour : ", "");
-			colour = retVal;
-	};
-
+var make_request_to_draw_a_card = function(){
+	alert('drw');
+	//send a request to draw the card..
 };
 
+var make_request_to_say_uno = function(){
+	alert('said UNO');
+	//request to say UNO
+};
+
+var make_request_to_catch_uno = function(){
+	alert('catch UNO');
+	//request to catch uno
+};
+
+var userCards;
+var flag = true;
+var showedRanks = false;
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	console.log(req.responseText);
 	        var comments = JSON.parse(req.responseText);
+	        console.log('whole response is', comments);
 	        userCards = comments.userCards;
-	        console.log('Current Turn',comments.currentPlayer);
-	        console.log('Next Turn', comments.nextPlayer);
-	        console.log('Previous Turn', comments.previousPlayer);
-	        console.log('Current running Colour', comments.runningColour);
 	        
 	        if(comments.isEndOfGame){
 	        	if(!showedRanks) {
@@ -109,94 +73,45 @@ var sendConnectionRequest = function(){
 	        if(flag){
 	        	var e = document.getElementById('loading');
 	        	document.body.removeChild(e);
-	        	
-	        	var iDiv = document.createElement('div');
-		  		iDiv.id = 'all_user_cards_info';
-		  		document.body.appendChild(iDiv);
 
-		   		var iDiv = document.createElement('div');
-			  	iDiv.id = 'All_pile';
-			  	document.body.appendChild(iDiv);
+		  		createDiv('all_user_cards_info');
+		  		createDiv('All_pile');
+		  		createDiv('current_player');
+		  		createDiv('next_player');
+		  		createDiv('previous_player');
+		  		createDiv('running_colour');
+		  		createDiv('User_Cards_Name');
+		  		createDiv('my_cards');
+		  		createDiv('say_UNO');
+		  		createDiv('catch_UNO');
+		  		createDiv('running_colour');
 
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'current_player';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'next_player';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'previous_player';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'running_colour';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'User_Cards_Name';
-			  	document.body.appendChild(iDiv);
-
-			  	var iDiv = document.createElement('div');
-			  	iDiv.id = 'my_cards';
-			  	document.body.appendChild(iDiv);
-
-			  	//say UNO
-			  	var iDiv = document.createElement('button');
-			  	iDiv.id = 'say_UNO';
-			  	iDiv.onclick = function(){ 
-			  		alert('yeahhh..said UNO..!!');
-			  		saidUNO = true;
+	        	document.getElementById('say_UNO').onclick = function(){ 
+	        		alert('said UNO');
+			  		//will make a request to say the uno
 			  	};
-			  	document.body.appendChild(iDiv);
 			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
-
-			  	//catch UNO
-			  	var iDiv = document.createElement('button');
-			  	iDiv.id = 'catch_UNO';
-			  	iDiv.onclick = function(){ 
-			  		alert('Call to catch UNO..!!');
-			  		catchedUNO = true;
+		    
+	        	document.getElementById('catch_UNO').onclick = function(){ 
+			  		//will make a request to catch the uno
 			  	};
-			  	document.body.appendChild(iDiv);
 			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
 
-			  	//draw
-			  	var iDiv = document.createElement('button');
-			  	iDiv.id = 'draw';
-			  	iDiv.onclick = function(){ 
-			  		alert('Draw cardsss..!!');
-			  		drawCard = true;
-			  	};
-			  	document.body.appendChild(iDiv);
-			  	document.getElementById('draw').innerHTML = 'DRAW';
-
-			  	//Submit
-				var iDiv = document.createElement('button');
-			  	iDiv.id = 'submit';
-			  	iDiv.onclick = function(){ 
-			  		sendRequestToPlayCard();
-			  	};
-			  	document.body.appendChild(iDiv);
-			  	document.getElementById('submit').innerHTML = 'Submit'
-	        	
 	        	flag = false;
 	        };
-
 	        
 		  	document.getElementById('all_user_cards_info').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
-	        var cardRef = '<img id="draw_pile" src="/public/images/allCards/close_face.png">';
+	        var cardRef = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 	        cardRef += '<img id="discard_pile" src="'+addressGenrator(comments.cardOnTable)+'">';
 
-		  	document.getElementById('All_pile').innerHTML = cardRef
+		  	document.getElementById('All_pile').innerHTML = cardRef;
 		  	
 		  	document.getElementById('User_Cards_Name').innerHTML = '<h3>'+'Players Cards :'+'</h3>'
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
-	    		imgRef += '<img id="card_num:'+i+'" onclick="updateIndex(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
 		  	document.getElementById('my_cards').innerHTML = imgRef;
 
