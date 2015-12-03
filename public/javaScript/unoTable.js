@@ -19,9 +19,7 @@ var createDiv = function(nameOfDiv){
 	document.body.appendChild(iDiv);
 };
 
-var make_request_to_play_the_card = function(id){
-	var indexOfPlayedcard = id.substr(9);
-	var playedCard = userCards[indexOfPlayedcard];
+var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -33,22 +31,49 @@ var make_request_to_play_the_card = function(id){
 	    };
 	};
 	req.open('POST', 'play_card', true);
-	req.send(JSON.stringify(playedCard));
+	req.send(dataToSend);
+};
+
+var type_of_wild;
+var make_request_to_play_the_card = function(id){
+	var indexOfPlayedcard = id.substr(9);
+	var playedCard = userCards[indexOfPlayedcard];
+	var dataToSend = {};
+	dataToSend.playedCard = playedCard;
+
+	// || playedCard.speciality == 'WildDrawFour'
+	if(playedCard.speciality == 'Wild'){
+		document.getElementById('colour_selection').className = '';
+		type_of_wild = playedCard;
+	}else{
+		send_request(JSON.stringify(dataToSend));
+	};
+	
+};
+
+var send_request_for_wild_card = function(){
+	var e = document.getElementById("colour_group");
+	var colour = e.options[e.selectedIndex].value;
+
+	dataToSend = {};
+	dataToSend.colour = colour;
+	dataToSend.playedCard = type_of_wild;
+	type_of_wild = undefined;
+	send_request(JSON.stringify(dataToSend));
+	console.log('colour is',colour);
+	document.getElementById('colour_selection').className = 'hide';
 };
 
 var make_request_to_draw_a_card = function(){
-	alert('drw');
-	//send a request to draw the card..
-};
-
-var make_request_to_say_uno = function(){
-	alert('said UNO');
-	//request to say UNO
-};
-
-var make_request_to_catch_uno = function(){
-	alert('catch UNO');
-	//request to catch uno
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+	    if (req.readyState == 4 && req.status == 200) {
+	    	console.log(req.responseText);
+	    	sendConnectionRequest();
+	    };
+	};
+	req.open('POST', 'draw_card', true);
+	req.send();
 };
 
 var userCards;
@@ -93,6 +118,7 @@ var sendConnectionRequest = function(){
 			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
 		    
 	        	document.getElementById('catch_UNO').onclick = function(){ 
+	        		alert('catched UNO')
 			  		//will make a request to catch the uno
 			  	};
 			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
@@ -119,7 +145,6 @@ var sendConnectionRequest = function(){
 			document.getElementById('next_player').innerHTML = "<h3>"+"Next Player :"+comments.nextPlayer+"</h3>";
 			document.getElementById('previous_player').innerHTML = "<h3>"+"Previous Player :"+comments.previousPlayer+"</h3>";
 			document.getElementById('running_colour').innerHTML = "<h3>"+"running colour :"+comments.runningColour+"</h3>";
-
 	    };
 
 		if(req.status == 404){

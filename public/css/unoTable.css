@@ -104,3 +104,7 @@ body{
 	position: relative;
     margin-left: 1100px;
 }
+
+.hide{
+	visibility: hidden;
+}

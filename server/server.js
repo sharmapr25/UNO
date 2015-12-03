@@ -129,7 +129,6 @@ var main = function(){
 			serveFile(filePath, request, response);
 		};
 
-
 		// switch(request.url){
 		// 	case '/' :
 		// 		if(isGameStarted){
@@ -234,7 +233,7 @@ var main = function(){
 						var dataToBeSent =  { alreadyConnected : true };
 						sendResponse(response, dataToBeSent);
 					};
-					
+
 					if(usersInformation.length == 1) isGameStarted = true;
 					console.log(usersInformation);
 				});
@@ -243,12 +242,20 @@ var main = function(){
 
 //---------------------------------PLAY_CARD_REQUEST---------------------------------//
 
-	var canNotPlayTheCard = function(response){
-		response.end('can_not_play_the_card');
-	};
-
-	var playTheCardThatUserRequested = function(cardPlayed, userHand ){
-
+	var playTheCardThatUserRequested = function(userPlay, request){
+		var cardPlayed = userPlay.playedCard;
+		var userName = mapName(request.connection.remoteAddress)
+		var userHand = user_cards[userName];
+		user_cards[userName] = removeSelectedCard(cardPlayed, userHand);
+		discard_pile.addCard(cardPlayed);
+		players.changePlayersTurn();
+		runningColour = cardPlayed.colour ? cardPlayed.colour : '';
+		currentPlayer = players.currentPlayer;
+		switch (cardPlayed.speciality){
+			case 'Wild':
+				runningColour = userPlay.colour;
+				break;
+		};
 	};
 
 	var handle_play_card_request = function(request, response){
@@ -258,20 +265,26 @@ var main = function(){
 				data += d;
 			});
 			request.on('end', function(){
-				var cardPlayed = JSON.parse(data);
+				var userPlay = JSON.parse(data);
+				var cardPlayed = userPlay.playedCard;
 				var discardedCard = discard_pile.getTopMostCard();
-				console.log('card played is', cardPlayed);
-				if(canPlayerPlayTheCard(cardPlayed, discardedCard)){
-					// playTheCardThatUserRequested(cardPlayed, userHand, discard_pile, );
+				if(canPlayerPlayTheCard(cardPlayed, discardedCard, runningColour)){
+					playTheCardThatUserRequested(userPlay, request);
 					response.statusCode = 200;
 					response.end('successful');
 				}else{
-					canNotPlayTheCard(response);
+					response.end('can_not_play_the_card');
 				}
-
 			});
 		};
-	}
+	};
+
+	var handle_draw_card_request = function(request, response){
+		var userName = mapName(request.connection.remoteAddress)
+		user_cards[userName] = user_cards[userName].concat(draw_pile.drawCards(1));
+		response.statusCode = 200;
+		response.end();
+	};
 
 	//-----------------------------------------------------------------------------//
 
@@ -283,6 +296,9 @@ var main = function(){
 				break;
 			case '/public/htmlFiles/play_card':
 				handle_play_card_request(request, response);
+				break;
+			case '/public/htmlFiles/draw_card':
+				handle_draw_card_request(request, response);
 				break;
 			default :
 				response.statusCode = 405;
