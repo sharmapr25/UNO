@@ -4,32 +4,44 @@ var areSameSpecialityCards = function(card1, card2){
 
 //-------------------------------------------------------------------------------------//
 
-var areSameColouredCards = function(cardPlayed, discardedCard){
+var allRules = {};
+
+allRules.areSameColouredCards = function(cardPlayed, discardedCard){
 	return ((cardPlayed.colour == discardedCard.colour) && (cardPlayed.colour != null));
 };
 
-var areSameNumberedCards = function(cardPlayed, discardedCard){
+allRules.areSameNumberedCards = function(cardPlayed, discardedCard){
 	return ((cardPlayed.number == discardedCard.number) && (cardPlayed.number != null));	
 };
 
-var isWildCardPlayed = function(cardPlayed, discardedCard){
+allRules.isWildCardPlayed = function(cardPlayed, discardedCard){
 	return (cardPlayed.speciality == 'Wild');
 };
 
-var isWildCardOnDeck = function(cardPlayed, discardedCard, runningcolour){
+allRules.isWildCardOnDeck = function(cardPlayed, discardedCard, runningcolour){
 	console.log(runningcolour, discardedCard);
 	return ((discardedCard.speciality == 'Wild') && (cardPlayed.colour == runningcolour));
 };
 
-var allRules = [ areSameColouredCards, 
-			   	 areSameNumberedCards,
-			   	 isWildCardPlayed,
-			   	 isWildCardOnDeck
+allRules.isReverseCardPlayed = function(cardPlayed, discardedCard){
+	return ((cardPlayed.speciality == 'Reverse') && (discardedCard.speciality == 'Reverse'));
+};
+
+allRules.isSkipCardPlayed = function(cardPlayed, discardedCard){
+	return ((cardPlayed.speciality == 'Skip') && (discardedCard.speciality == 'Skip'));
+}
+
+exports.allRules = allRules;
+
+var all_rules =  [allRules.areSameColouredCards, 
+			   	 allRules.areSameNumberedCards,
+			   	 allRules.isWildCardPlayed,
+			   	 allRules.isWildCardOnDeck
 			   ];
 
 exports.canPlayerPlayTheCard = function(cardPlayed, discardedCard, runningcolour){
-	for(var i = 0; i < allRules.length; i++){
-		if(allRules[i](cardPlayed, discardedCard, runningcolour)){
+	for(var i = 0; i < all_rules.length; i++){
+		if(all_rules[i](cardPlayed, discardedCard, runningcolour)){
 			return true;
 		};
 	};
