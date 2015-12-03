@@ -1,19 +1,21 @@
-body{
-	border-left: 4px solid red;
-	border-right: 4px solid red;
+.logo{
+  margin-top: 100px;
+  height:200px;
 }
 h1 {
-    color: brown;
     text-align: center;
+    font-family: veranda;
 }
 
 .login {
+  width: 500px;
 	background: white;
     text-align: center;
+    font-family: courier;
 }
 
 #current_game_information {
-	color: Green;
+  font-size: 20px;
 }
 
 #login_page_image {
@@ -30,12 +32,14 @@ h1 {
 }
 
 button {
-	width: 100px;
-	height: 25px;
-	border-radius: 25px;
+  font-size: 20px;
+	width: 120px;
+	height: 40px;
+  font-family: monospace;
 }
 
 #user_name {
 	width: 180px;
-	height: 20px;
+	height: 30px;
+  font-size: 20px;
 }
