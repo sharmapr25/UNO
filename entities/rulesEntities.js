@@ -1,9 +1,9 @@
 var allRules = {};
 
 allRules.areSameColouredCards = function(cardPlayed, discardedCard, colour, penalty){
-	return ((cardPlayed.colour == discardedCard.colour) 
+	return (((cardPlayed.colour == discardedCard.colour) 
 		&& (cardPlayed.colour != null)
-		&& (penalty == 0));
+		&& (penalty == 0)) || (discardedCard.colour == ''));
 };
 
 allRules.areSameNumberedCards = function(cardPlayed, discardedCard){
@@ -34,16 +34,6 @@ allRules.canPlayerPlayPlusTwo = function(cardPlayed, discardedCard){
 };
 
 exports.allRules = allRules;
-
-// var all_rules = [ allRules.areSameColouredCards, 
-// 			   	  allRules.areSameNumberedCards,
-// 			   	  allRules.isWildCardPlayed,
-// 			   	  allRules.isWildCardOnDeck,
-// 			   	  allRules.isSkipCardPlayed,
-
-// 			   	  allRules.canPlayerPlayPlusTwo
-// 			   ];
-
 
 exports.canPlayerPlayTheCard = function(cardPlayed, discardedCard, runningcolour, penalty){
 	for(i in allRules){

@@ -90,6 +90,7 @@ var main = function(){
 			dataToSend.isEndOfGame = isEndOfGame();
 			dataToSend.ranks = calculateRanking();
 			storeRankOfPlayers(dataToSend.ranks);
+			//clear the variables..
 		};
 
 		sendResponse(response, dataToSend);
@@ -212,10 +213,22 @@ var main = function(){
 	};
 
 //---------------------------------PLAY_CARD_REQUEST---------------------------------//
+	
+	var drawCardsFromDeck = function(noOfCards){
+		var cards = draw_pile.drawCards(noOfCards);
+		if(draw_pile.isEmpty()){
+			var topMostCard = discard_pile.cards.shift();
+			var allDeckCards = discard_pile.cards;
+			draw_pile = new DrawPile(lodash.shuffle(allDeckCards));
+			discard_pile = new DiscardPile([topMostCard]);
+		};
+		return cards;
+	};
+	
 
 	var giveFourCardsToNextPlayer = function(){
 		var nextPlayer = players.nextPlayer;
-		user_cards[nextPlayer] = user_cards[nextPlayer].concat(draw_pile.drawCards(4))
+		user_cards[nextPlayer] = user_cards[nextPlayer].concat(drawCardsFromDeck(4))
 	};
 
 	var doesNextPlayerHavePlustwo = function(){
@@ -225,7 +238,7 @@ var main = function(){
 	};
 
 	var givePenaltyCardsTwoNextPlayer = function(penalty){
-		user_cards[players.nextPlayer] = user_cards[players.nextPlayer].concat(draw_pile.drawCards(penalty));
+		user_cards[players.nextPlayer] = user_cards[players.nextPlayer].concat(drawCardsFromDeck(penalty));
 	};
 
 	var playTheCardThatUserRequested = function(userPlay, request){
@@ -305,13 +318,19 @@ var main = function(){
 	var handle_draw_card_request = function(request, response){
 		var userName = mapName(request.connection.remoteAddress)
 		if(currentPlayer == userName){
-			var card = draw_pile.drawCards(1);
+			var card = drawCardsFromDeck(1);
+			if(card[0] == undefined){
+				response.end('out_of_cards');
+				return;		
+			};
 			user_cards[userName] = user_cards[userName].concat(card);
-			if(!canPlayerPlayTheCard(card, discard_pile.getTopMostCard(), runningColour, plus_two_cards_count))
+			if(!canPlayerPlayTheCard(card, discard_pile.getTopMostCard(), runningColour, plus_two_cards_count)){
 				players.changePlayersTurn();
 				currentPlayer = players.currentPlayer;
 			response.statusCode = 200;
 			response.end();
+				
+			}
 		}else{
 			response.statusCode = 200;
 			response.end('not_your_turn');		

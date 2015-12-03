@@ -85,6 +85,9 @@ var make_request_to_draw_a_card = function(){
 	    	console.log(req.responseText);
 	    	if(req.responseText == 'not_your_turn')
 	    		alert('Not Your Turn..!!');
+	    	else if(req.responseText == 'out_of_cards'){
+	    		alert('out of cards..!!');
+	    	}
 	    	else
 	    		sendConnectionRequest();
 	    };
