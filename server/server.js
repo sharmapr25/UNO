@@ -297,6 +297,7 @@ var main = function(){
 			user_cards[userName] = user_cards[userName].concat(card);
 			if(!canPlayerPlayTheCard(card, discard_pile.getTopMostCard(), runningColour, plus_two_cards_count))
 				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
 			response.statusCode = 200;
 			response.end();
 		}else{
