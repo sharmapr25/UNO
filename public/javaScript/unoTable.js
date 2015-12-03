@@ -83,7 +83,10 @@ var make_request_to_draw_a_card = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
-	    	sendConnectionRequest();
+	    	if(req.responseText == 'not_your_turn')
+	    		alert('Not Your Turn..!!');
+	    	else
+	    		sendConnectionRequest();
 	    };
 	};
 	req.open('POST', 'draw_card', true);
