@@ -3,7 +3,7 @@ var allRules = {};
 allRules.areSameColouredCards = function(cardPlayed, discardedCard, colour, penalty){
 	return (((cardPlayed.colour == discardedCard.colour) 
 		&& (cardPlayed.colour != null)
-		&& (penalty == 0)) || (discardedCard.colour == ''));
+		&& (penalty == 0)));
 };
 
 allRules.areSameNumberedCards = function(cardPlayed, discardedCard){
@@ -15,6 +15,7 @@ allRules.isWildCardPlayed = function(cardPlayed, discardedCard){
 };
 
 allRules.isWildCardOnDeck = function(cardPlayed, discardedCard, runningcolour){
+		if(runningcolour == '') return true;
 		return (((discardedCard.speciality == 'Wild')
 		|| (discardedCard.speciality == 'WildDrawFour')) 
 		&& (cardPlayed.colour == runningcolour));
