@@ -118,12 +118,24 @@ var main = function(){
 			response.end('Game has already been started..!');
 		}else if(request.url == '/public/htmlFiles/all_information_on_table' && !isUserExists(request)){
 			response.statusCode = 404;
-			response.end('Oops..!! Something went wrong..!! GO TO LOGIN PAGE');
+			var info = [ 'Oops..!!',
+						 'Something went wrong..!!',
+						 ' GO TO ',
+						 '<a href="/"> LOGIN PAGE </a>'
+						].join('');
+			response.end(info);
 		}else if(request.url == '/updated_login_data'){
 			sendUpdatedData(request, response);
 		}else if(request.url == '/public/htmlFiles/winners.html' && !isUserExists(request)){
 			response.statusCode = 404;
-			response.end('Sorry..!!! Login First..!!!');
+			var info = [ '<!DOCTYPE html><html><head><title></title></head><body>',
+						 'Sorry..',
+						 ' Login First..!!',
+						 ' go to ',
+						 '<a href="/"> LOGIN PAGE </a>',
+						 '</body></html>'
+						].join('');
+			response.end(info);
 		}else if(request.url == '/public/htmlFiles/all_information_on_table'){
 			sendAllInformationOfTable(request,response);
 		}else{
