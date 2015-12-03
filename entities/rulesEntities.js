@@ -1,43 +1,52 @@
-var areSameSpecialityCards = function(card1, card2){
-	return ((card1.speciality == card2.speciality) && card1.speciality != null);
-};
+var allRules = {};
 
-//-------------------------------------------------------------------------------------//
-
-var areSameColouredCards = function(cardPlayed, discardedCard, colour, penalty){
+allRules.areSameColouredCards = function(cardPlayed, discardedCard, colour, penalty){
 	return ((cardPlayed.colour == discardedCard.colour) 
 		&& (cardPlayed.colour != null)
 		&& (penalty == 0));
 };
 
-var areSameNumberedCards = function(cardPlayed, discardedCard){
+allRules.areSameNumberedCards = function(cardPlayed, discardedCard){
 	return ((cardPlayed.number == discardedCard.number) && (cardPlayed.number != null));	
 };
 
-var isWildCardPlayed = function(cardPlayed, discardedCard){
+allRules.isWildCardPlayed = function(cardPlayed, discardedCard){
 	return ((cardPlayed.speciality == 'Wild') || (cardPlayed.speciality == 'WildDrawFour'));
 };
 
-var isWildCardOnDeck = function(cardPlayed, discardedCard, runningcolour){
-	return (((discardedCard.speciality == 'Wild')
+allRules.isWildCardOnDeck = function(cardPlayed, discardedCard, runningcolour){
+		return (((discardedCard.speciality == 'Wild')
 		|| (discardedCard.speciality == 'WildDrawFour')) 
 		&& (cardPlayed.colour == runningcolour));
 };
 
-var canPlayerPlayPlusTwo = function(cardPlayed, discardedCard){
+allRules.isReverseCardPlayed = function(cardPlayed, discardedCard){
+	return ((cardPlayed.speciality == 'Reverse') && (discardedCard.speciality == 'Reverse'));
+};
+
+allRules.isSkipCardPlayed = function(cardPlayed, discardedCard){
+	return ((cardPlayed.speciality == 'Skip') && (discardedCard.speciality == 'Skip'));
+}
+
+allRules.canPlayerPlayPlusTwo = function(cardPlayed, discardedCard){
 	return ((cardPlayed.speciality == discardedCard.speciality) 
 		&& (cardPlayed.speciality != null));
 };
 
-var allRules = [ areSameColouredCards, 
-			   	 areSameNumberedCards,
-			   	 isWildCardPlayed,
-			   	 isWildCardOnDeck,
-			   	 canPlayerPlayPlusTwo
-			   ];
+exports.allRules = allRules;
+
+// var all_rules = [ allRules.areSameColouredCards, 
+// 			   	  allRules.areSameNumberedCards,
+// 			   	  allRules.isWildCardPlayed,
+// 			   	  allRules.isWildCardOnDeck,
+// 			   	  allRules.isSkipCardPlayed,
+
+// 			   	  allRules.canPlayerPlayPlusTwo
+// 			   ];
+
 
 exports.canPlayerPlayTheCard = function(cardPlayed, discardedCard, runningcolour, penalty){
-	for(var i = 0; i < allRules.length; i++){
+	for(i in allRules){
 		if(allRules[i](cardPlayed, discardedCard, runningcolour, penalty)){
 			return true;
 		};

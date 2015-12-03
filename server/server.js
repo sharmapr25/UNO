@@ -262,6 +262,18 @@ var main = function(){
 				players.changePlayersTurn();
 				currentPlayer = players.currentPlayer;
 				runningColour = cardPlayed.colour;
+				break;
+			case 'Skip':
+				runningColour = cardPlayed.colour;
+				players.changePlayersTurn();
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				break;
+			case 'Reverse':
+				runningColour = cardPlayed.colour;
+				players.changeDirection();
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
 		};
 	};
 
