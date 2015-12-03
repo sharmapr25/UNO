@@ -28,6 +28,8 @@ var send_request = function(dataToSend){
 	    		sendConnectionRequest();
 	    	else if(req.responseText == 'can_not_play_the_card')
 	    		alert('Invalid Card..!!!');
+	    	else if(req.responseText == 'not_your_turn')
+	    		alert('Not Your Turn..!!');
 	    };
 	};
 	req.open('POST', 'play_card', true);
@@ -41,14 +43,26 @@ var make_request_to_play_the_card = function(id){
 	var dataToSend = {};
 	dataToSend.playedCard = playedCard;
 
-	// || playedCard.speciality == 'WildDrawFour'
 	if(playedCard.speciality == 'Wild'){
 		document.getElementById('colour_selection').className = '';
 		type_of_wild = playedCard;
+	}else if(playedCard.speciality == 'WildDrawFour'){
+		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
+			alert('You Have Card To play..!!');
+		}else{
+			document.getElementById('colour_selection').className = '';
+			type_of_wild = playedCard;
+		}
 	}else{
 		send_request(JSON.stringify(dataToSend));
 	};
 	
+};
+
+var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
+	return userCards.some(function(card){
+		return (card.colour == colour)
+	});
 };
 
 var send_request_for_wild_card = function(){
@@ -77,6 +91,7 @@ var make_request_to_draw_a_card = function(){
 };
 
 var userCards;
+var cardOnDeck;
 var flag = true;
 var showedRanks = false;
 var sendConnectionRequest = function(){
@@ -86,7 +101,7 @@ var sendConnectionRequest = function(){
 	        var comments = JSON.parse(req.responseText);
 	        console.log('whole response is', comments);
 	        userCards = comments.userCards;
-	        
+	        cardOnDeck = comments.cardOnTable;
 	        if(comments.isEndOfGame){
 	        	if(!showedRanks) {
 	        		alert('Game End..!!');

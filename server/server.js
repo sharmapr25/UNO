@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -234,7 +234,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 
-					if(usersInformation.length == 1) isGameStarted = true;
+					if(usersInformation.length == 3) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
@@ -242,19 +242,67 @@ var main = function(){
 
 //---------------------------------PLAY_CARD_REQUEST---------------------------------//
 
+	var giveFourCardsToNextPlayer = function(){
+		var nextPlayer = players.nextPlayer;
+		user_cards[nextPlayer] = user_cards[nextPlayer].concat(draw_pile.drawCards(4))
+	};
+
+	var doesNextPlayerHavePlustwo = function(){
+		return user_cards[players.nextPlayer].some(function(card){
+			return (card.speciality == 'DrawTwo');
+		});
+	};
+
+	var givePenaltyCardsTwoNextPlayer = function(penalty){
+		user_cards[players.nextPlayer] = user_cards[players.nextPlayer].concat(draw_pile.drawCards(penalty));
+	};
+
 	var playTheCardThatUserRequested = function(userPlay, request){
 		var cardPlayed = userPlay.playedCard;
 		var userName = mapName(request.connection.remoteAddress)
 		var userHand = user_cards[userName];
 		user_cards[userName] = removeSelectedCard(cardPlayed, userHand);
 		discard_pile.addCard(cardPlayed);
-		players.changePlayersTurn();
-		runningColour = cardPlayed.colour ? cardPlayed.colour : '';
-		currentPlayer = players.currentPlayer;
 		switch (cardPlayed.speciality){
 			case 'Wild':
 				runningColour = userPlay.colour;
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
 				break;
+			case 'WildDrawFour':
+				runningColour = userPlay.colour;
+				giveFourCardsToNextPlayer();
+				players.changePlayersTurn();
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				break;
+			case 'DrawTwo':
+				plus_two_cards_count += 2;
+				if(!doesNextPlayerHavePlustwo()){
+					givePenaltyCardsTwoNextPlayer(plus_two_cards_count);
+					players.changePlayersTurn();
+					plus_two_cards_count = 0;
+				};
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				runningColour = cardPlayed.colour;
+				break;
+			case null:
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				runningColour = cardPlayed.colour;
+				break;
+			case 'Skip':
+				runningColour = cardPlayed.colour;
+				players.changePlayersTurn();
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
+				break;
+			case 'Reverse':
+				runningColour = cardPlayed.colour;
+				players.changeDirection();
+				players.changePlayersTurn();
+				currentPlayer = players.currentPlayer;
 		};
 	};
 
@@ -268,15 +316,19 @@ var main = function(){
 				var userPlay = JSON.parse(data);
 				var cardPlayed = userPlay.playedCard;
 				var discardedCard = discard_pile.getTopMostCard();
-				if(canPlayerPlayTheCard(cardPlayed, discardedCard, runningColour)){
-					playTheCardThatUserRequested(userPlay, request);
-					response.statusCode = 200;
-					response.end('successful');
-				}else{
-					response.end('can_not_play_the_card');
-				}
+					if(canPlayerPlayTheCard(cardPlayed, discardedCard, runningColour, plus_two_cards_count)){
+						playTheCardThatUserRequested(userPlay, request);
+						response.statusCode = 200;
+						response.end('successful');
+					}else{
+						response.end('can_not_play_the_card');
+					}
 			});
+		}else{
+			response.statusCode = 200;
+			response.end('not_your_turn');
 		};
+
 	};
 
 	var handle_draw_card_request = function(request, response){

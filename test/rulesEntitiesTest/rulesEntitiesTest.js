@@ -6,7 +6,7 @@ describe('colour card',function(){
 	it('should be play same colour card',function(){
 		var discardCard = {colour:'Red',number:1,speciality:null,points:1};
 		var playerCard = {colour:'Red',number:9,speciality:null,points:9};
-		assert.ok(allRules.areSameColouredCards(playerCard, discardCard));
+		assert.ok(allRules.areSameColouredCards(playerCard, discardCard,'Red',0));
 	});
 
 	it('should not be play different colour card',function(){
