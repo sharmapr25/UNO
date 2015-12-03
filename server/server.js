@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 3){
+		if(usersInformation.length != 1){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -205,7 +205,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 
-					if(usersInformation.length == 3) isGameStarted = true;
+					if(usersInformation.length == 1) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
