@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 2){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -128,35 +128,6 @@ var main = function(){
 		}else{
 			serveFile(filePath, request, response);
 		};
-
-		// switch(request.url){
-		// 	case '/' :
-		// 		if(isGameStarted){
-		// 			response.statusCode = 404;
-		// 			response.end('Game has already been started..!');
-		// 		}else{
-		// 			serveFile(filePath, request, response);
-		// 		}break;
-		// 	case '/public/htmlFiles/all_information_on_table':
-		// 		if(!isUserExists(request)){
-		// 			response.statusCode = 404;
-		// 			response.end('Oops..!! Something went wrong..!! GO TO LOGIN PAGE');
-		// 		}else{
-		// 			sendAllInformationOfTable(request,response);
-		// 		}break;
-		// 	case '/updated_login_data':
-		// 		sendUpdatedData(request, response);
-		// 		break;
-		// 	case '/public/htmlFiles/winners.html':
-		// 		if(!isUserExists(request)){
-		// 			response.statusCode = 404;
-		// 			response.end('Sorry..!!! Login First..!!!');
-		// 		}else{
-		// 			serveFile(filePath, request, response);
-		// 		}break;
-		// 	default:
-		// 		serveFile(filePath, request, response);
-		// };
 	};
 
 	//-----------------------------------POST_HANDLER---------------------------------------//
@@ -234,7 +205,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 
-					if(usersInformation.length == 2) isGameStarted = true;
+					if(usersInformation.length == 3) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
@@ -321,9 +292,17 @@ var main = function(){
 
 	var handle_draw_card_request = function(request, response){
 		var userName = mapName(request.connection.remoteAddress)
-		user_cards[userName] = user_cards[userName].concat(draw_pile.drawCards(1));
-		response.statusCode = 200;
-		response.end();
+		if(currentPlayer == userName){
+			var card = draw_pile.drawCards(1);
+			user_cards[userName] = user_cards[userName].concat(card);
+			if(!canPlayerPlayTheCard(card, discard_pile.getTopMostCard(), runningColour, plus_two_cards_count))
+				players.changePlayersTurn();
+			response.statusCode = 200;
+			response.end();
+		}else{
+			response.statusCode = 200;
+			response.end('not_your_turn');		
+		};
 	};
 
 	//-----------------------------------------------------------------------------//
