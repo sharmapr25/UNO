@@ -21,7 +21,7 @@ var main = function(){
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != 3){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -80,7 +80,7 @@ var main = function(){
 		var dataToSend = {};
 		dataToSend.cardOnTable = discard_pile.getTopMostCard();
 		dataToSend.userCards = getUserCards(request.connection.remoteAddress);
-		dataToSend.allUsersCardsLength = getAllUserCardsLength();
+		dataToSend.allUsersCardsLength = getAllUserCardsLength(); 
 		dataToSend.currentPlayer = players.currentPlayer;
 		dataToSend.nextPlayer = players.nextPlayer;
 		dataToSend.previousPlayer = players.previousPlayer;
@@ -206,7 +206,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 
-					if(usersInformation.length == 1) isGameStarted = true;
+					if(usersInformation.length == 3) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
@@ -290,6 +290,15 @@ var main = function(){
 		};
 	};
 
+	var checkAndResetTheUnoField = function(){
+		said_UNO_registry.forEach(function(player){
+			if(player.said_uno == true){
+				if(user_cards[player.name].length != 1)
+					player.said_uno = false;
+			};
+		});
+	};
+
 	var handle_play_card_request = function(request, response){
 		if(currentPlayer == mapName(request.connection.remoteAddress)){
 			var data = '';
@@ -302,6 +311,7 @@ var main = function(){
 				var discardedCard = discard_pile.getTopMostCard();
 					if(canPlayerPlayTheCard(cardPlayed, discardedCard, runningColour, plus_two_cards_count)){
 						playTheCardThatUserRequested(userPlay, request);
+						checkAndResetTheUnoField();
 						response.statusCode = 200;
 						response.end('successful');
 					}else{
@@ -337,6 +347,48 @@ var main = function(){
 		};
 	};
 
+	var handle_say_uno = function(request, response){
+		var playerName = mapName(request.connection.remoteAddress);
+		said_UNO_registry.forEach(function(user){
+			if(user.name == playerName) 
+				console.log('uno is here',user);
+				user.said_uno = true;
+		});
+		response.statusCode = 200;
+		response.end('said_uno_sucessfully')
+	};
+
+	var givePenalty = function(player, noOfCards){
+		user_cards[player] = user_cards[player].concat(drawCardsFromDeck(noOfCards));
+		checkAndResetTheUnoField();
+	}
+	var handle_catch_uno = function(request, response){
+		var playersCardInfo = getAllUserCardsLength();
+		// playersCardInfo.forEach(function(player){
+		// 	if(player.noOfCards == 1){
+		// 		said_UNO_registry.forEach(function(user){
+		// 				if(user.said_uno == false && user.name == player.name){
+		// 					givePenalty(user.name,2);
+		// 					response.end("uno_catched_successfully");
+		// 				}
+		// 		});
+		// 	}
+		// });
+		for(var i = 0; i < playersCardInfo.length; i++){
+			if(playersCardInfo[i].noOfCards == 1){
+				for(var j = 0; j < said_UNO_registry.length; j++){
+					if(said_UNO_registry[j].said_uno == false && said_UNO_registry[j].name == playersCardInfo[i].name){
+							givePenalty(said_UNO_registry[j].name,2);
+							response.end("uno_catched_successfully");
+							break;
+						}
+				}	
+			}
+		};
+		response.statusCode = 200;
+		response.end("no_one_to_catch_uno");
+	};
+
 	//-----------------------------------------------------------------------------//
 
 	var handle_post_request = function(request, response){
@@ -351,6 +403,11 @@ var main = function(){
 			case '/public/htmlFiles/draw_card':
 				handle_draw_card_request(request, response);
 				break;
+			case '/public/htmlFiles/say_uno':
+				handle_say_uno(request, response);
+				break;
+			case '/public/htmlFiles/catch_uno':
+				handle_catch_uno(request, response);
 			default :
 				response.statusCode = 405;
 				response.end('Method NOT allowed..!!');
@@ -398,6 +455,8 @@ var main = function(){
 
 	var plus_two_cards_count = 0;
 
+	var said_UNO_registry = [];
+
 	var startUno = function(){
 		var shuffledCards = lodash.shuffle(allCards);
 		var deck = new GenerateDeck(shuffledCards);
@@ -412,6 +471,9 @@ var main = function(){
 		discard_pile = new DiscardPile([cardForDiscardPile]);
 		runningColour = (discard_pile.getTopMostCard().colour) ? (discard_pile.getTopMostCard().colour) : '';
 		draw_pile = new DrawPile(remainingCards);
+		user_names.forEach(function(user){
+			said_UNO_registry.push({name : user, said_uno : false});
+		});
 	};
 
 	//-------------------------------------------------------------------------------------------//

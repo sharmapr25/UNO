@@ -133,15 +133,33 @@ var sendConnectionRequest = function(){
 		  		createDiv('running_colour');
 
 	        	document.getElementById('say_UNO').onclick = function(){ 
-	        		alert('said UNO');
-			  		//will make a request to say the uno
+	        		var req = new XMLHttpRequest();
+					req.onreadystatechange = function() {
+					    if (req.readyState == 4 && req.status == 200) {
+					    	if(req.responseText == 'said_uno_sucessfully')
+						    	console.log('said uno');
+					    };
+					};
+					if(userCards.length == 1){
+						req.open('POST', 'say_uno', true);
+						req.send();
+					};
 			  	};
 			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
 		    
 	        	document.getElementById('catch_UNO').onclick = function(){ 
-	        		alert('catched UNO')
-			  		//will make a request to catch the uno
+	        		var req = new XMLHttpRequest();
+					req.onreadystatechange = function() {
+					    if (req.readyState == 4 && req.status == 200) {
+					    	if(req.responseText == 'uno_catched_successfully'){
+					    		console.log('catch uno');
+					    	}
+					    };
+					};
+					req.open('POST', 'catch_uno', true);
+					req.send();
 			  	};
+
 			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
 
 	        	flag = false;
