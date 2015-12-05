@@ -96,6 +96,33 @@ var make_request_to_draw_a_card = function(){
 	req.send();
 };
 
+var sayUnoRequest = function(){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+	    if (req.readyState == 4 && req.status == 200) {
+	    	if(req.responseText == 'said_uno_sucessfully')
+		    	console.log('said uno');
+	    };
+	};
+	if(userCards.length == 1){
+		req.open('POST', 'say_uno', true);
+		req.send();
+	};
+};
+
+var catchUnoRequest = function(){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+	    if (req.readyState == 4 && req.status == 200) {
+	    	if(req.responseText == 'uno_catched_successfully'){
+	    		console.log('catch uno');
+	    	}
+	    };
+	};
+	req.open('POST', 'catch_uno', true);
+	req.send();
+};
+
 var userCards;
 var cardOnDeck;
 var flag = true;
@@ -133,35 +160,15 @@ var sendConnectionRequest = function(){
 		  		createDiv('running_colour');
 
 	        	document.getElementById('say_UNO').onclick = function(){ 
-	        		var req = new XMLHttpRequest();
-					req.onreadystatechange = function() {
-					    if (req.readyState == 4 && req.status == 200) {
-					    	if(req.responseText == 'said_uno_sucessfully')
-						    	console.log('said uno');
-					    };
-					};
-					if(userCards.length == 1){
-						req.open('POST', 'say_uno', true);
-						req.send();
-					};
+	        		sayUnoRequest();
 			  	};
 			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
 		    
 	        	document.getElementById('catch_UNO').onclick = function(){ 
-	        		var req = new XMLHttpRequest();
-					req.onreadystatechange = function() {
-					    if (req.readyState == 4 && req.status == 200) {
-					    	if(req.responseText == 'uno_catched_successfully'){
-					    		console.log('catch uno');
-					    	}
-					    };
-					};
-					req.open('POST', 'catch_uno', true);
-					req.send();
+	        		catchUnoRequest();
 			  	};
 
 			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
-
 	        	flag = false;
 	        };
 	        
@@ -197,5 +204,25 @@ var sendConnectionRequest = function(){
 };
 
 var interval = setInterval(sendConnectionRequest, 5000);
+
+window.addEventListener("keypress", checkKeyPressed, false);
+
+function checkKeyPressed(e) {
+    switch(e.charCode){
+    	case 115:
+    		//sayUNO
+    		sayUnoRequest();
+    		break;
+    	case 99:
+    		//catch UNO
+    		catchUnoRequest();
+    		break;
+    	case 100:
+    		//draw
+    		make_request_to_draw_a_card();
+    		break;
+    };
+};
+
 
 exports.addressGenrator = addressGenrator;
