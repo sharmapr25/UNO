@@ -123,10 +123,22 @@ var catchUnoRequest = function(){
 	req.send();
 };
 
+var generateMessage = function(allInfo){
+	var runningColour = allInfo.runningColour;
+	var currentPlayer = allInfo.currentPlayer;
+	var nextPlayer = allInfo.nextPlayer;
+	
+	var template = [ '<b>'+'Running Colour : '+'</b>'+ runningColour,
+				   	 '<b>'+'CurrentPlayer  : '+'</b>'+ currentPlayer,
+				   	 '<b>'+'Next Player    : '+'</b>'+ nextPlayer,
+				   ].join('<br>');
+	return template;
+};
+
 var userCards;
 var cardOnDeck;
-var flag = true;
 var showedRanks = false;
+var previous_player;
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -143,59 +155,28 @@ var sendConnectionRequest = function(){
 	        	};
 	        };
 
-	        if(flag){
-	        	var e = document.getElementById('loading');
-	        	document.body.removeChild(e);
-
-		  		createDiv('all_user_cards_info');
-		  		createDiv('All_pile');
-		  		createDiv('current_player');
-		  		createDiv('next_player');
-		  		createDiv('previous_player');
-		  		createDiv('running_colour');
-		  		createDiv('User_Cards_Name');
-		  		createDiv('my_cards');
-		  		createDiv('say_UNO');
-		  		createDiv('catch_UNO');
-		  		createDiv('running_colour');
-
-	        	document.getElementById('say_UNO').onclick = function(){ 
-	        		sayUnoRequest();
-			  	};
-			  	document.getElementById('say_UNO').innerHTML = 'SAY UNO';
-		    
-	        	document.getElementById('catch_UNO').onclick = function(){ 
-	        		catchUnoRequest();
-			  	};
-
-			  	document.getElementById('catch_UNO').innerHTML = 'CATCH UNO';
-	        	flag = false;
-	        };
+	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest();};
+	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
 	        
-		  	document.getElementById('all_user_cards_info').innerHTML = generateTable(comments.allUsersCardsLength);
+		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
-	        var cardRef = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
-	        cardRef += '<img id="discard_pile" src="'+addressGenrator(comments.cardOnTable)+'">';
-
-		  	document.getElementById('All_pile').innerHTML = cardRef;
-		  	
-		  	document.getElementById('User_Cards_Name').innerHTML = '<h3>'+'Players Cards :'+'</h3>'
+		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
+		  	document.getElementById('discard_pile_deck').innerHTML = '<img id="discard_pile" src="'+addressGenrator(comments.cardOnTable)+'">'
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
 	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
-		  	document.getElementById('my_cards').innerHTML = imgRef;
 
-			document.getElementById('current_player').innerHTML = "<h3>"+"Current Player :"+comments.currentPlayer+"</h3>";
-			document.getElementById('next_player').innerHTML = "<h3>"+"Next Player :"+comments.nextPlayer+"</h3>";
-			document.getElementById('previous_player').innerHTML = "<h3>"+"Previous Player :"+comments.previousPlayer+"</h3>";
-			document.getElementById('running_colour').innerHTML = "<h3>"+"running colour :"+comments.runningColour+"</h3>";
+		  	document.getElementById('cards').innerHTML = imgRef;
+			document.getElementById('message_box').innerHTML = generateMessage(comments);
+
+			previous_player = comments.currentPlayer;
 	    };
 
 		if(req.status == 404){
-				var e = document.getElementById('loading');
-		       	e.innerHTML = req.responseText;
+			var e = document.getElementById('loading');
+		    e.innerHTML = req.responseText;
 		};
 	};
 
@@ -203,7 +184,7 @@ var sendConnectionRequest = function(){
 	req.send();
 };
 
-var interval = setInterval(sendConnectionRequest, 5000);
+var interval = setInterval(sendConnectionRequest, 500);
 
 window.addEventListener("keypress", checkKeyPressed, false);
 
@@ -215,7 +196,7 @@ function checkKeyPressed(e) {
     		break;
     	case 99:
     		//catch UNO
-    		catchUnoRequest();
+    		catchUnoRequest();	
     		break;
     	case 100:
     		//draw
