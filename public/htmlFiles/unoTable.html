@@ -8,34 +8,34 @@
 <body>
 	<div id="UNO_Table">
 		<div id="Table_information">
-			<div id="user_card_information"></div>
+			<div id="user_card_information">hoshior preeti</div>
 			<div id="table_deck">
 				<div id="deck">
 					<div id="draw_pile_deck"></div>
 					<div id="discard_pile_deck"></div>
 				</div>
 				<div id="say_and_catch_uno">
-					<button type="button" id="say_UNO">Say UNO</button>
-					<button type="button" id="catch_UNO">Catch UNO</button>
+					<center><button type="button" id="catch_UNO">Catch UNO</button></center>
 				</div>
 			</div>
-			<div id="message_box"></div>
+			<div id="message_box">"hello pagalo!"</div>
 		</div>
 
-		<div id="user_selection">
-			<div id="change_colour_menu">
-				<select id="colour_group">
-					<option value="Red">Red</option>
-					<option value="Green">Green</option>
-					<option value="Yellow">Yellow</option>
-					<option value="Blue">Blue</option>
-				</select>
-				<button type="button" id="submit_colour" onclick="send_request_for_wild_card()">Submit</button>	
+			<div id="user_selection">
+				<button type="button" id="say_UNO">Say UNO</button>
+				<div id="change_colour_menu">
+					<select id="colour_group">
+						<option value="Red">Red</option>
+						<option value="Green">Green</option>
+						<option value="Yellow">Yellow</option>
+						<option value="Blue">Blue</option>
+					</select>
+					<button type="button" id="submit_colour" onclick="send_request_for_wild_card()">Submit</button>	
+				</div>
+				<button type="button" id="change_turn">Change Turn</button>
 			</div>
-			<button type="button" id="change_turn">Change Turn</button>
+		<div id="cards">
 		</div>
-
-		<div id="cards"></div>
 	</div>
 </body>
 </html>

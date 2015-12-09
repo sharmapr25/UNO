@@ -1,110 +1,101 @@
-body{
-	margin: 30px;
+#UNO_Table{
+	width:100%;
+	height: 910px;
 }
 
-#say_UNO{
-	margin-left: 1100px;
-	margin-bottom : 30px;
-	height: 30px;
-	width: 80px;
-	background-color: #CCCCFF; 
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
-	color: white;
-	font-size: 13px;
-	border-radius: 23px;
-	border-color: #6699FF;
+#Table_information{
+	height: 400px;
+    overflow: scroll;
+}
+
+#user_card_information{
+	height: 400px;
+    width: 25%;
+    display: inline-block;
+    overflow: scroll;
+}
+
+#table_deck{
+    width: 50%;
+    display: inline-block;
+    height: 400px;
+    overflow: scroll;
+}
+
+#message_box{
+    height: 400px;
+    display: inline-block;
+    width: 24%;
+    overflow: scroll;
+}
+
+#cards{
+	height: 510px;
+    width: 100%;
+}
+
+#user_selection{
+	height: 60px;
+    width: 100%;
+}
+
+#change_colour_menu{
+	display: inline-block;
+	margin-top: 34px;
+}
+
+#draw_pile_deck{
+	margin: 1%;
+	display: inline-block;
+	width: 47%;
+	height: 340px;
+}
+
+#discard_pile_deck{
+	float: right;
+    margin: 1%;
+    display: inline-block;
+    width: 47%;
+    height: 340px;
+}
+
+#say_and_catch_uno{
+	 height: 45px;
+	 margin: 5px,0px,5px,0px;
 }
 
 #catch_UNO{
+	margin-left: 280px;
+	margin-top: 3px;
 	height: 30px;
+	width: 150px;
+	font-size: 17px;
+}
+
+#say_UNO{
+	height: 22px;
 	width: 100px;
-	background-color: #CCCCFF;
-	margin-left: 7px;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
-	color:white;
-	font-size: 13px;
-	border-radius: 23px;
-	border-color: #6699FF;
+	font-size: 15px;
 }
 
-#draw{
-	height: 30px;
-	width: 80px;
-	background-color: #CCCCFF;
-	margin-left: 7px;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
-	color: white;
-	font-size: 13px;
-	border-radius: 23px;
-	border-color: #6699FF;
+#change_colour_menu{
+	margin-left: 20px;
 }
 
-#table{
-	margin-left: 1100px;
+#colour_group{
+	width: 75px;
+	font-size: 22px;
 }
 
-#submit{
-	position: absolute;
-    margin-left: 1175px;	
-    margin-bottom: 10px;
-	width :100px;
-	border:4px solid #0F5F24 ;
-	-webkit-box-shadow: #878787 0px 2px 2px ;
-	box-shadow: #878787 0px 2px 2px ;
-	-webkit-border-radius: 23px; 
-	border-radius: 23px;
-	font-size:13px;font-family:arial, helvetica, sans-serif; 
-	padding: 10px 20px 10px 20px;
-	text-decoration:none;
-	display:inline-block;
-	text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
-	font-weight:bold; 
-	color: #FFFFFF;
- 	background-color: #40E86D; 
- 	background-image: -webkit-gradient(linear, left top, left bottom, from(#40E86D), to(#0F7229));
-
+#submit_colour{
+	height: 22px;
+	width: 100px;
+	font-size: 15px;
 }
 
-#draw_pile{
-	width:10%;
-}
-
-#discard_pile{
-	width : 145px;
-	position: relative;
-    margin-left: 70px;
-}
-
-#User_Cards_Name{
-	position: relative;
-	margin-top: 15px;
-}
-
-#my_cards{
-    position: relative;
-    margin-top: 20px;
-}
-
-#current_player{
-	position: relative;
-    margin-left: 1100px;
-}
-
-#next_player{
-	position: relative;
-    margin-left: 1100px;
-}
-
-#previous_player{
-	position: relative;
-    margin-left: 1100px;
-}
-
-#running_colour{
-	position: relative;
-    margin-left: 1100px;
-}
-
-.hide{
-	visibility: hidden;
+#change_turn{
+	margin-left: 20px;
+	height: 22px;
+	width: 120px;
+	font-size: 15px;
 }
