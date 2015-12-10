@@ -38,19 +38,20 @@ var send_request = function(dataToSend){
 
 var type_of_wild;
 var make_request_to_play_the_card = function(id){
+	document.getElementById('change_colour_menu').className = 'hidden';
 	var indexOfPlayedcard = id.substr(9);
 	var playedCard = userCards[indexOfPlayedcard];
 	var dataToSend = {};
 	dataToSend.playedCard = playedCard;
 
 	if(playedCard.speciality == 'Wild'){
-		document.getElementById('colour_selection').className = '';
+		document.getElementById('change_colour_menu').className = '';
 		type_of_wild = playedCard;
 	}else if(playedCard.speciality == 'WildDrawFour'){
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
 			alert('You Have Card To play..!!');
 		}else{
-			document.getElementById('colour_selection').className = '';
+			document.getElementById('change_colour_menu').className = '';
 			type_of_wild = playedCard;
 		}
 	}else{
@@ -75,7 +76,7 @@ var send_request_for_wild_card = function(){
 	type_of_wild = undefined;
 	send_request(JSON.stringify(dataToSend));
 	console.log('colour is',colour);
-	document.getElementById('colour_selection').className = 'hide';
+	document.getElementById('change_colour_menu').className = 'hidden';
 };
 
 var make_request_to_draw_a_card = function(){
@@ -165,7 +166,15 @@ var sendConnectionRequest = function(){
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
+<<<<<<< HEAD
 	    		imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+=======
+	    		var num = comments.userCards[i].number ? comments.userCards[i].number : '#';
+	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : '#fff'
+	    		// imgRef += '<div id="card_num:"'+i+' onclick="make_request_to_play_the_card(this.id)" >' + createCard(1,'#00ff00') + '</div>'
+
+	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+>>>>>>> 120a08848d25ef751da8ba973748a1c7109a371b
 	    	};			
 
 		  	document.getElementById('cards').innerHTML = imgRef;
@@ -182,6 +191,21 @@ var sendConnectionRequest = function(){
 
 	req.open('GET', 'all_information_on_table', true);
 	req.send();
+};
+
+
+var createCard = function(num, colour){
+		return [
+		'<svg width="150" height="200" xmlns="http://www.w3.org/2000/svg">',
+		 '<!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->',
+		 '<g>',
+		  '<title>Layer 1</title>',
+		  '<rect id="svg_1" height="196" width="125" y="4" x="5" stroke-width="5" stroke="#000000" fill="#7fff00"/>',
+		  '<text transform="matrix(4.947136402130127,0,0,2.5357143878936768,-380.15857473015785,-213.46429991722107) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" id="svg_2" y="133" x="91" stroke-width="0" stroke="#000000" fill="#000000"/>',
+		  '<text transform="matrix(4.352551213660601,0,0,3.119748044353794,-186.42177813880252,-157.05883804006075) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" id="svg_3" y="92" x="58" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">+4</text>',
+		 '</g>',
+		'</svg>'
+		].join('');
 };
 
 var interval = setInterval(sendConnectionRequest, 500);
@@ -204,6 +228,5 @@ function checkKeyPressed(e) {
     		break;
     };
 };
-
 
 exports.addressGenrator = addressGenrator;
