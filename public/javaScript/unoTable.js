@@ -170,8 +170,10 @@ var sendConnectionRequest = function(){
 	    		var num = comments.userCards[i].number ? ' '+comments.userCards[i].number : '#';
 	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : 'gray'
 	    		// imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" onclick="make_request_to_play_the_card(this.id)" >' + createCard(num,colour) + '</div>'
-
-	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		var num = comments.userCards[i].number ? comments.userCards[i].number : '#';
+	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : '#fff'
+	    		// imgRef += '<div id="card_num:"'+i+' onclick="make_request_to_play_the_card(this.id)" >' + createCard(1,'#00ff00') + '</div>'
 	    	};			
 
 		  	document.getElementById('cards').innerHTML = imgRef;
