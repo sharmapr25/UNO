@@ -165,7 +165,7 @@ var sendConnectionRequest = function(){
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
-	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
 
 		  	document.getElementById('cards').innerHTML = imgRef;
