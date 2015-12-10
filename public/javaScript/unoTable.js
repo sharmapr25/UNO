@@ -41,6 +41,7 @@ var make_request_to_play_the_card = function(id){
 	document.getElementById('change_colour_menu').className = 'hidden';
 	var indexOfPlayedcard = id.substr(9);
 	var playedCard = userCards[indexOfPlayedcard];
+	console.log('I played  thsi', id, playedCard);
 	var dataToSend = {};
 	dataToSend.playedCard = playedCard;
 
@@ -166,9 +167,9 @@ var sendConnectionRequest = function(){
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
-	    		var num = comments.userCards[i].number ? comments.userCards[i].number : '#';
-	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : '#fff'
-	    		// imgRef += '<div id="card_num:"'+i+' onclick="make_request_to_play_the_card(this.id)" >' + createCard(1,'#00ff00') + '</div>'
+	    		var num = comments.userCards[i].number ? ' '+comments.userCards[i].number : '#';
+	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : 'gray'
+	    		// imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" onclick="make_request_to_play_the_card(this.id)" >' + createCard(num,colour) + '</div>'
 
 	    		imgRef += '<img id="card_num:'+i+'" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
@@ -191,14 +192,22 @@ var sendConnectionRequest = function(){
 
 
 var createCard = function(num, colour){
+		colour = colour.toLowerCase();
+
 		return [
-		'<svg width="150" height="200" xmlns="http://www.w3.org/2000/svg">',
-		 '<!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->',
+		'<svg width="187" height="262" xmlns="http://www.w3.org/2000/svg">',
+		 '<g>',
+		  '<title>background</title>',
+		  '<rect fill="#fff" id="canvas_background" height="264" width="189" y="-1" x="-1"/>',
+		  '<g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">',
+		   '<rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>',
+		  '</g>',
+		 '</g>',
 		 '<g>',
 		  '<title>Layer 1</title>',
-		  '<rect id="svg_1" height="196" width="125" y="4" x="5" stroke-width="5" stroke="#000000" fill="#7fff00"/>',
-		  '<text transform="matrix(4.947136402130127,0,0,2.5357143878936768,-380.15857473015785,-213.46429991722107) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" id="svg_2" y="133" x="91" stroke-width="0" stroke="#000000" fill="#000000"/>',
-		  '<text transform="matrix(4.352551213660601,0,0,3.119748044353794,-186.42177813880252,-157.05883804006075) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" id="svg_3" y="92" x="58" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">+4</text>',
+		  '<rect id="svg_1" height="224" width="152" y="22" x="17.5" stroke-width="1.5" stroke="#000" fill="'+colour+'"/>',
+		  '<text stroke="#000" transform="matrix(4.747072696685791,0,0,3.642857074737549,-256.6744797229767,-216.714280128479) " xml:space="preserve" text-anchor="left" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="104" x="66" stroke-width="0" fill="#000000"/>',
+		  '<text xml:space="preserve" text-anchor="left" font-family="Helvetica, Arial, sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">'+num+'</text>',
 		 '</g>',
 		'</svg>'
 		].join('');
