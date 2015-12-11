@@ -38,6 +38,8 @@ var send_request = function(dataToSend){
 
 var type_of_wild;
 var make_request_to_play_the_card = function(id){
+	if(document.getElementById('change_turn').className == '')
+		document.getElementById('change_turn').className = 'hidden';
 	document.getElementById('change_colour_menu').className = 'hidden';
 	var indexOfPlayedcard = id.substr(9);
 	var playedCard = userCards[indexOfPlayedcard];
@@ -90,8 +92,11 @@ var make_request_to_draw_a_card = function(){
 	    	else if(req.responseText == 'out_of_cards'){
 	    		alert('out of cards..!!');
 	    	}
-	    	else
+	    	else{
 	    		sendConnectionRequest();
+				document.getElementById('change_turn').className = '';
+				isVisibleChangeTurnButton = true;
+        	};
 	    };
 	};
 	req.open('POST', 'draw_card', true);
@@ -125,6 +130,20 @@ var catchUnoRequest = function(){
 	req.send();
 };
 
+var make_request_to_pass_turn = function(){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+	    if (req.readyState == 4 && req.status == 200) {
+	    	if(req.responseText == 'turn_passed'){
+	    		console.log('passed turn to next player');
+	    	};
+			document.getElementById('change_turn').className = 'hidden';
+	    };
+	};
+	req.open('POST', 'pass_turn', true);
+	req.send();
+};
+
 var generateMessage = function(allInfo){
 	var runningColour = allInfo.runningColour;
 	var currentPlayer = allInfo.currentPlayer;
@@ -137,6 +156,7 @@ var generateMessage = function(allInfo){
 	return template;
 };
 
+var isVisibleChangeTurnButton;
 var userCards;
 var cardOnDeck;
 var showedRanks = false;
@@ -171,9 +191,6 @@ var sendConnectionRequest = function(){
 	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : 'gray'
 	    		// imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" onclick="make_request_to_play_the_card(this.id)" >' + createCard(num,colour) + '</div>'
 	    		imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
-	    		var num = comments.userCards[i].number ? comments.userCards[i].number : '#';
-	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : '#fff'
-	    		// imgRef += '<div id="card_num:"'+i+' onclick="make_request_to_play_the_card(this.id)" >' + createCard(1,'#00ff00') + '</div>'
 	    	};			
 
 		  	document.getElementById('cards').innerHTML = imgRef;
@@ -183,8 +200,7 @@ var sendConnectionRequest = function(){
 	    };
 
 		if(req.status == 404){
-			var e = document.getElementById('loading');
-		    e.innerHTML = req.responseText;
+		    document.getElementById('UNO_Table').innerHTML = req.responseText;
 		};
 	};
 

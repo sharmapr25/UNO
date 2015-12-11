@@ -15,13 +15,14 @@ var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
 //-------------------------------------------------------------------------------------//
 
+var no_of_players = 3;
 var main = function(){
 	var usersInformation = [];
 	var isGameStarted = false;
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != 1){
+		if(usersInformation.length != no_of_players){
 			var data =  { isGameStarted : isGameStarted,
 						  numberOfPlayers : usersInformation.length,
 						};
@@ -218,7 +219,7 @@ var main = function(){
 						sendResponse(response, dataToBeSent);
 					};
 
-					if(usersInformation.length == 1) isGameStarted = true;
+					if(usersInformation.length == no_of_players) isGameStarted = true;
 					console.log(usersInformation);
 				});
 			};
@@ -346,13 +347,9 @@ var main = function(){
 				return;		
 			};
 			user_cards[userName] = user_cards[userName].concat(card);
-			if(!canPlayerPlayTheCard(card, discard_pile.getTopMostCard(), runningColour, plus_two_cards_count)){
-				players.changePlayersTurn();
-				currentPlayer = players.currentPlayer;
 			response.statusCode = 200;
 			response.end();
 				
-			}
 		}else{
 			response.statusCode = 200;
 			response.end('not_your_turn');		
@@ -370,22 +367,19 @@ var main = function(){
 		response.end('said_uno_sucessfully')
 	};
 
+	var handle_pass_turn_request = function(request, response){
+		players.changePlayersTurn();
+		currentPlayer = players.currentPlayer;
+		response.statusCode = 200;
+		response.end('turn_passed');
+	};
+
 	var givePenalty = function(player, noOfCards){
 		user_cards[player] = user_cards[player].concat(drawCardsFromDeck(noOfCards));
 		checkAndResetTheUnoField();
 	}
 	var handle_catch_uno = function(request, response){
 		var playersCardInfo = getAllUserCardsLength();
-		// playersCardInfo.forEach(function(player){
-		// 	if(player.noOfCards == 1){
-		// 		said_UNO_registry.forEach(function(user){
-		// 				if(user.said_uno == false && user.name == player.name){
-		// 					givePenalty(user.name,2);
-		// 					response.end("uno_catched_successfully");
-		// 				}
-		// 		});
-		// 	}
-		// });
 		for(var i = 0; i < playersCardInfo.length; i++){
 			if(playersCardInfo[i].noOfCards == 1){
 				for(var j = 0; j < said_UNO_registry.length; j++){
@@ -414,6 +408,9 @@ var main = function(){
 				break;
 			case '/public/htmlFiles/draw_card':
 				handle_draw_card_request(request, response);
+				break;
+			case '/public/htmlFiles/pass_turn':
+				handle_pass_turn_request(request, response);
 				break;
 			case '/public/htmlFiles/say_uno':
 				handle_say_uno(request, response);
