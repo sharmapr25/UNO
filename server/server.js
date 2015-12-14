@@ -18,6 +18,7 @@ var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 var no_of_players = 1;
 var main = function(){
 	var usersInformation = [];
+  var allUsersInTheGame = [];
 	var isGameStarted = false;
 
 	//-------------------------------------------------------------------------------------------//
@@ -107,6 +108,7 @@ var main = function(){
       plus_two_cards_count = 0;
 
       said_UNO_registry = [];
+      allUsersInTheGame = allUsersInTheGame.concat(usersInformation);
       usersInformation = [];
       isGameStarted = false;
 		};
@@ -127,6 +129,14 @@ var main = function(){
 		});
 	};
 
+  var isValidUser = function(request){
+    var currentIP = request.connection.remoteAddress;
+		return allUsersInTheGame.some(function(user){
+			return (user.ip == currentIP);
+		});
+
+  };
+
 
 	var handle_get_request = function(request, response){
 		console.log('requested files', request.url);
@@ -144,7 +154,7 @@ var main = function(){
 			response.end(info);
 		}else if(request.url == '/updated_login_data'){
 			sendUpdatedData(request, response);
-		}else if(request.url == '/public/htmlFiles/winners.html' && !isUserExists(request)){
+		}else if(request.url == '/public/htmlFiles/winners.html' && !isValidUser(request)){
 			response.statusCode = 404;
 			var info = [ '<!DOCTYPE html><html><head><title></title></head><body>',
 						 'Sorry..',
