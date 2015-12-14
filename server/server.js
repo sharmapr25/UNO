@@ -15,7 +15,7 @@ var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
 //-------------------------------------------------------------------------------------//
 
-var no_of_players = 3;
+var no_of_players = 1;
 var main = function(){
 	var usersInformation = [];
 	var isGameStarted = false;
@@ -92,6 +92,23 @@ var main = function(){
 			dataToSend.ranks = calculateRanking();
 			storeRankOfPlayers(dataToSend.ranks);
 			//clear the variables..
+      
+      user_names = undefined;
+      user_cards = undefined;
+      discard_pile = undefined;
+      draw_pile = undefined;
+
+      players = undefined;
+
+      runningColour = undefined;
+
+      currentPlayer = undefined;
+
+      plus_two_cards_count = 0;
+
+      said_UNO_registry = [];
+      usersInformation = [];
+      isGameStarted = false;
 		};
 
 		sendResponse(response, dataToSend);
@@ -467,6 +484,7 @@ var main = function(){
 	var said_UNO_registry = [];
 
 	var startUno = function(){
+    said_UNO_registry = [];
 		var shuffledCards = lodash.shuffle(allCards);
 		var deck = new GenerateDeck(shuffledCards);
 		user_names = getUserName(usersInformation);
