@@ -24,8 +24,10 @@ var send_request = function(dataToSend){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	console.log(req.responseText);
-	    	if(req.responseText == 'successful')
+	    	if(req.responseText == 'successful'){
 	    		sendConnectionRequest();
+          isVisibleChangeTurnButton = false;
+        }
 	    	else if(req.responseText == 'can_not_play_the_card')
 	    		alert('Invalid Card..!!!');
 	    	else if(req.responseText == 'not_your_turn')
@@ -94,15 +96,18 @@ var make_request_to_draw_a_card = function(){
 	    	}
 	    	else{
 	    		sendConnectionRequest();
-				document.getElementById('change_turn').className = '';
-				isVisibleChangeTurnButton = true;
-        	};
+		  		document.getElementById('change_turn').className = '';
+		  		isVisibleChangeTurnButton = true;
+        };
 	    };
 	};
-	req.open('POST', 'draw_card', true);
-	req.send();
-};
-
+  if(isVisibleChangeTurnButton) 
+    alert('Play the Card or Pass Turn..!!')
+  else{
+    req.open('POST', 'draw_card', true);
+  	req.send();
+  };
+}
 var sayUnoRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -138,6 +143,7 @@ var make_request_to_pass_turn = function(){
 	    		console.log('passed turn to next player');
 	    	};
 			document.getElementById('change_turn').className = 'hidden';
+      isVisibleChangeTurnButton = false;
 	    };
 	};
 	req.open('POST', 'pass_turn', true);
