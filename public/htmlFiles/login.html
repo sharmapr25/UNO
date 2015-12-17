@@ -7,14 +7,15 @@
 	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
-	<div class="logo">
-		<h1>WELCOME TO UNO</h1>
-		</div>
-		<center><div class= "login" >
-			<h2><b>Enter Your Name : </b><input type="text" id="user_name"name="user_name"></h2><br/>
-			<button type="button">Play</button>
-			<button type="button"><a href = "/public/htmlFiles/instruction.html">Help</a></button>	
-			<div id='current_game_information'>
-		</div></center>	
+	<center><div id="main">
+		<center><div id="logo">WELCOME TO UNO</div>
+			<div id= "login" >
+				<input type="text" id="user_name"name="user_name" placeholder="Enter your name"><br/>
+				<button type="button" id="play_button">Play</button>
+			</div>
+			<div id="help"><a href = "/public/htmlFiles/instruction.html">Help</a></div>
+			<div id='current_game_information'></div>
+		</center>
+	</div></center>	
 </body>
 </html>
