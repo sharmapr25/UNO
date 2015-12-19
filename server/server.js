@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var lodash = require('lodash');
 
-//-------------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------------------//
 
 var allCards = require('../entities/cardEntities.js').allCards;
 var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
@@ -13,29 +13,43 @@ var InitializePlayers = require('../entities/playerEntities.js').InitializePlaye
 var canPlayerPlayTheCard = require('../entities/rulesEntities.js').canPlayerPlayTheCard;
 var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
-//-------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------//
 
-var no_of_players = 1;
+var no_of_players = 0;
 var main = function(){
 	var usersInformation = [];
-  var allUsersInTheGame = [];
+ 	var allUsersInTheGame = [];
 	var isGameStarted = false;
+	var timeOut = false;
 
 	//-------------------------------------------------------------------------------------------//
 	var sendUpdatedData = function(request, response){
-		if(usersInformation.length != no_of_players){
-			var data =  { isGameStarted : isGameStarted,
-						  numberOfPlayers : usersInformation.length,
-						};
-			sendResponse(response, data);
+		if(usersInformation.length == 1){
+			setTimeout(function(){
+				if(no_of_players>1){
+					no_of_players = usersInformation.length;
+					var data =  { isGameStarted : true};
+					timeOut = true;
+					sendResponse(response, data);
+				}
+			}, 30000);
 		}else if(isUserExists(request)){
 			startUno();
 			response.statusCode = 200;
 			response.end('public/htmlFiles/unoTable.html');
-		}else{
+		}else if(usersInformation.length == 6){
+			no_of_players = usersInformation.length;
 			var data =  { isGameStarted : true};
 			sendResponse(response, data);
-		}
+		}else if(timeOut && no_of_players>1) {
+				no_of_players = usersInformation.length;
+				var data =  { isGameStarted : true};
+				sendResponse(response, data); 
+		}else{
+			var data = {isGameStarted : isGameStarted,
+					    numberOfPlayers : usersInformation.length};
+			sendResponse(response, data);
+		};
 	};
 
 	var mapName = function(ip){
@@ -228,28 +242,28 @@ var main = function(){
 	var handle_login_user_request = function(request, response){
 		if(isGameStarted){
 				response.end('{"isGameStarted" : true}');
-			}else{
-				console.log('User requested to log in..!');
-				var data = '';
-				request.on('data', function(d){
-					data += d;
-				});
-				request.on('end', function(){
-					if(!isUserExists(request)){
-						addUser(data.substr(5), request.connection.remoteAddress);
-						var dataToBeSent =  { isGameStarted : isGameStarted,
-										  	  numberOfPlayers : usersInformation.length,
-											};
-						sendResponse(response, dataToBeSent);
-					}else{
-						var dataToBeSent =  { alreadyConnected : true };
-						sendResponse(response, dataToBeSent);
-					};
+		}else{
+			console.log('User requested to log in..!');
+			var data = '';
+			request.on('data', function(d){
+				data += d;
+			});
+			request.on('end', function(){
+				if(!isUserExists(request)){
+					addUser(data.substr(5), request.connection.remoteAddress);
+					var dataToBeSent =  { isGameStarted : isGameStarted,
+									  	  numberOfPlayers : usersInformation.length,
+										};
+					sendResponse(response, dataToBeSent);
+				}else{
+					var dataToBeSent =  { alreadyConnected : true };
+					sendResponse(response, dataToBeSent);
+				};
 
-					if(usersInformation.length == no_of_players) isGameStarted = true;
-					console.log(usersInformation);
-				});
-			};
+				if(usersInformation.length == no_of_players) isGameStarted = true;
+				console.log(usersInformation);
+			});
+		};
 	};
 
 //---------------------------------PLAY_CARD_REQUEST---------------------------------//
@@ -407,8 +421,9 @@ var main = function(){
 	}
 	var handle_catch_uno = function(request, response){
 		var playersCardInfo = getAllUserCardsLength();
+		console.log("..............",playersCardInfo);
 		for(var i = 0; i < playersCardInfo.length; i++){
-			if(playersCardInfo[i].noOfCards == 1){
+			if(playersCardInfo[i].noOfCards == 1 && playersCardInfo[i].name != players.currentPlayer){
 				for(var j = 0; j < said_UNO_registry.length; j++){
 					if(said_UNO_registry[j].said_uno == false && said_UNO_registry[j].name == playersCardInfo[i].name){
 							givePenalty(said_UNO_registry[j].name,2);
