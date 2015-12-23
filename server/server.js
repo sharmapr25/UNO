@@ -36,17 +36,16 @@ var sendUpdatedData = function(request, response){
   }
 };
 
-var mapName = function(ip){
-  var name;
-  usersInformation.forEach(function(user){
-    if(user.ip.toString() == ip.toString()) name = user.name;
-  });
-  return name;
-};
+// var mapName = function(ip){
+  // var name;
+  // usersInformation.forEach(function(user){
+    // if(user.ip.toString() == ip.toString()) name = user.name;
+  // });
+  // return name;
+// };
 
-var getUserCards = function(ip){
-  var name = mapName(ip);
-  return user_cards[name];
+var getUserCards = function(cookie){
+  return user_cards[cookie];
 };
 
 var getAllUserCardsLength = function(){
@@ -79,7 +78,7 @@ var storeRankOfPlayers = function(ranks){
 var sendAllInformationOfTable = function(request,response){
   var dataToSend = {};
   dataToSend.cardOnTable = discard_pile.getTopMostCard();
-  dataToSend.userCards = getUserCards(request.connection.remoteAddress);
+  dataToSend.userCards = getUserCards(request.headers.cookie);
   dataToSend.allUsersCardsLength = getAllUserCardsLength(); 
   dataToSend.currentPlayer = players.currentPlayer;
   dataToSend.nextPlayer = players.nextPlayer;
@@ -92,23 +91,23 @@ var sendAllInformationOfTable = function(request,response){
     storeRankOfPlayers(dataToSend.ranks);
     //clear the variables..
     
-    user_names = undefined;
-    user_cards = undefined;
-    discard_pile = undefined;
-    draw_pile = undefined;
+    // user_names = undefined;
+    // user_cards = undefined;
+    // discard_pile = undefined;
+    // draw_pile = undefined;
 
-    players = undefined;
+    // players = undefined;
 
-    runningColour = undefined;
+    // runningColour = undefined;
 
-    currentPlayer = undefined;
+    // currentPlayer = undefined;
 
-    plus_two_cards_count = 0;
+    // plus_two_cards_count = 0;
 
-    said_UNO_registry = [];
-    allUsersInTheGame = allUsersInTheGame.concat(usersInformation);
-    usersInformation = [];
-    isGameStarted = false;
+    // said_UNO_registry = [];
+    // allUsersInTheGame = allUsersInTheGame.concat(usersInformation);
+    // usersInformation = [];
+    // isGameStarted = false;
   };
 
   sendResponse(response, dataToSend);
@@ -128,13 +127,10 @@ var serveFile = function(filePath, request, response){
 };
 
 var isValidUser = function(request){
-  var currentIP = request.connection.remoteAddress;
   return allUsersInTheGame.some(function(user){
-    return (user.ip == currentIP);
+    return (user.name == request.headers.cookie);
   });
-
 };
-
 
 var handle_get_request = function(request, response){
   console.log('requested files', request.url);
@@ -152,7 +148,7 @@ var handle_get_request = function(request, response){
     response.end(info);
   }else if(request.url == '/updated_login_data'){
     sendUpdatedData(request, response);
-  }else if(request.url == '/public/htmlFiles/winners.html' && !isValidUser(request)){
+  }else if(request.url == '/public/htmlFiles/winners.html' && !isUserExists(request)){
     response.statusCode = 404;
     var info = [ '<!DOCTYPE html><html><head><title></title></head><body>',
            'Sorry..',
@@ -171,15 +167,15 @@ var handle_get_request = function(request, response){
 
 //-----------------------------------POST_HANDLER---------------------------------------//
 
-var addUser = function(name, ip){
-  usersInformation.push({name : name, ip : ip});
+var addUser = function(name){
+  usersInformation.push({name : name});
 };
 
 var isUserExists = function(request){
-  var currentIP = request.connection.remoteAddress;
-  console.log('Checking for', currentIP);
+  var cookies = request.headers.cookie;
+  console.log('Checking for', cookies);
   return usersInformation.some(function(user){
-    return (user.ip == currentIP);
+    return (user.name == cookies);
   });
 };
 
@@ -234,10 +230,11 @@ var handle_login_user_request = function(request, response){
       });
       request.on('end', function(){
         if(!isUserExists(request)){
-          addUser(data.substr(5), request.connection.remoteAddress);
+          addUser(data.substr(5));
           var dataToBeSent =  { isGameStarted : isGameStarted,
                         numberOfPlayers : usersInformation.length,
                     };
+          response.writeHead(200, {'Set-Cookie': data.substr(5)});
           sendResponse(response, dataToBeSent);
         }else{
           var dataToBeSent =  { alreadyConnected : true };
@@ -281,7 +278,7 @@ var givePenaltyCardsTwoNextPlayer = function(penalty){
 
 var playTheCardThatUserRequested = function(userPlay, request){
   var cardPlayed = userPlay.playedCard;
-  var userName = mapName(request.connection.remoteAddress)
+  var userName = request.headers.cookie;
   var userHand = user_cards[userName];
   user_cards[userName] = removeSelectedCard(cardPlayed, userHand);
   discard_pile.addCard(cardPlayed);
@@ -338,7 +335,7 @@ var checkAndResetTheUnoField = function(){
 };
 
 var handle_play_card_request = function(request, response){
-  if(currentPlayer == mapName(request.connection.remoteAddress)){
+  if(currentPlayer == request.headers.cookie){
     var data = '';
     request.on('data', function(d){
       data += d;
@@ -364,7 +361,7 @@ var handle_play_card_request = function(request, response){
 };
 
 var handle_draw_card_request = function(request, response){
-  var userName = mapName(request.connection.remoteAddress)
+  var userName = request.headers.cookie;
   if(currentPlayer == userName){
     var card = drawCardsFromDeck(1);
     if(card[0] == undefined){
@@ -382,7 +379,7 @@ var handle_draw_card_request = function(request, response){
 };
 
 var handle_say_uno = function(request, response){
-  var playerName = mapName(request.connection.remoteAddress);
+  var playerName = request.headers.cookie;
   said_UNO_registry.forEach(function(user){
     if(user.name == playerName) 
       console.log('uno is here',user);
@@ -476,7 +473,7 @@ var getUserName = function(allInformation){
 
 //-------------------------------------UNO_DECK DATA---------------------------------------------//
 var game = {
-  no_of_players : 1
+  no_of_players : 2
 };
 var user_names;
 var user_cards;
