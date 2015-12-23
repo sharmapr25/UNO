@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var lodash = require('lodash');
 
-//-------------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------------------//
 
 var allCards = require('../entities/cardEntities.js').allCards;
 var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
@@ -13,8 +13,7 @@ var InitializePlayers = require('../entities/playerEntities.js').InitializePlaye
 var canPlayerPlayTheCard = require('../entities/rulesEntities.js').canPlayerPlayTheCard;
 var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
-//-------------------------------------------------------------------------------------//
-
+//-----------------------------------------------------------------------------------------//
 
 var usersInformation = [];
 var allUsersInTheGame = [];

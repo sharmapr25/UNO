@@ -1,4 +1,4 @@
-.logo{
+/*.logo{
   margin-top: 100px;
   height:200px;
 }
@@ -41,5 +41,42 @@ button {
 #user_name {
 	width: 180px;
 	height: 30px;
+  font-size: 20px;
+}*/
+
+#main {
+  margin-top: 145px;
+  background-color: #ffe4cc;
+  width: 480px;
+  height: 310px;
+  border-radius: 10px;
+}
+
+#logo {
+  font-size: 45px;
+  padding: 6%;
+}
+
+#user_name {
+  margin-top: 10px;
+  width: 230px;
+  height: 25px;
+  font-size: 17px;
+}
+
+#play_button {
+  margin-top: 13px;
+  width: 232px;
+  height: 27px;
+  font-size: 17px;
+}
+
+#help {
+  margin-top: 8px;
+  font-size: 15px;
+  margin-left: 191px;
+}
+
+#current_game_information {
   font-size: 20px;
 }
