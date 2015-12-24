@@ -4,6 +4,7 @@
   "description": "a simple card based UNO game",
   "main": "index.js",
   "scripts": {
+    "start": "node ~/projects/UNO/server/server.js",
     "test": "mocha --recursive",
     "min": "mocha -R min --recursive",
     "watch": "mocha -R min --watch --recursive"
@@ -21,6 +22,7 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
+    "sinon": "^1.17.2",
     "supertest": "^1.1.0"
   },
   "dependencies": {
