@@ -14,16 +14,11 @@ var canPlayerPlayTheCard = require('../entities/rulesEntities.js').canPlayerPlay
 var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
 //-----------------------------------------------------------------------------------------//
-
-var usersInformation = [];
-var allUsersInTheGame = [];
-var isGameStarted = false;
-
 //-------------------------------------------------------------------------------------------//
 var sendUpdatedData = function(request, response){
-  if(usersInformation.length != game.no_of_players){
-    var data =  { isGameStarted : isGameStarted,
-            numberOfPlayers : usersInformation.length,
+  if(game.usersInformation.length != game.no_of_players){
+    var data =  {isGameStarted : game.isGameStarted,
+            numberOfPlayers : game.usersInformation.length,
           };
     sendResponse(response, data);
   }else if(isUserExists(request)){
@@ -38,20 +33,20 @@ var sendUpdatedData = function(request, response){
 
 // var mapName = function(ip){
   // var name;
-  // usersInformation.forEach(function(user){
+  // game.usersInformation.forEach(function(user){
     // if(user.ip.toString() == ip.toString()) name = user.name;
   // });
   // return name;
 // };
 
 var getUserCards = function(cookie){
-  return user_cards[cookie];
+  return game.user_cards[cookie];
 };
 
 var getAllUserCardsLength = function(){
   var cardInfo = [];
-  user_names.forEach(function(userName){
-    cardInfo.push({name : userName, noOfCards : user_cards[userName].length});
+  game.user_names.forEach(function(userName){
+    cardInfo.push({name : userName, noOfCards : game.user_cards[userName].length});
   });
   return cardInfo;
 };
@@ -77,13 +72,13 @@ var storeRankOfPlayers = function(ranks){
 
 var sendAllInformationOfTable = function(request,response){
   var dataToSend = {};
-  dataToSend.cardOnTable = discard_pile.getTopMostCard();
+  dataToSend.cardOnTable = game.discard_pile.getTopMostCard();
   dataToSend.userCards = getUserCards(request.headers.cookie);
   dataToSend.allUsersCardsLength = getAllUserCardsLength(); 
-  dataToSend.currentPlayer = players.currentPlayer;
-  dataToSend.nextPlayer = players.nextPlayer;
-  dataToSend.previousPlayer = players.previousPlayer;
-  dataToSend.runningColour = runningColour;
+  dataToSend.currentPlayer = game.players.currentPlayer;
+  dataToSend.nextPlayer = game.players.nextPlayer;
+  dataToSend.previousPlayer = game.players.previousPlayer;
+  dataToSend.runningColour = game.runningColour;
   var end = isEndOfGame();
   if(end){
     dataToSend.isEndOfGame = isEndOfGame();
@@ -91,23 +86,22 @@ var sendAllInformationOfTable = function(request,response){
     storeRankOfPlayers(dataToSend.ranks);
     //clear the variables..
     
-    // user_names = undefined;
-    // user_cards = undefined;
-    // discard_pile = undefined;
-    // draw_pile = undefined;
+    // game.user_names = undefined;
+    // game.user_cards = undefined;
+    // game.discard_pile = undefined;
+    // game.draw_pile = undefined;
 
-    // players = undefined;
+    // game.players = undefined;
 
-    // runningColour = undefined;
+    // game.runningColour = undefined;
 
-    // currentPlayer = undefined;
+    // game.currentPlayer = undefined;
 
-    // plus_two_cards_count = 0;
+    // game.plus_two_cards_count = 0;
 
-    // said_UNO_registry = [];
-    // allUsersInTheGame = allUsersInTheGame.concat(usersInformation);
-    // usersInformation = [];
-    // isGameStarted = false;
+    // game.said_UNO_registry = [];
+    // game.usersInformation = [];
+    // game.isGameStarted = false;
   };
 
   sendResponse(response, dataToSend);
@@ -126,16 +120,10 @@ var serveFile = function(filePath, request, response){
   });
 };
 
-var isValidUser = function(request){
-  return allUsersInTheGame.some(function(user){
-    return (user.name == request.headers.cookie);
-  });
-};
-
 var handle_get_request = function(request, response){
   console.log('requested files', request.url);
   filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '..' + request.url;
-  if(request.url == '/' && isGameStarted){
+  if(request.url == '/' && game.isGameStarted){
     response.statusCode = 404;
     response.end('Game has already been started..!');
   }else if(request.url == '/public/htmlFiles/all_information_on_table' && !isUserExists(request)){
@@ -168,29 +156,29 @@ var handle_get_request = function(request, response){
 //-----------------------------------POST_HANDLER---------------------------------------//
 
 var addUser = function(name){
-  usersInformation.push({name : name});
+  game.usersInformation.push({name : name});
 };
 
 var isUserExists = function(request){
   var cookies = request.headers.cookie;
   console.log('Checking for', cookies);
-  return usersInformation.some(function(user){
+  return game.usersInformation.some(function(user){
     return (user.name == cookies);
   });
 };
 
 var isEndOfGame = function(){
   var end = false;
-  user_names.forEach(function(name){
-    if(user_cards[name].length == 0) end = true;
+  game.user_names.forEach(function(name){
+    if(game.user_cards[name].length == 0) end = true;
   });
   return end;
 };
 
 var calculateRanking = function(){
   var ranks = [];
-  user_names.forEach(function(name){
-    ranks.push({name : name, points : calculatePoints(user_cards[name])});
+  game.user_names.forEach(function(name){
+    ranks.push({name : name, points : calculatePoints(game.user_cards[name])});
   });
   ranks.sort(function(player1, player2){
     return (player1.points > player2.points)
@@ -220,7 +208,7 @@ var sendResponse = function(response, data){
 //---------------------------------LOGIN_USER_REQUEST---------------------------------//
 
 var handle_login_user_request = function(request, response){
-  if(isGameStarted){
+  if(game.isGameStarted){
       response.end('{"isGameStarted" : true}');
     }else{
       console.log('User requested to log in..!');
@@ -231,8 +219,8 @@ var handle_login_user_request = function(request, response){
       request.on('end', function(){
         if(!isUserExists(request)){
           addUser(data.substr(5));
-          var dataToBeSent =  { isGameStarted : isGameStarted,
-                        numberOfPlayers : usersInformation.length,
+          var dataToBeSent =  { isGameStarted : game.isGameStarted,
+                        numberOfPlayers : game.usersInformation.length,
                     };
           response.writeHead(200, {'Set-Cookie': data.substr(5)});
           sendResponse(response, dataToBeSent);
@@ -241,8 +229,8 @@ var handle_login_user_request = function(request, response){
           sendResponse(response, dataToBeSent);
         };
 
-        if(usersInformation.length == game.no_of_players) isGameStarted = true;
-        console.log(usersInformation);
+        if(game.usersInformation.length == game.no_of_players) game.isGameStarted = true;
+        console.log(game.usersInformation);
       });
     };
 };
@@ -250,92 +238,92 @@ var handle_login_user_request = function(request, response){
 //---------------------------------PLAY_CARD_REQUEST---------------------------------//
 
 var drawCardsFromDeck = function(noOfCards){
-  var cards = draw_pile.drawCards(noOfCards);
-  if(draw_pile.isEmpty()){
-    var topMostCard = discard_pile.cards.shift();
-    var allDeckCards = discard_pile.cards;
-    draw_pile = new DrawPile(lodash.shuffle(allDeckCards));
-    discard_pile = new DiscardPile([topMostCard]);
+  var cards = game.draw_pile.drawCards(noOfCards);
+  if(game.draw_pile.isEmpty()){
+    var topMostCard = game.discard_pile.cards.shift();
+    var allDeckCards = game.discard_pile.cards;
+    game.draw_pile = new DrawPile(lodash.shuffle(allDeckCards));
+    game.discard_pile = new DiscardPile([topMostCard]);
   };
   return cards;
 };
 
 
 var giveFourCardsToNextPlayer = function(){
-  var nextPlayer = players.nextPlayer;
-  user_cards[nextPlayer] = user_cards[nextPlayer].concat(drawCardsFromDeck(4))
+  var nextPlayer = game.players.nextPlayer;
+  game.user_cards[nextPlayer] = game.user_cards[nextPlayer].concat(drawCardsFromDeck(4))
 };
 
 var doesNextPlayerHavePlustwo = function(){
-  return user_cards[players.nextPlayer].some(function(card){
+  return game.user_cards[game.players.nextPlayer].some(function(card){
     return (card.speciality == 'DrawTwo');
   });
 };
 
 var givePenaltyCardsTwoNextPlayer = function(penalty){
-  user_cards[players.nextPlayer] = user_cards[players.nextPlayer].concat(drawCardsFromDeck(penalty));
+  game.user_cards[game.players.nextPlayer] = game.user_cards[game.players.nextPlayer].concat(drawCardsFromDeck(penalty));
 };
 
 var playTheCardThatUserRequested = function(userPlay, request){
   var cardPlayed = userPlay.playedCard;
   var userName = request.headers.cookie;
-  var userHand = user_cards[userName];
-  user_cards[userName] = removeSelectedCard(cardPlayed, userHand);
-  discard_pile.addCard(cardPlayed);
+  var userHand = game.user_cards[userName];
+  game.user_cards[userName] = removeSelectedCard(cardPlayed, userHand);
+  game.discard_pile.addCard(cardPlayed);
   switch (cardPlayed.speciality){
     case 'Wild':
-      runningColour = userPlay.colour;
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
+      game.runningColour = userPlay.colour;
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
       break;
     case 'WildDrawFour':
-      runningColour = userPlay.colour;
+      game.runningColour = userPlay.colour;
       giveFourCardsToNextPlayer();
-      players.changePlayersTurn();
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
+      game.players.changePlayersTurn();
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
       break;
     case 'DrawTwo':
-      plus_two_cards_count += 2;
+      game.plus_two_cards_count += 2;
       if(!doesNextPlayerHavePlustwo()){
-        givePenaltyCardsTwoNextPlayer(plus_two_cards_count);
-        players.changePlayersTurn();
-        plus_two_cards_count = 0;
+        givePenaltyCardsTwoNextPlayer(game.plus_two_cards_count);
+        game.players.changePlayersTurn();
+        game.plus_two_cards_count = 0;
       };
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
-      runningColour = cardPlayed.colour;
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
+      game.runningColour = cardPlayed.colour;
       break;
     case null:
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
-      runningColour = cardPlayed.colour;
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
+      game.runningColour = cardPlayed.colour;
       break;
     case 'Skip':
-      runningColour = cardPlayed.colour;
-      players.changePlayersTurn();
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
+      game.runningColour = cardPlayed.colour;
+      game.players.changePlayersTurn();
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
       break;
     case 'Reverse':
-      runningColour = cardPlayed.colour;
-      players.changeDirection();
-      players.changePlayersTurn();
-      currentPlayer = players.currentPlayer;
+      game.runningColour = cardPlayed.colour;
+      game.players.changeDirection();
+      game.players.changePlayersTurn();
+      game.currentPlayer = game.players.currentPlayer;
   };
 };
 
 var checkAndResetTheUnoField = function(){
-  said_UNO_registry.forEach(function(player){
+  game.said_UNO_registry.forEach(function(player){
     if(player.said_uno == true){
-      if(user_cards[player.name].length != 1)
+      if(game.user_cards[player.name].length != 1)
         player.said_uno = false;
     };
   });
 };
 
 var handle_play_card_request = function(request, response){
-  if(currentPlayer == request.headers.cookie){
+  if(game.currentPlayer == request.headers.cookie){
     var data = '';
     request.on('data', function(d){
       data += d;
@@ -343,8 +331,8 @@ var handle_play_card_request = function(request, response){
     request.on('end', function(){
       var userPlay = JSON.parse(data);
       var cardPlayed = userPlay.playedCard;
-      var discardedCard = discard_pile.getTopMostCard();
-        if(canPlayerPlayTheCard(cardPlayed, discardedCard, runningColour, plus_two_cards_count)){
+      var discardedCard = game.discard_pile.getTopMostCard();
+        if(canPlayerPlayTheCard(cardPlayed, discardedCard, game.runningColour, game.plus_two_cards_count)){
           playTheCardThatUserRequested(userPlay, request);
           checkAndResetTheUnoField();
           response.statusCode = 200;
@@ -362,13 +350,13 @@ var handle_play_card_request = function(request, response){
 
 var handle_draw_card_request = function(request, response){
   var userName = request.headers.cookie;
-  if(currentPlayer == userName){
+  if(game.currentPlayer == userName){
     var card = drawCardsFromDeck(1);
     if(card[0] == undefined){
       response.end('out_of_cards');
       return;		
     };
-    user_cards[userName] = user_cards[userName].concat(card);
+    game.user_cards[userName] = game.user_cards[userName].concat(card);
     response.statusCode = 200;
     response.end();
       
@@ -380,7 +368,7 @@ var handle_draw_card_request = function(request, response){
 
 var handle_say_uno = function(request, response){
   var playerName = request.headers.cookie;
-  said_UNO_registry.forEach(function(user){
+  game.said_UNO_registry.forEach(function(user){
     if(user.name == playerName) 
       console.log('uno is here',user);
       user.said_uno = true;
@@ -390,23 +378,23 @@ var handle_say_uno = function(request, response){
 };
 
 var handle_pass_turn_request = function(request, response){
-  players.changePlayersTurn();
-  currentPlayer = players.currentPlayer;
+  game.players.changePlayersTurn();
+  game.currentPlayer = game.players.currentPlayer;
   response.statusCode = 200;
   response.end('turn_passed');
 };
 
 var givePenalty = function(player, noOfCards){
-  user_cards[player] = user_cards[player].concat(drawCardsFromDeck(noOfCards));
+  game.user_cards[player] = game.user_cards[player].concat(drawCardsFromDeck(noOfCards));
   checkAndResetTheUnoField();
 }
 var handle_catch_uno = function(request, response){
   var playersCardInfo = getAllUserCardsLength();
   for(var i = 0; i < playersCardInfo.length; i++){
     if(playersCardInfo[i].noOfCards == 1){
-      for(var j = 0; j < said_UNO_registry.length; j++){
-        if(said_UNO_registry[j].said_uno == false && said_UNO_registry[j].name == playersCardInfo[i].name){
-            givePenalty(said_UNO_registry[j].name,2);
+      for(var j = 0; j < game.said_UNO_registry.length; j++){
+        if(game.said_UNO_registry[j].said_uno == false && game.said_UNO_registry[j].name == playersCardInfo[i].name){
+            givePenalty(game.said_UNO_registry[j].name,2);
             response.end("uno_catched_successfully");
             break;
           }
@@ -473,40 +461,37 @@ var getUserName = function(allInformation){
 
 //-------------------------------------UNO_DECK DATA---------------------------------------------//
 var game = {
-  no_of_players : 2
+  no_of_players : 1,
+  usersInformation : [],
+  user_names : undefined,
+  user_cards : undefined,
+  discard_pile : undefined,
+  draw_pile : undefined,
+  isGameStarted : false,
+  players : undefined,
+  runningColour : undefined,
+  currentPlayer : undefined,
+  plus_two_cards_count : 0,
+  said_UNO_registry : []
 };
-var user_names;
-var user_cards;
-var discard_pile;
-var draw_pile;
-
-var players;
-
-var runningColour;
-
-var currentPlayer;
-
-var plus_two_cards_count = 0;
-
-var said_UNO_registry = [];
 
 var startUno = function(){
-  said_UNO_registry = [];
+  game.said_UNO_registry = [];
   var shuffledCards = lodash.shuffle(allCards);
   var deck = new GenerateDeck(shuffledCards);
-  user_names = getUserName(usersInformation);
-  players = new InitializePlayers(user_names);
-  user_names = players.players;
-  currentPlayer = players.currentPlayer;
-  var dataAfterDistribution = distributeCards(user_names,shuffledCards);
-  user_cards = dataAfterDistribution[0];
+  game.user_names = getUserName(game.usersInformation);
+  game.players = new InitializePlayers(game.user_names);
+  game.user_names = game.players.players;
+  game.currentPlayer = game.players.currentPlayer;
+  var dataAfterDistribution = distributeCards(game.user_names,shuffledCards);
+  game.user_cards = dataAfterDistribution[0];
   var remainingCards = dataAfterDistribution[1];
   var cardForDiscardPile = remainingCards.shift();
-  discard_pile = new DiscardPile([cardForDiscardPile]);
-  runningColour = (discard_pile.getTopMostCard().colour) ? (discard_pile.getTopMostCard().colour) : '';
-  draw_pile = new DrawPile(remainingCards);
-  user_names.forEach(function(user){
-    said_UNO_registry.push({name : user, said_uno : false});
+  game.discard_pile = new DiscardPile([cardForDiscardPile]);
+  game.runningColour = (game.discard_pile.getTopMostCard().colour) ? (game.discard_pile.getTopMostCard().colour) : '';
+  game.draw_pile = new DrawPile(remainingCards);
+  game.user_names.forEach(function(user){
+  game.said_UNO_registry.push({name : user, said_uno : false});
   });
 };
 
