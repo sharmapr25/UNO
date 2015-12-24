@@ -259,7 +259,7 @@ var createCard = function(card){
 
 var interval = setInterval(sendConnectionRequest, 500);
 
-window.addEventListener("keypress", checkKeyPressed, false);
+// window.addEventListener("keypress", checkKeyPressed, false);
 
 function checkKeyPressed(e) {
     switch(e.charCode){

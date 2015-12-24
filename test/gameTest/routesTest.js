@@ -19,6 +19,116 @@ var request = require('supertest');
 
 describe('Routes', function(){
   describe('GET', function(){
+    describe('/',function(){
+      // it('should give the login page if game is not started', function(done){
+      //   var game = { isGameStarted : false };
+      //   request(controller(game))
+      //     .get('/')
+      //     .expect(/WELCOME TO UNO/)
+      //     .expect(200, done)
+      // });
+
+      it('should redirect to page not found if game is already started', function(done){
+        var game = { isGameStarted : true }
+        request(controller(game))
+          .get('/')
+          .expect(/Game has already been started..!/)
+          .expect(404, done)
+      });
+    });
+
+    // describe('/favicon.ico',function(){  
+    // });
+
+    describe('/updated_login_data',function(){
+      it('should give an information of is game started and number of players', function(done){
+        game = { usersInformation : [] }
+        request(controller(game))
+          .get('/updated_login_data')
+          .expect(/numberOfPlayers/)
+          .expect(200, done)
+      });
+    });
+
+    // describe('unoTable',function(){
+    //   it('should redirect to the login page if game is not started', function(done){
+    //     var game = { isGameStarted : false }
+    //     request(controller(game))
+    //       .get('/public/htmlFiles/unoTable.html')
+    //       .expect(/WELCOME TO UNO/)
+    //       .expect(302, done)
+    //   });
+    // });
+
+    describe('/all_information_on_table',function(){
+      it('should give all required information to updated the table', function(done){
+        var game = {
+          user_cards : { Raviraj : [{}]},
+          no_of_players : 1,
+          usersInformation : [{ name : 'Raviraj'}],
+          isGameStarted : true,
+          runningColour : 'Red',
+          discard_pile : {getTopMostCard : function(){return {}}},
+          said_UNO_registry : [],
+          user_names : ['Raviraj'],
+          players : {currentPlayer : 'Raviraj'}
+        };
+        request(controller(game))
+          .get('/public/htmlFiles/all_information_on_table')
+          .set('Cookie', 'Raviraj') 
+          .expect(/runningColour/)
+          .expect(200, done)
+      });
+
+      it('should not give information if player is not login ', function(done){
+        var game = {
+          usersInformation : [],
+          isGameStarted : true,
+        };
+        request(controller(game))
+            .get('/public/htmlFiles/all_information_on_table')
+            .expect(/Oops..!!Something went wrong..!/)
+            .expect(404, done)
+      });
+    });
+
+    // describe('close deck',function(done){
+    //     // /close_face.png
+    // });
+
+    // describe('open deck',function(){
+    //   //cover svg images..
+    // });
+
+    // describe('/all_information_on_table',function(){
+    // });
+
+    describe('winers page',function(){
+      it.skip('should give winers page if user is login and game is over', function(done) {
+          var game = {
+            user_cards : { Kalidas : []},
+            no_of_players : 1,
+            usersInformation : [{ name : 'Kalidas'}],
+            isGameStarted : true
+          };
+        request(controller(game))
+            .get('/public/htmlFiles/winners.html')
+            .set('Cookie', 'Kalidas') 
+            .expect(/<table id='table'>/)
+            .expect(200, done)
+      });
+
+      it('should not give winers page if user is not login', function(done) {
+         var game = {
+          usersInformation : [],
+          isGameStarted : true,
+        };
+        request(controller(game))
+            .get('/public/htmlFiles/winners.html')
+            .expect(/Sorry.. Login First..!!/)
+            .expect(404, done)
+      });
+    });
   });
 
   describe('POST', function(){
