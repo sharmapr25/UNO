@@ -14,19 +14,19 @@ var controller = require('../../server/server.js');
   // said_UNO_registry : []
 // };
 
-
+var sinon = require('sinon');
 var request = require('supertest');
 
 describe('Routes', function(){
   describe('GET', function(){
     describe('/',function(){
-      // it('should give the login page if game is not started', function(done){
-      //   var game = { isGameStarted : false };
-      //   request(controller(game))
-      //     .get('/')
-      //     .expect(/WELCOME TO UNO/)
-      //     .expect(200, done)
-      // });
+      it('should give the login page if game is not started', function(done){
+        var game = { isGameStarted : false };
+        request(controller(game))
+          .get('/')
+          .expect(/WELCOME TO UNO/)
+          .expect(200, done)
+      });
 
       it('should redirect to page not found if game is already started', function(done){
         var game = { isGameStarted : true }
@@ -36,9 +36,6 @@ describe('Routes', function(){
           .expect(404, done)
       });
     });
-
-    // describe('/favicon.ico',function(){  
-    // });
 
     describe('/updated_login_data',function(){
       it('should give an information of is game started and number of players', function(done){
@@ -50,15 +47,15 @@ describe('Routes', function(){
       });
     });
 
-    // describe('unoTable',function(){
-    //   it('should redirect to the login page if game is not started', function(done){
-    //     var game = { isGameStarted : false }
-    //     request(controller(game))
-    //       .get('/public/htmlFiles/unoTable.html')
-    //       .expect(/WELCOME TO UNO/)
-    //       .expect(302, done)
-    //   });
-    // });
+    describe('unoTable',function(){
+      it('should give a lnk to go to login page if the user directly hits unotable page without login', function(done){
+        var game = { isGameStarted : sinon.stub().returns(false) }
+        request(controller(game))
+          .get('/public/htmlFiles/unoTable.html')
+          .expect(/UNO Table<\/title>/)
+          .expect(200, done)
+      });
+    });
 
     describe('/all_information_on_table',function(){
       it('should give all required information to updated the table', function(done){
@@ -73,10 +70,11 @@ describe('Routes', function(){
           user_names : ['Raviraj'],
           players : {currentPlayer : 'Raviraj'}
         };
+        var expected_String = '{"cardOnTable":{},"userCards":[{}],"allUsersCardsLength":[{"name":"Raviraj","noOfCards":1}],"currentPlayer":"Raviraj","runningColour":"Red"}';
         request(controller(game))
           .get('/public/htmlFiles/all_information_on_table')
           .set('Cookie', 'Raviraj') 
-          .expect(/runningColour/)
+          .expect(expected_String)
           .expect(200, done)
       });
 
@@ -104,7 +102,7 @@ describe('Routes', function(){
     // });
 
     describe('winers page',function(){
-      it.skip('should give winers page if user is login and game is over', function(done) {
+      it('should give winers page if user is login and game is over', function(done) {
           var game = {
             user_cards : { Kalidas : []},
             no_of_players : 1,
@@ -141,6 +139,7 @@ describe('Routes', function(){
           usersInformation : [{ name : 'Ram'}],
           isGameStarted : false,
         };
+
 
         request(controller(game))
           .post('/login_user')
@@ -266,14 +265,11 @@ describe('Routes', function(){
     describe('/DrawCard', function(){
       it('should allow the user to draw a card if its his turn', function(done){ 
         var game = {
-          currentPlayer : 'Ram',
-          draw_pile : { drawCards : function(num){
-                          return {number : '1', colour : 'Green', speciality : null, points : 1};
-                        },
-                        isEmpty : function(){return false;}
-                      } 
+          currentPlayer : sinon.stub().returns('Ram'),
+          draw_pile : { drawCards : sinon.stub().returns({number : '1', colour : 'Green', speciality : null, points : 1}),
+                        isEmpty : sinon.stub().returns(false) } 
         };
-
+        
         request(controller(game))
           .post('/public/htmlFiles/draw_card')
           .set('Cookie', 'Ram')
@@ -282,9 +278,7 @@ describe('Routes', function(){
       });
 
       it('should not allow the user to draw a card if its not his turn', function(done){
-          var game = {
-             currentPlayer : 'Ram'
-          };
+        var game = { currentPlayer : sinon.stub.returns('Ram')};
 
         request(controller(game))
           .post('/public/htmlFiles/draw_card')
@@ -297,15 +291,16 @@ describe('Routes', function(){
 
     describe('/public/htmlFiles/pass_turn', function(){
       it('should allow the user to pass the turn to next player', function(done){
-          var game = {
-             players : { changePlayersTurn : function(){}}
-          };
+        var game = {
+            players : { changePlayersTurn : function(){}}
+        };
+        var spy = sinon.spy(game.players, "changePlayersTurn"); 
 
         request(controller(game))
           .post('/public/htmlFiles/pass_turn')
           .set('Cookie', 'Shyam')
           .expect('turn_passed')
-          .expect(200, done);  
+          .expect(200, done);
       });
     });
   
