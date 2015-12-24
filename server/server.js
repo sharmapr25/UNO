@@ -13,7 +13,6 @@ var InitializePlayers = require('../entities/playerEntities.js').InitializePlaye
 var canPlayerPlayTheCard = require('../entities/rulesEntities.js').canPlayerPlayTheCard;
 var calculatePoints = require('./serverUtilities.js').server.calculatePoints;
 
-//-----------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------//
 var sendUpdatedData = function(request, response){
   if(game.usersInformation.length != game.no_of_players){
@@ -220,8 +219,8 @@ var handle_login_user_request = function(request, response){
         if(!isUserExists(request)){
           addUser(data.substr(5));
           var dataToBeSent =  { isGameStarted : game.isGameStarted,
-                        numberOfPlayers : game.usersInformation.length,
-                    };
+                                numberOfPlayers : game.usersInformation.length,
+                              };
           response.writeHead(200, {'Set-Cookie': data.substr(5)});
           sendResponse(response, dataToBeSent);
         }else{
@@ -443,14 +442,24 @@ var removeSelectedCard = function(card, allCards){
 };
 
 //-------------------------------------------------------------------------------------------//
-
-var requestHandler = function(request, response){
-  console.log(request.method, request.url);
-  if(request.method == 'GET')
-    handle_get_request(request, response);
-  else if(request.method == 'POST')
-    handle_post_request(request, response);
+var requestHandler = function(gameObject){
+  game = gameObject;
+  return function(request, response){
+    console.log(request.method, request.url);
+    if(request.method == 'GET')
+      handle_get_request(request, response);
+    else if(request.method == 'POST')
+      handle_post_request(request, response);
+  };
 };
+
+// var requestHandler = function(request, response){
+  // console.log(request.method, request.url);
+  // if(request.method == 'GET')
+    // handle_get_request(request, response);
+  // else if(request.method == 'POST')
+    // handle_post_request(request, response);
+// };
 
 //-------------------------------------------------------------------------------------------//
 var getUserName = function(allInformation){
@@ -460,20 +469,7 @@ var getUserName = function(allInformation){
 };
 
 //-------------------------------------UNO_DECK DATA---------------------------------------------//
-var game = {
-  no_of_players : 1,
-  usersInformation : [],
-  user_names : undefined,
-  user_cards : undefined,
-  discard_pile : undefined,
-  draw_pile : undefined,
-  isGameStarted : false,
-  players : undefined,
-  runningColour : undefined,
-  currentPlayer : undefined,
-  plus_two_cards_count : 0,
-  said_UNO_registry : []
-};
+var game;
 
 var startUno = function(){
   game.said_UNO_registry = [];
@@ -491,7 +487,7 @@ var startUno = function(){
   game.runningColour = (game.discard_pile.getTopMostCard().colour) ? (game.discard_pile.getTopMostCard().colour) : '';
   game.draw_pile = new DrawPile(remainingCards);
   game.user_names.forEach(function(user){
-  game.said_UNO_registry.push({name : user, said_uno : false});
+    game.said_UNO_registry.push({name : user, said_uno : false});
   });
 };
 
