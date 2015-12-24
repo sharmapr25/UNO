@@ -2,8 +2,10 @@ var http = require('http');
 var fs = require('fs');
 var lodash = require('lodash');
 
+ 
 //----------------------------------------------------------------------------------------//
 
+var gameObject = require('../entities/gameEntity.js'); 
 var allCards = require('../entities/cardEntities.js').allCards;
 var GenerateDeck = require('../entities/cardEntities.js').GenerateDeck;
 var distributeCards = require('./serverUtilities.js').server.distributeCards;
@@ -29,14 +31,6 @@ var sendUpdatedData = function(request, response){
     sendResponse(response, data);
   }
 };
-
-// var mapName = function(ip){
-  // var name;
-  // game.usersInformation.forEach(function(user){
-    // if(user.ip.toString() == ip.toString()) name = user.name;
-  // });
-  // return name;
-// };
 
 var getUserCards = function(cookie){
   return game.user_cards[cookie];
@@ -107,6 +101,7 @@ var sendAllInformationOfTable = function(request,response){
 };
 
 var serveFile = function(filePath, request, response){
+  console.log('serving', filePath);
   fs.readFile(filePath, function(err, data){
     if(data){
       response.statusCode = 200;
@@ -121,7 +116,7 @@ var serveFile = function(filePath, request, response){
 
 var handle_get_request = function(request, response){
   console.log('requested files', request.url);
-  filePath = (request.url == '/') ? '../public/htmlFiles/login.html' : '..' + request.url;
+  filePath = (request.url == '/') ? './public/htmlFiles/login.html' : '.' + request.url;
   if(request.url == '/' && game.isGameStarted){
     response.statusCode = 404;
     response.end('Game has already been started..!');
@@ -493,7 +488,7 @@ var startUno = function(){
 
 //-------------------------------------------------------------------------------------------//
 
-var server = http.createServer(requestHandler);
+var server = http.createServer(requestHandler(gameObject));
 server.listen(3000);
 
 module.exports = requestHandler;
