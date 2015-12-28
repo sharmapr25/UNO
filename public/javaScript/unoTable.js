@@ -189,7 +189,7 @@ var sendConnectionRequest = function(){
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
 		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
-		  	document.getElementById('discard_pile_deck').innerHTML = '<img id="discard_pile" src="'+addressGenrator(comments.cardOnTable)+'">'
+		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable)
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
