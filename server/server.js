@@ -56,7 +56,7 @@ var generateTable  = function(userInfo) {
 
 var storeRankOfPlayers = function(ranks){
   var dataToWrite = generateTable(ranks);
-  var fileName = '../public/htmlFiles/winners.html';
+  var fileName = './public/htmlFiles/winners.html';
   var data = fs.readFileSync(fileName,'UTF-8');
   var startIndex = data.indexOf('<table');
   var dataAfter = data.substring(0,startIndex) + dataToWrite;
