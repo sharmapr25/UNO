@@ -1,9 +1,9 @@
-var addressGenrator = function (card) {
-	var type,colour;
-	(card.speciality) ? (type = card.speciality.toLowerCase()) : (type = card.number);
-	(card.colour) ? (colour = card.colour.toLowerCase()+"_") : (colour = "");
-	return "/public/images/allCards/"+colour+type+".png";
-};
+// var addressGenrator = function (card) {
+// 	var type,colour;
+// 	(card.speciality) ? (type = card.speciality.toLowerCase()) : (type = card.number);
+// 	(card.colour) ? (colour = card.colour.toLowerCase()+"_") : (colour = "");
+// 	return "/public/images/allCards/"+colour+type+".png";
+// };
 
 var generateTable  = function(userInfo) {
 	var user_info = userInfo.map(function (eachUser) {
@@ -13,26 +13,24 @@ var generateTable  = function(userInfo) {
 	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
 };
 
-var createDiv = function(nameOfDiv){
-	var iDiv = document.createElement('div');
-	iDiv.id = nameOfDiv;
-	document.body.appendChild(iDiv);
-};
+// var createDiv = function(nameOfDiv){
+// 	var iDiv = document.createElement('div');
+// 	iDiv.id = nameOfDiv;
+// 	document.body.appendChild(iDiv);
+// };
 
 var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	console.log(req.responseText);
 	    	if(req.responseText == 'successful'){
+          		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
-          isVisibleChangeTurnButton = false;
-        }
-	    	else if(req.responseText == 'can_not_play_the_card')
+        	}else if(req.responseText == 'can_not_play_the_card')
 	    		alert('Invalid Card..!!!');
 	    	else if(req.responseText == 'not_your_turn')
 	    		alert('Not Your Turn..!!');
-	    };
+		};
 	};
 	req.open('POST', 'play_card', true);
 	req.send(dataToSend);
@@ -40,19 +38,22 @@ var send_request = function(dataToSend){
 
 var type_of_wild;
 var make_request_to_play_the_card = function(id){
-	if(document.getElementById('change_turn').className == '')
-		document.getElementById('change_turn').className = 'hidden';
-	document.getElementById('change_colour_menu').className = 'hidden';
+	if(document.getElementById('change_turn').className == ''){
+		console.log("visible turn hai jishka",isVisibleChangeTurnButton);
+		if(isVisibleChangeTurnButton != false){
+			document.getElementById('change_turn').className = 'hidden';
+		}
+		document.getElementById('change_colour_menu').className = 'hidden';
+	}
 	var indexOfPlayedcard = id.substr(9);
 	var playedCard = userCards[indexOfPlayedcard];
-	console.log('I played  thsi', id, playedCard);
 	var dataToSend = {};
 	dataToSend.playedCard = playedCard;
-
 	if(playedCard.speciality == 'Wild'){
 		document.getElementById('change_colour_menu').className = '';
 		type_of_wild = playedCard;
-	}else if(playedCard.speciality == 'WildDrawFour'){
+	}
+	else if(playedCard.speciality == 'WildDrawFour'){
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
 			alert('You Have Card To play..!!');
 		}else{
@@ -61,8 +62,7 @@ var make_request_to_play_the_card = function(id){
 		}
 	}else{
 		send_request(JSON.stringify(dataToSend));
-	};
-	
+	}
 };
 
 var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
@@ -74,13 +74,12 @@ var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
 var send_request_for_wild_card = function(){
 	var e = document.getElementById("colour_group");
 	var colour = e.options[e.selectedIndex].value;
-
 	dataToSend = {};
 	dataToSend.colour = colour;
 	dataToSend.playedCard = type_of_wild;
+	console.log("console kiya hai colour ko",dataToSend.playedCard);
 	type_of_wild = undefined;
 	send_request(JSON.stringify(dataToSend));
-	console.log('colour is',colour);
 	document.getElementById('change_colour_menu').className = 'hidden';
 };
 
@@ -88,17 +87,16 @@ var make_request_to_draw_a_card = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	console.log(req.responseText);
 	    	if(req.responseText == 'not_your_turn')
 	    		alert('Not Your Turn..!!');
 	    	else if(req.responseText == 'out_of_cards'){
 	    		alert('out of cards..!!');
 	    	}
 	    	else{
-	    		sendConnectionRequest();
+	    		// sendConnectionRequest();
 		  		document.getElementById('change_turn').className = '';
 		  		isVisibleChangeTurnButton = true;
-        };
+       		};
 	    };
 	};
   if(isVisibleChangeTurnButton) 
@@ -126,9 +124,8 @@ var catchUnoRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	if(req.responseText == 'uno_catched_successfully'){
+	    	if(req.responseText == 'uno_catched_successfully')
 	    		console.log('catch uno');
-	    	}
 	    };
 	};
 	req.open('POST', 'catch_uno', true);
@@ -152,6 +149,7 @@ var make_request_to_pass_turn = function(){
 
 var generateMessage = function(allInfo){
 	var runningColour = allInfo.runningColour;
+	console.log("pagal ko runningColour do-------",runningColour);
 	var currentPlayer = allInfo.currentPlayer;
 	var nextPlayer = allInfo.nextPlayer;
 	
@@ -163,17 +161,17 @@ var generateMessage = function(allInfo){
 };
 
 var isVisibleChangeTurnButton;
-var userCards;
-var cardOnDeck;
+// var userCards;
+// var cardOnDeck;
 var showedRanks = false;
-var previous_player;
+// var previous_player;
+
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	        var comments = JSON.parse(req.responseText);
-	        console.log('whole response is', comments);
-	        userCards = comments.userCards;
+	        userCards = comments.userCards; 
 	        cardOnDeck = comments.cardOnTable;
 	        if(comments.isEndOfGame){
 	        	if(!showedRanks) {
@@ -185,11 +183,11 @@ var sendConnectionRequest = function(){
 
 	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest();};
 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
-	        
+
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
 		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
-		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable)
+		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
 
 	    	var imgRef = '';
 	    	for(var i=0; i < comments.userCards.length; i++){
@@ -199,7 +197,7 @@ var sendConnectionRequest = function(){
 	    		// imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
 	    	};			
 
-        document.getElementById('table_deck').className = comments.runningColour;
+        	document.getElementById('table_deck').className = comments.runningColour;
 		  	document.getElementById('cards').innerHTML = imgRef;
 			document.getElementById('message_box').innerHTML = generateMessage(comments);
 
@@ -220,7 +218,7 @@ var createCard = function(card){
 	var num;
 	var colour = card.colour ? card.colour : '#ffffff'
 
-	if(card.number || card.number == 0){
+	if(card.number != null){
 		num = ' ' + card.number;
 	}else{
 		switch(card.speciality){
@@ -259,23 +257,23 @@ var createCard = function(card){
 
 var interval = setInterval(sendConnectionRequest, 500);
 
-// window.addEventListener("keypress", checkKeyPressed, false);
+// // window.addEventListener("keypress", checkKeyPressed, false);
 
-function checkKeyPressed(e) {
-    switch(e.charCode){
-    	case 115:
-    		//sayUNO
-    		sayUnoRequest();
-    		break;
-    	case 99:
-    		//catch UNO
-    		catchUnoRequest();	
-    		break;
-    	case 100:
-    		//draw
-    		make_request_to_draw_a_card();
-    		break;
-    };
-};
+// function checkKeyPressed(e) {
+//     switch(e.charCode){
+//     	case 115:
+//     		//sayUNO
+//     		sayUnoRequest();
+//     		break;
+//     	case 99:
+//     		//catch UNO
+//     		catchUnoRequest();	
+//     		break;
+//     	case 100:
+//     		//draw
+//     		make_request_to_draw_a_card();
+//     		break;
+//     };
+// };
 
-exports.addressGenrator = addressGenrator;
+// exports.addressGenrator = addressGenrator;
