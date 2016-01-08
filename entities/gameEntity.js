@@ -1,6 +1,6 @@
-exports.game = function(id) {
+exports.game = function(id,numOfPlayer) {
   this.id = id;
-  this.no_of_players = 1,
+  this.no_of_players = numOfPlayer,
   this.usersInformation = [],//!array of players url
   this.user_names = undefined;
   this.user_cards = [],
