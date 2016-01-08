@@ -10,11 +10,18 @@ var alreadyConnected = function(){
 	return 'Already Connected Boss..!!';
 };
 
+var no_of_player = function(){
+	var e = document.getElementById("noOfPlayer");
+	var players = e.options[e.selectedIndex].value;
+	return players;
+};
+
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	        var comments = JSON.parse(req.responseText);
+	        console.log("....",comments.id)
 	        if(comments.isGameStarted == true){
 		      	document.querySelector('#current_game_information').innerHTML = alreadyGameStarted();
 	        }else if(comments.alreadyConnected == true){
@@ -24,8 +31,11 @@ var sendConnectionRequest = function(){
 	        }
 	    };
 	};
+
+		var info = { name : document.querySelector('input[name="user_name"]').value, setNoOfPlayer : no_of_player()};
 	req.open('POST', 'login_user', true);
-	req.send('name='+document.querySelector('input[name="user_name"]').value);
+	req.send(JSON.stringify(info));
+	// req.send('name='+document.querySelector('input[name="user_name"]').value);
 	document.querySelector('input[name="user_name"]').value = "";
 };
 
