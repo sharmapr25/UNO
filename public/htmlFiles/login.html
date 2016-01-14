@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Log in</title>
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/login.css">
 	<script type="text/javascript" src = '/javaScript/login.js'></script>
-	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="shortcut icon" href="/images/favicon.ico">
 </head>
 <body>
 	<center><div id="main">
@@ -13,6 +14,7 @@
 				<input type="text" id="user_name"name="user_name" placeholder="Enter your name"><br/>
 				<h3>select number of player :
 				<select id="noOfPlayer">
+					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
@@ -23,8 +25,7 @@
 				</select></h3>
 				<button type="button" id="play_button">Play</button>
 			</div>
-			<div id="help"><a href = "/public/htmlFiles/instruction.html">Help</a></div>
-			<div id='current_game_information'></div>
+			<div id="help"><a href = "/htmlFiles/instruction.html">Help</a></div>
 		</center>
 	</div>
 	<div id="gameInfo">
