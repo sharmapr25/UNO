@@ -63,6 +63,7 @@ var make_request_to_play_the_card = function(id){
 			type_of_wild = playedCard;
 		}
 	}else{
+		dataToSend.colour = playedCard.colour;
 		send_request(JSON.stringify(dataToSend));
 	}
 };
