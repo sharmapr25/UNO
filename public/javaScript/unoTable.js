@@ -20,8 +20,10 @@ var generateTable  = function(userInfo) {
 // };
 
 var send_request = function(dataToSend){
+	console.log("data to send ...... in play_Card by server",dataToSend);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
+	    	console.log("response text",req.responseText);
 	    if (req.readyState == 4 && req.status == 200) {
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
@@ -37,9 +39,8 @@ var send_request = function(dataToSend){
 };
 
 var type_of_wild;
-var make_request_to_play_the_card = function(id){
+var make_request_to_play_the_card = function(id){	
 	if(document.getElementById('change_turn').className == ''){
-		console.log("visible turn hai jishka",isVisibleChangeTurnButton);
 		if(isVisibleChangeTurnButton != false){
 			document.getElementById('change_turn').className = 'hidden';
 		}
@@ -52,6 +53,7 @@ var make_request_to_play_the_card = function(id){
 	if(playedCard.speciality == 'Wild'){
 		document.getElementById('change_colour_menu').className = '';
 		type_of_wild = playedCard;
+		console.log("type_of_wild in make a request play",type_of_wild);
 	}
 	else if(playedCard.speciality == 'WildDrawFour'){
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
@@ -65,7 +67,7 @@ var make_request_to_play_the_card = function(id){
 	}
 };
 
-var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
+var doesThePlayerHaveSpecifiedColourCard = function(colour){
 	return userCards.some(function(card){
 		return (card.colour == colour)
 	});
@@ -77,7 +79,6 @@ var send_request_for_wild_card = function(){
 	dataToSend = {};
 	dataToSend.colour = colour;
 	dataToSend.playedCard = type_of_wild;
-	console.log("console kiya hai colour ko",dataToSend.playedCard);
 	type_of_wild = undefined;
 	send_request(JSON.stringify(dataToSend));
 	document.getElementById('change_colour_menu').className = 'hidden';
@@ -106,7 +107,7 @@ var make_request_to_draw_a_card = function(){
   	req.send();
   };
 }
-var sayUnoRequest = function(){
+var sayUnoRequest = function(userCards){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -149,7 +150,6 @@ var make_request_to_pass_turn = function(){
 
 var generateMessage = function(allInfo){
 	var runningColour = allInfo.runningColour;
-	console.log("pagal ko runningColour do-------",runningColour);
 	var currentPlayer = allInfo.currentPlayer;
 	var nextPlayer = allInfo.nextPlayer;
 	
@@ -186,7 +186,7 @@ var sendConnectionRequest = function(){
 
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
-		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/public/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
+		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
 
 	    	var imgRef = '';
