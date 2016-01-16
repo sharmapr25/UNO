@@ -20,6 +20,20 @@ var sendConnectionRequest = function(){
 	document.querySelector('input[name="user_name"]').value = "";
 };
 
+var sendJoinRequest = function(){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function(){
+		window.location = req.responseText;
+	};
+	var e = document.getElementById("existing_game_list");
+	var game_id = e.options[e.selectedIndex].value;
+	var join_game = {name : document.querySelector('input[name="user_name"]').value, id : game_id};
+	req.open('POST','join_game',true);
+	req.send(JSON.stringify(join_game));
+};
+
+
+
 window.onload = function(){
-	document.querySelector('button').onclick = sendConnectionRequest;
+	document.getElementById('play_button').onclick = sendConnectionRequest;
 };
