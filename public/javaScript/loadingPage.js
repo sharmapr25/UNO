@@ -42,4 +42,4 @@ var getUpdatedData = function(){
 	req.send();
 };
 
-var interval = setInterval(getUpdatedData, 3000);
+var interval = setInterval(getUpdatedData, 1000);
