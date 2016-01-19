@@ -189,7 +189,7 @@ var sendConnectionRequest = function(){
 
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
 	        
-		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
+		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="150px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
 
 	    	var imgRef = '';
@@ -228,7 +228,7 @@ var createCard = function(card){
 			case 'Reverse':
 				num = ' R';break;
 			case 'Skip':
-				num = '@';break;
+				num = ' $';break;
 			case 'DrawTwo':
 				num = '+2';break;
 			case 'Wild':
@@ -237,22 +237,32 @@ var createCard = function(card){
 				num = '+4';break;
 		};
 	};
-
+	var runningColour = colour.toLowerCase();
+	switch(runningColour){
+		case 'red':
+			colour = '#E32B34';break;
+		case 'green':
+			colour = '#26BD41';break;
+		case 'blue':
+			colour = '#2980d8';break;
+		case 'yellow':
+			colour = '#F2CD38';break;
+	}
 	colour = colour.toLowerCase();
 	return [
 	'<svg width="187" height="262" xmlns="http://www.w3.org/2000/svg">',
 	 '<g>',
 	  '<title>background</title>',
-	  '<rect fill="#fff" id="canvas_background" height="264" width="189" y="-1" x="-1"/>',
+	  '<rect fill="#fff" id="canvas_background" height="234" width="178" y="-1" x="-1"/>',
 	  '<g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">',
 	   '<rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>',
 	  '</g>',
 	 '</g>',
 	 '<g>',
 	  '<title>Layer 1</title>',
-	  '<rect id="svg_1" height="224" width="152" y="22" x="17.5" stroke-width="1.5" stroke="#000" fill="'+colour+'"/>',
+	  '<rect id="svg_1" height="190" width="142" y="22" x="17.5" stroke-width="1.5" stroke="#000" fill="'+colour+'"/>',
 	  '<text stroke="#000" transform="matrix(4.747072696685791,0,0,3.642857074737549,-256.6744797229767,-216.714280128479) " xml:space="preserve" text-anchor="left" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="104" x="66" stroke-width="0" fill="#000000"/>',
-	  '<text xml:space="preserve" text-anchor="left" font-family="sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">'+num+'</text>',
+	  '<text xml:space="preserve" text-anchor="left" font-family="sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#ffffff">'+num+'</text>',
 	 '</g>',
 	'</svg>'
 	].join('');
