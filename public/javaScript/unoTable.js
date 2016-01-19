@@ -108,7 +108,9 @@ var make_request_to_draw_a_card = function(){
   	req.send();
   };
 }
-var sayUnoRequest = function(userCards){
+var sayUnoRequest = function(comments){
+	var cookie = document.cookie.split(' ');
+	var name = cookie[0].substring(10,cookie[0].length-1);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -116,7 +118,7 @@ var sayUnoRequest = function(userCards){
 		    	console.log('said uno');
 	    };
 	};
-	if(userCards.length == 1){
+	if(userCards.length == 2 && comments.currentPlayer == name){
 		req.open('POST', 'say_uno', true);
 		req.send();
 	};
@@ -182,7 +184,7 @@ var sendConnectionRequest = function(){
 	        	};
 	        };
 
-	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest();};
+	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(comments);};
 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
 
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
