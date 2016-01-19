@@ -1,12 +1,13 @@
 #UNO_Table{
-	width:100%;
-	height: 860px;
+	width:98%;
+	height: 630px;
+	padding: 15px;
 	background-color: #FADED4;
-	border-radius: 15px;
+	border-radius: 10px;
 }
 
 #Table_information{
-	height: 400px;
+	height: 270px;
 	padding: 15px;
 }
 
@@ -14,35 +15,31 @@
 	background-color: #E8B4A2;
 	border-radius: 15px;
 	padding: 7px;
-	height: 375px;
+	height: 270px;
 	margin-left: 10px;
-    width: 23%;
+    width: 25%;
     display: inline-block;
     overflow: scroll;
 }
 
 .user_cards{
-	height: 250px;
+	height: 200px;
     padding: 5px;
-    padding-top: 15px;
+    padding-top: 10px;
     float: left;
 }
 
 #deck{
-	height: 360px;
+	height: 260px;
 }
 
 #table_deck{
-    width: 50%;
+    width: 48%;
     margin-left: 18px;
     display: inline-block;
-    height: 400px;
+    height: 300px;
     border:1px solid;
     border-radius: 15px
-}
-
-.gaurav{
-	background-color:red; 
 }
 
 #message_box{
@@ -51,19 +48,19 @@
 	padding: 7px;
 	border-spacing: 50px;
 	margin-left: 20px;
-    height: 377px;
+    height: 260px;
     display: inline-block;
     width: 20%;
     overflow: scroll;
-    font-size: 24px;
+    font-size: 21px;
 }
 
 #cards{
 	background-color: #E8B4A2;
 	border-radius: 15px;
-	height: 350px;
+	height: 260px;
     width: 100%;
-    margin-top: 22px;
+    margin-top: 15px;
     overflow: scroll;
 }
 
@@ -78,24 +75,24 @@
 }
 
 #draw_pile_deck{
-	margin-top: 26px;
+	margin-top: 16px;
 	display: inline-block;
 	margin-left: -30px;
-	width: 47%;
-	height: 320px;
+	width: 40%;
+	height: 150px;
 }
 
 #discard_pile_deck{
 	float: right;
-	margin-top: 29px;
-	margin-left: 20px;
+	margin-top: 12px;
+	margin-left: 10px;
     display: inline-block;
-    width: 47%;
-    height: 300px;
+    width: 40%;
+    height: 150px;
 }
 
 #say_and_catch_uno{
-	 height: 45px;
+	 height: 50px;
 	 margin: 5px,0px,5px,0px;
 }
 
@@ -128,19 +125,12 @@
 }
 
 #draw_pile{
-	margin-left: 150px;
+	margin-left: 160px;
 }
-
-#change_turn{
-	margin-left: 20px;
-	height: 22px;
-	width: 120px;
-	font-size: 15px;
-}	
 
 #discard_pile{
 	margin-top: 25px;
-	height:300px;
+	height:180px;
 	margin-left: 50px;
 }
 
