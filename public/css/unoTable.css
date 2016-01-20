@@ -1,6 +1,6 @@
 #UNO_Table{
-	width:98%;
-	height: 630px;
+	width:100%;
+	height: 630	px;
 	padding: 15px;
 	background-color: #FADED4;
 	border-radius: 10px;
@@ -58,8 +58,8 @@
 #cards{
 	background-color: #E8B4A2;
 	border-radius: 15px;
-	height: 260px;
     width: 100%;
+    height: 390px;
     margin-top: 15px;
     overflow: scroll;
 }
