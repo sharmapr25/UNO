@@ -18,7 +18,6 @@ var generateTable  = function(userInfo) {
 // 	iDiv.id = nameOfDiv;
 // 	document.body.appendChild(iDiv);
 // };
-
 var send_request = function(dataToSend){
 	console.log("data to send ...... in play_Card by server",dataToSend);
 	var req = new XMLHttpRequest();
@@ -29,7 +28,10 @@ var send_request = function(dataToSend){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
         	}else if(req.responseText == 'can_not_play_the_card')
-	    		alert('Invalid Card..!!!');
+        	{
+      			document.getElementById('change_turn').className = '';
+	    		alert('Invalid Card..!!!');	
+        	}
 	    	else if(req.responseText == 'not_your_turn')
 	    		alert('Not Your Turn..!!');
 		};
@@ -139,12 +141,20 @@ var catchUnoRequest = function(){
 var make_request_to_pass_turn = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
+	console.log("req respose in past turn is",req.responseText);
 	    if (req.readyState == 4 && req.status == 200) {
 	    	if(req.responseText == 'turn_passed'){
 	    		console.log('passed turn to next player');
-	    	};
-			document.getElementById('change_turn').className = 'hidden';
-      isVisibleChangeTurnButton = false;
+	    		document.getElementById('change_turn').className = 'hidden';
+	    	}
+
+
+	    	else if(isVisibleChangeTurnButton == true){
+	    	console.log("isVisibleChangeTurnButton after invalid card true must be",isVisibleChangeTurnButton);
+      			document.getElementById('change_turn').className = '';
+	    	}
+	    		isVisibleChangeTurnButton = false;
+				document.getElementById('change_turn').className = 'hidden';
 	    };
 	};
 	req.open('POST', 'pass_turn', true);
@@ -164,10 +174,7 @@ var generateMessage = function(allInfo){
 };
 
 var isVisibleChangeTurnButton;
-// var userCards;
-// var cardOnDeck;
 var showedRanks = false;
-// var previous_player;
 
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
@@ -262,7 +269,7 @@ var createCard = function(card){
 	  '<title>Layer 1</title>',
 	  '<rect id="svg_1" height="190" width="142" y="22" x="17.5" stroke-width="1.5" stroke="#000" fill="'+colour+'"/>',
 	  '<text stroke="#000" transform="matrix(4.747072696685791,0,0,3.642857074737549,-256.6744797229767,-216.714280128479) " xml:space="preserve" text-anchor="left" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="104" x="66" stroke-width="0" fill="#000000"/>',
-	  '<text xml:space="preserve" text-anchor="left" font-family="sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#ffffff">'+num+'</text>',
+	  '<text xml:space="preserve" text-anchor="left" font-family="sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">'+num+'</text>',
 	 '</g>',
 	'</svg>'
 	].join('');
