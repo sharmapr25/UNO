@@ -8,21 +8,26 @@ body{
 	margin-top: 70px;
 	border: 1px solid darkblue;
 	text-align: center;
-	background-color: #66B2FF;			
+	background-color: #E8B4A2;			
 	color:#FF8000;
 	border-spacing: 15px;
 }
 
 tr{
-	background-color:#0066CC;
+	background-color:#FADED4;
 	font-size: 30px;
+	border: 1px solid black;
 }
 td{
-	color:white;
+	color:black;
 	font-size: 30px;
+	border: 1px solid black;
+
 }
 th{
 	color:black;
+	border: 1px solid black;
+
 }
 
 #congratulation{
@@ -34,7 +39,10 @@ th{
 	font-size:35px;
 	font-weight:bold;
 }
-
-html { 
-  background-color:#0286CC 
-}
+button{
+	margin-left: 640px;
+    margin-top: 20px;
+    height: 30px;
+	width: 150px;
+	font-size: 17px;
+};
