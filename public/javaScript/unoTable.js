@@ -19,10 +19,8 @@ var generateTable  = function(userInfo) {
 // 	document.body.appendChild(iDiv);
 // };
 var send_request = function(dataToSend){
-	console.log("data to send ...... in play_Card by server",dataToSend);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
-	    	console.log("response text",req.responseText);
 	    if (req.readyState == 4 && req.status == 200) {
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
@@ -55,7 +53,6 @@ var make_request_to_play_the_card = function(id){
 	if(playedCard.speciality == 'Wild'){
 		document.getElementById('change_colour_menu').className = '';
 		type_of_wild = playedCard;
-		console.log("type_of_wild in make a request play",type_of_wild);
 	}
 	else if(playedCard.speciality == 'WildDrawFour'){
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
@@ -111,8 +108,16 @@ var make_request_to_draw_a_card = function(){
   };
 }
 var sayUnoRequest = function(comments){
-	var cookie = document.cookie.split(' ');
-	var name = cookie[0].substring(10,cookie[0].length-1);
+	// var cookie = document.cookie.split(';');
+	// var name;
+	// if(cookie[0].substr(10).indexOf('%20') == -1){
+	// 	name = cookie[0].substring(10,cookie[0].length);
+	// 	console.log("name in sayuno without space",name);	
+	// }
+	// else{
+	// 	name = cookie[0].substr(10).split('%20').join(' ');
+	// }
+	console.log("userCards in sayUnoRequest in unoTable.js",userCards);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -120,7 +125,7 @@ var sayUnoRequest = function(comments){
 		    	console.log('said uno');
 	    };
 	};
-	if(userCards.length == 2 && comments.currentPlayer == name){
+	if(userCards.length == 1){
 		req.open('POST', 'say_uno', true);
 		req.send();
 	};
@@ -141,7 +146,6 @@ var catchUnoRequest = function(){
 var make_request_to_pass_turn = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
-	console.log("req respose in past turn is",req.responseText);
 	    if (req.readyState == 4 && req.status == 200) {
 	    	if(req.responseText == 'turn_passed'){
 	    		console.log('passed turn to next player');
@@ -150,7 +154,6 @@ var make_request_to_pass_turn = function(){
 
 
 	    	else if(isVisibleChangeTurnButton == true){
-	    	console.log("isVisibleChangeTurnButton after invalid card true must be",isVisibleChangeTurnButton);
       			document.getElementById('change_turn').className = '';
 	    	}
 	    		isVisibleChangeTurnButton = false;
@@ -190,8 +193,7 @@ var sendConnectionRequest = function(){
 		        	window.location = 'winners.html';
 	        	};
 	        };
-
-	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(comments);};
+	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
 
 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
