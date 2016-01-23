@@ -2,9 +2,9 @@
   "name": "uno",
   "version": "1.0.0",
   "description": "a simple card based UNO game",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node ~/projects/UNO/server/server.js",
+    "start": "node server/server.js",
     "test": "mocha --recursive",
     "min": "mocha -R min --recursive",
     "watch": "mocha -R min --watch --recursive"
@@ -29,5 +29,9 @@
     "lodash": "^3.10.1",
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3"
+  },
+  "engines": {
+    "node": ">= 0.12.0",
+    "npm": ">= 1.2.0"
   }
 }
