@@ -1,10 +1,3 @@
-// var addressGenrator = function (card) {
-// 	var type,colour;
-// 	(card.speciality) ? (type = card.speciality.toLowerCase()) : (type = card.number);
-// 	(card.colour) ? (colour = card.colour.toLowerCase()+"_") : (colour = "");
-// 	return "/public/images/allCards/"+colour+type+".png";
-// };
-
 var generateTable  = function(userInfo) {
 	var user_info = userInfo.map(function (eachUser) {
 		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.noOfCards+"</td></tr>";
@@ -13,11 +6,6 @@ var generateTable  = function(userInfo) {
 	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
 };
 
-// var createDiv = function(nameOfDiv){
-// 	var iDiv = document.createElement('div');
-// 	iDiv.id = nameOfDiv;
-// 	document.body.appendChild(iDiv);
-// };
 var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -94,7 +82,6 @@ var make_request_to_draw_a_card = function(){
 	    		alert('out of cards..!!');
 	    	}
 	    	else{
-	    		// sendConnectionRequest();
 		  		document.getElementById('change_turn').className = '';
 		  		isVisibleChangeTurnButton = true;
        		};
@@ -108,16 +95,6 @@ var make_request_to_draw_a_card = function(){
   };
 }
 var sayUnoRequest = function(comments){
-	// var cookie = document.cookie.split(';');
-	// var name;
-	// if(cookie[0].substr(10).indexOf('%20') == -1){
-	// 	name = cookie[0].substring(10,cookie[0].length);
-	// 	console.log("name in sayuno without space",name);	
-	// }
-	// else{
-	// 	name = cookie[0].substr(10).split('%20').join(' ');
-	// }
-	console.log("userCards in sayUnoRequest in unoTable.js",userCards);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -205,8 +182,7 @@ var sendConnectionRequest = function(){
 	    	for(var i=0; i < comments.userCards.length; i++){
 	    		var num = comments.userCards[i].number ? ' '+comments.userCards[i].number : '#';
 	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : 'gray'
-	    		imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" class="user_cards" onclick="make_request_to_play_the_card(this.id)" >' + createCard(comments.userCards[i]) + '</div>'
-	    		// imgRef += '<img id="card_num:'+i+'" class="user_cards" onclick="make_request_to_play_the_card(this.id)" src="'+addressGenrator(comments.userCards[i])+'">';
+	    		imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" class="user_cards" onclick="make_request_to_play_the_card(this.id)" >' + createCard(comments.userCards[i]) + '</div>';
 	    	};			
 
         	document.getElementById('table_deck').className = comments.runningColour;
@@ -278,24 +254,3 @@ var createCard = function(card){
 };
 
 var interval = setInterval(sendConnectionRequest, 500);
-
-// // window.addEventListener("keypress", checkKeyPressed, false);
-
-// function checkKeyPressed(e) {
-//     switch(e.charCode){
-//     	case 115:
-//     		//sayUNO
-//     		sayUnoRequest();
-//     		break;
-//     	case 99:
-//     		//catch UNO
-//     		catchUnoRequest();	
-//     		break;
-//     	case 100:
-//     		//draw
-//     		make_request_to_draw_a_card();
-//     		break;
-//     };
-// };
-
-// exports.addressGenrator = addressGenrator;
