@@ -67,7 +67,7 @@ var make_request_to_play_the_card = function(id){
 	}
 };
 
-var doesThePlayerHaveSpecifiedColourCard = function(colour){
+var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
 	return userCards.some(function(card){
 		return (card.colour == colour)
 	});
