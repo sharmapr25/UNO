@@ -12,8 +12,6 @@ var sendConnectionRequest = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	    	window.location = req.responseText;
-	        // var comments = JSON.parse(req.responseText);
-	        // console.log("....",comments.id)
 	    };
 	};
 
