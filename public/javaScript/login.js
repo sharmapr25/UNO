@@ -39,7 +39,7 @@ var giveList = function(gameList) {
 	if(!gameList.length)
 		return '';
 	for (var i = 0; i<gameList.length;i++ ) {
-		html+=gameList[i]+'<button id ="'+ gameList[i] +'"" onClick = "sendJoinRequest(this.id)">Join game</button></br>';
+		html+=gameList[i]+'&nbsp;&nbsp;&nbsp;&nbsp; <button id ="'+ gameList[i] +'"" onClick = "sendJoinRequest(this.id)">Join game</button></br>';
 	};
 	html+="</body></html>";
 	return html;
