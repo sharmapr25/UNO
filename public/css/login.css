@@ -1,48 +1,13 @@
-/*.logo{
-  margin-top: 100px;
-  height:200px;
-}
-h1 {
-    text-align: center;
-    font-family: veranda;
-}
-
-.login {
-  width: 500px;
-	background: white;
-    text-align: center;
-    font-family: courier;
-}
-
-#current_game_information {
-  font-size: 20px;
-}
-
-#login_page_image {
- 	width: 70%;
- 	height: 650px;
-   	left:35%;
-   	top:5%;
-   	margin-left:-10px;
-   	margin-top:-10px;
-   	border: 6px solid white;
-   	outline-width: 4px;
-   	outline-style: solid;
-   	outline-color: red;
-}
-
 button {
-  font-size: 20px;
-	width: 120px;
-	height: 40px;
+  font-size: 16px;
+	width: 150px;
+	height: 23px;
   font-family: monospace;
 }
 
-#user_name {
-	width: 180px;
-	height: 30px;
+#gameInfo {
   font-size: 20px;
-}*/
+}
 
 #main {
   margin-top: 145px;
