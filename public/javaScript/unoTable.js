@@ -145,10 +145,22 @@ var generateMessage = function(allInfo){
 	var runningColour = allInfo.runningColour;
 	var currentPlayer = allInfo.currentPlayer;
 	var nextPlayer = allInfo.nextPlayer;
+	var UNO_info = '';
+	var playedCardInfo = '';
+	if(allInfo.noOfDiscardCards > 1){
+		playedCardInfo = allInfo.previousPlayer+' played '+
+						(allInfo.cardOnTable.colour||'')+' '+
+						(allInfo.cardOnTable.number||allInfo.cardOnTable.speciality);
+	}
+	for (var i = 0; i < allInfo.UNOregistry.length; i++) {
+		if(allInfo.UNOregistry[i].said_uno)
+			UNO_info+=allInfo.UNOregistry[i].name+' said UNO</br>'
+	};
 	
-	var template = [ '<b>'+'Running Colour : '+'</b>'+ runningColour,
-				   	 '<b>'+'CurrentPlayer  : '+'</b>'+ currentPlayer,
-				   	 '<b>'+'Next Player    : '+'</b>'+ nextPlayer,
+	var template = ['<b> CurrentPlayer  : </b>'+ currentPlayer,
+				   	'<b> Next Player    : </b>'+ nextPlayer,
+				   	playedCardInfo,
+				   	'<p class = "unoInfoOnMsgBox">'+UNO_info+'</p>'
 				   ].join('<br>');
 	return template;
 };
