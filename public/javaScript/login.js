@@ -33,11 +33,11 @@ var sendJoinRequest = function(id){
 };
 
 var giveList = function(gameList) {
-	var html = "<html><body></br>";
+	var html = "<html><body><p>Exiting Game List</p>";
 	if(!gameList.length)
 		return '';
 	for (var i = 0; i<gameList.length;i++ ) {
-		html+=gameList[i]+'&nbsp;&nbsp;&nbsp;&nbsp; <button id ="'+ gameList[i] +'"" onClick = "sendJoinRequest(this.id)">Join game</button></br>';
+		html+='<button id ="'+ gameList[i] +'"" onClick = "sendJoinRequest(this.id)">'+ gameList[i]+'</button></br><br/>';
 	};
 	html+="</body></html>";
 	return html;
@@ -54,6 +54,12 @@ var existing_game_info = function(){
 	req.open('GET','give_list_of_game',true);
 	req.send();
 };
+
+var changePage = function(shown, hidden){
+	console.log("funciton yaha hai");
+	document.getElementById(shown).style.display = 'block';
+	document.getElementById(hidden).style.display = 'none';
+}
 
 window.onload = function(){
 	document.getElementById('play_button').onclick = sendConnectionRequest;

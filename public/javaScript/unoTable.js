@@ -225,13 +225,13 @@ var createCard = function(card){
 	var runningColour = colour.toLowerCase();
 	switch(runningColour){
 		case 'red':
-			colour = '#E32B34';break;
+			colour = '#f25b4c';break;
 		case 'green':
-			colour = '#26BD41';break;
+			colour = '#7ed097';break;
 		case 'blue':
-			colour = '#2980d8';break;
+			colour = '#00aacb';break;
 		case 'yellow':
-			colour = '#F2CD38';break;
+			colour = '#ffe131';break;
 	}
 	colour = colour.toLowerCase();
 	return [

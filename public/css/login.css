@@ -1,47 +1,90 @@
-button {
-  font-size: 16px;
-	width: 150px;
-	height: 23px;
-  font-family: monospace;
+
+.blue {
+  background-color: #00aacb;
 }
 
-#gameInfo {
-  font-size: 20px;
+.green {
+  background-color: #7ed097;
 }
 
-#main {
-  margin-top: 145px;
-  background-color: #ffe4cc;
-  width: 480px;
-  height: 310px;
-  border-radius: 10px;
+.red {
+  background-color: #f25b4c;
 }
 
-#logo {
-  font-size: 45px;
-  padding: 6%;
+.yellow {
+  background-color: #ffe131;
 }
 
-#user_name {
+.gray {
+  background-color: lightgray;
+}
+
+.logo_card {
+  width: 20px;
+  height: 14px;
+  float: left;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+.underline_container {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.logo_text {
+  width: 200px;
+  font-family: helvetica;
+  font-size: 60px;
+  font-weight: 200;
+  padding-top: 2%;
+  margin: 0 auto;
+}
+
+#login{
+  width: 300px;
+  padding-top: 10%;
+  margin: 0 auto;
+}
+
+#user_name{
   margin-top: 10px;
   width: 230px;
   height: 25px;
   font-size: 17px;
 }
 
-#play_button {
-  margin-top: 13px;
-  width: 232px;
-  height: 27px;
-  font-size: 17px;
+button{
+  font-size: 16px;
+  width: 235px;
+  height: 29px;
+  font-family: helvetica;
+  font-weight: 200;
+  border: none;
+  border-radius: 3px;
+  background-color: darkgray;
 }
 
-#help {
-  margin-top: 8px;
-  font-size: 15px;
-  margin-left: 191px;
+h3{
+  font-family: helvetica;
+  font-weight: 200;
+
 }
 
-#current_game_information {
-  font-size: 20px;
+#next{
+  display: none;
+  width: 300px;
+  padding-top: 6%;
+  margin: 0 auto;
+}
+
+#gameInfo{
+  font-size: 19px;
+  font-family: helvetica;
+  font-weight: 200;
+}
+
+#help{
+  margin-left: 200px;
+  margin-top: 3%;
 }

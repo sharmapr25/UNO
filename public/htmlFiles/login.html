@@ -2,17 +2,28 @@
 <html>
 <head>
 	<title>Log in</title>
-	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<!-- // <script src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="/css/login.css">
-	<script type="text/javascript" src = '/javaScript/login.js'></script>
+	 <script type="text/javascript" src = '/javaScript/login.js'></script>
 	<link rel="shortcut icon" href="/images/favicon.ico">
 </head>
 <body>
-	<center><div id="main">
-		<center><div id="logo">WELCOME TO UNO</div>
-			<div id= "login" >
-				<input type="text" id="user_name"name="user_name" placeholder="Enter your name"><br/>
-				<h3>select number of player :
+		<div class="logo_text">UNO	
+		<div class="underline_container">
+			<div class="blue logo_card"></div>
+			<div class="yellow logo_card"></div>
+			<div class="green logo_card"></div>
+			<div class="gray logo_card"></div>
+			<div class="red logo_card"></div>
+		</div>
+	</div>
+		<div id = "login">
+			<input type="text" id="user_name" name="user_name" placeholder="Enter your name"><br/><br/>
+			<button onClick="changePage('next','login')">NEXT</button>
+		</div>
+
+		<div id = "next">
+			<h3>Number Of Players :
 				<select id="noOfPlayer">
 					<option value="1">1</option>
 					<option value="2">2</option>
@@ -23,12 +34,10 @@
 					<option value="7">7</option>
 					<option value="8">8</option>
 				</select></h3>
-				<button type="button" id="play_button"> Create Game </button>
-			</div>
+			<button type="button" id="play_button"> Create Game </button>
 			<div id="help"><a href = "/htmlFiles/instruction.html">Help</a></div>
-		</center>
-	</div>
-	<div id="gameInfo"></div>
-	</div></center>	
+			<br/>
+			<div id="gameInfo"></div>
+		</div>
 </body>
 </html>

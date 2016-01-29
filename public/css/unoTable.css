@@ -143,3 +143,19 @@
 .hidden{
 	visibility: hidden;
 }
+
+.Red{
+	background-color: #E77665;
+}
+
+.Blue{
+	background-color: #4883B5;
+}
+
+.Green{
+	background-color: #58A852;
+}
+
+.Yellow{
+	background-color: #E7C242;
+}
