@@ -6,3 +6,8 @@ var resetCookie = function(){
 	req.open('GET','reset_cookie',true);
 	req.send();	
 };
+
+var showList = function(){
+	document.getElementById('list').style.display = 'block';
+	document.getElementById('winner').style.display = 'none';
+};
