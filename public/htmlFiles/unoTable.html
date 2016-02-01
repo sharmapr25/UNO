@@ -6,24 +6,24 @@
 	<script type="text/javascript" src = '/javaScript/unoTable.js'></script>
 </head>
 <body>
+	<div id="header">UNO</div>
 	<div id="UNO_Table">
 		<div id="Table_information">
 			<div id="user_card_information"></div>
 			<div id="table_deck">
-				<div id="deck">
-					<div id="draw_pile_deck"></div>
-					<div id="discard_pile_deck"></div>
-				</div>
-				<div id="say_and_catch_uno">
-					<center><button type="button" id="catch_UNO">Catch UNO</button></center>
-				</div>
+				<div id="draw_pile_deck"></div>
+				<div id="discard_pile_deck"></div>
 			</div>
 			<div id="message_box"></div>
 		</div>
 
 		
-		<div id="user_selection">
+		<div id="say_and_catch_uno">
 			<button type="button" id="say_UNO">Say UNO</button>
+			<button type="button" id="catch_UNO">Catch UNO</button>
+		</div>
+		<div id="user_selection">
+			<button type="button" id="change_turn" onclick="make_request_to_pass_turn()" class="hidden">Change Turn</button>
 			
 			<div id="change_colour_menu" class='hidden'>
 				<select id="colour_group">
@@ -35,11 +35,9 @@
 				<button type="button" id="submit_colour" onclick="send_request_for_wild_card()">Submit</button>	
 			</div>
 			
-			<button type="button" id="change_turn" onclick="make_request_to_pass_turn()" class="hidden">Change Turn</button>
 		</div>
 		
-		<div id="cards">
-		</div>
+		<center><div id="cards"></div></center>
 	</div>
 </body>
 </html>
