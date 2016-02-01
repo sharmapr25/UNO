@@ -173,15 +173,18 @@ var sendConnectionRequest = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 	        var comments = JSON.parse(req.responseText);
+	        if(comments.status == 500){
+				window.location = comments.location;
+			};
+
 	        userCards = comments.userCards; 
 	        cardOnDeck = comments.cardOnTable;
 	        if(comments.isEndOfGame){
-	        	window.location = req.responseText;
-	        	// if(!showedRanks) {
-	        	// 	alert('Game End..!!');
-	        	// 	showedRanks = true;
-		        // 	window.location = 'winners.html';
-	        	// };
+	        	if(!showedRanks) {
+	        		alert('Game End..!!');
+	        		showedRanks = true;
+		        	window.location = 'winners.html';
+	        	};
 	        };
 	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
@@ -204,10 +207,6 @@ var sendConnectionRequest = function(){
 
 			previous_player = comments.currentPlayer;
 	    };
-
-		if(req.status == 404){
-		    document.getElementById('UNO_Table').innerHTML = req.responseText;
-		};
 	};
 
 	req.open('GET', 'all_information_on_table', true);
