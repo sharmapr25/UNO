@@ -2,7 +2,7 @@ var generateTable  = function(userInfo) {
 	var user_info = userInfo.map(function (eachUser) {
 		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.noOfCards+"</td></tr>";
 	});
-	var tableHead = "<tr><th>Name&nbsp;&nbsp;&nbsp;</th><th>Number Of Card</th></tr>"
+	var tableHead = "<tr><th>Names</th><th>Cards</th></tr>"
 	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
 };
 
@@ -157,11 +157,11 @@ var generateMessage = function(allInfo){
 			UNO_info+=allInfo.UNOregistry[i].name+' said UNO</br>'
 	};
 	
-	var template = ['<b> CurrentPlayer  : </b>'+ currentPlayer,
-				   	'<b> Next Player    : </b>'+ nextPlayer,
+	var template = ['CurrentPlayer is '+ currentPlayer,
+				   	'Next Player is '+ nextPlayer,
 				   	playedCardInfo,
 				   	'<p class = "unoInfoOnMsgBox">'+UNO_info+'</p>'
-				   ].join('<br>');
+				   ].join('<br>')+'</br>';
 	return template;
 };
 
@@ -216,7 +216,7 @@ var sendConnectionRequest = function(){
 
 var createCard = function(card){
 	var num;
-	var colour = card.colour ? card.colour : '#ffffff'
+	var colour = card.colour ? card.colour : 'lightgray'
 
 	if(card.number != null){
 		num = ' ' + card.number;
@@ -225,7 +225,7 @@ var createCard = function(card){
 			case 'Reverse':
 				num = ' R';break;
 			case 'Skip':
-				num = ' $';break;
+				num = ' S';break;
 			case 'DrawTwo':
 				num = '+2';break;
 			case 'Wild':
@@ -235,34 +235,9 @@ var createCard = function(card){
 		};
 	};
 	var runningColour = colour.toLowerCase();
-	switch(runningColour){
-		case 'red':
-			colour = '#f25b4c';break;
-		case 'green':
-			colour = '#7ed097';break;
-		case 'blue':
-			colour = '#00aacb';break;
-		case 'yellow':
-			colour = '#ffe131';break;
-	}
+	
 	colour = colour.toLowerCase();
-	return [
-	'<svg width="187" height="262" xmlns="http://www.w3.org/2000/svg">',
-	 '<g>',
-	  '<title>background</title>',
-	  '<rect fill="#fff" id="canvas_background" height="234" width="178" y="-1" x="-1"/>',
-	  '<g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">',
-	   '<rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>',
-	  '</g>',
-	 '</g>',
-	 '<g>',
-	  '<title>Layer 1</title>',
-	  '<rect id="svg_1" height="190" width="142" y="22" x="17.5" stroke-width="1.5" stroke="#000" fill="'+colour+'"/>',
-	  '<text stroke="#000" transform="matrix(4.747072696685791,0,0,3.642857074737549,-256.6744797229767,-216.714280128479) " xml:space="preserve" text-anchor="left" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="104" x="66" stroke-width="0" fill="#000000"/>',
-	  '<text xml:space="preserve" text-anchor="left" font-family="sans-serif" font-size="111" id="svg_4" y="166" x="27" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">'+num+'</text>',
-	 '</g>',
-	'</svg>'
-	].join('');
+	return '<div class = "'+ runningColour +' myCards">'+num+'</div>';
 };
 
 var interval = setInterval(sendConnectionRequest, 500);
