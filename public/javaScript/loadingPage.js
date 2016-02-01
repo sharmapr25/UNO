@@ -1,7 +1,8 @@
 var waitingMessage = function(noOfPlayers){
-	return '<h2>Players in The Game :'+noOfPlayers+'</h2>'
+	return 'Players in The Game :'+noOfPlayers;
 }
 
+var progressing = 0;
 
 var getUpdatedData = function(){
 	var req = new XMLHttpRequest();
@@ -12,6 +13,11 @@ var getUpdatedData = function(){
 	    		window.location = status.location;
 	    	}
 	    	else if(status.noOfPlayers){
+	    		progressing++;
+				var percentage = (progressing*100)/status.total;
+				document.getElementById('progress_bar').style.width = percentage+'%';
+				if(progressing == status.noOfPlayers)
+					progressing = 0;
 	    		document.querySelector('#current_game_information').innerHTML = waitingMessage(status.noOfPlayers);
 	    	}
 	    	else if(!status.noOfPlayers){

@@ -1,0 +1,24 @@
+.main{
+	width: 250px;
+	margin:0 auto;
+	padding-top: 9%
+}
+
+#loading{
+	width: 300px;
+    height: 30px;
+}
+
+#progress_bar{
+	width: 0px;
+    height: 100%;
+	border-radius: 24px;
+    background-color: #7ed097;
+}
+
+#current_game_information{
+	font-family: helvetica;
+    font-weight: 200;
+    font-size: x-large;
+    padding-bottom :12px;
+}
