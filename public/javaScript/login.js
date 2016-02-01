@@ -33,7 +33,7 @@ var sendJoinRequest = function(id){
 };
 
 var giveList = function(gameList) {
-	var html = "<html><body><p>Exiting Game List</p>";
+	var html = "<html><body>";
 	if(!gameList.length)
 		return '';
 	for (var i = 0; i<gameList.length;i++ ) {
@@ -48,7 +48,7 @@ var existing_game_info = function(){
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
 			var gameList = JSON.parse(req.responseText);
-			document.getElementById('gameInfo').innerHTML = giveList(gameList);
+			document.getElementById('list_of_joinGame').innerHTML = giveList(gameList);
 		};
 	};
 	req.open('GET','give_list_of_game',true);

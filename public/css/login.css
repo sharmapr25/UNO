@@ -22,12 +22,18 @@
 .logo_card {
   width: 20px;
   height: 14px;
+  display: inline-block;
   float: left;
   margin-right: 8px;
   border-radius: 50%;
 }
 
 .underline_container {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.logo_container {
   width: 200px;
   margin: 0 auto;
 }
@@ -49,42 +55,58 @@
 
 #user_name{
   margin-top: 10px;
-  width: 230px;
+  width: 210px;
   height: 25px;
   font-size: 17px;
 }
 
 button{
   font-size: 16px;
-  width: 235px;
+  width: 218px;
   height: 29px;
   font-family: helvetica;
   font-weight: 200;
   border: none;
   border-radius: 3px;
-  background-color: darkgray;
+  background-color: lightgray;
 }
 
-h3{
-  font-family: helvetica;
+body {
+  font-family: "Helvetica";
   font-weight: 200;
+}
 
+.num_of_players {
+  font-size: 19px;
+  margin-bottom: 18px;
 }
 
 #next{
   display: none;
-  width: 300px;
-  padding-top: 6%;
+  width: 600px;
   margin: 0 auto;
+  clear: both;
+  padding-top: 8%;
+}
+
+#createGame{
+  display: inline-block;
+  float: left;
 }
 
 #gameInfo{
   font-size: 19px;
   font-family: helvetica;
   font-weight: 200;
+  float: right;
 }
 
 #help{
-  margin-left: 200px;
+  margin-left: 182px;
+  font-size: 16px; 
   margin-top: 3%;
+}
+
+#noOfPlayer{
+
 }

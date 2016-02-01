@@ -176,11 +176,12 @@ var sendConnectionRequest = function(){
 	        userCards = comments.userCards; 
 	        cardOnDeck = comments.cardOnTable;
 	        if(comments.isEndOfGame){
-	        	if(!showedRanks) {
-	        		alert('Game End..!!');
-	        		showedRanks = true;
-		        	window.location = 'winners.html';
-	        	};
+	        	window.location = req.responseText;
+	        	// if(!showedRanks) {
+	        	// 	alert('Game End..!!');
+	        	// 	showedRanks = true;
+		        // 	window.location = 'winners.html';
+	        	// };
 	        };
 	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
