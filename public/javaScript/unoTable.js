@@ -1,13 +1,5 @@
 var stateOfGame;
 
-// var generateTable  = function(userInfo) {
-// 	var user_info = userInfo.map(function (eachUser) {
-// 		return "<tr><td>"+eachUser.name+"</td><td>"+eachUser.noOfCards+"</td></tr>";
-// 	});
-// 	var tableHead = "<tr><th>Names</th><th>Cards</th></tr>"
-// 	return "<table id='table'>"+tableHead+user_info.join('')+"</table>";
-// };
-
 var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -175,7 +167,6 @@ var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-// <<<<<<< HEAD
 	    	if(stateOfGame != req.responseText || !stateOfGame){
 	    		stateOfGame = req.responseText;	
 		        var comments = JSON.parse(req.responseText);
@@ -198,7 +189,7 @@ var sendConnectionRequest = function(){
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
 			  	document.getElementById('RunningColorContainer').className = comments.runningColour;
 		        
-			  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="131px" height="181px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
+			  	// document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="131px" height="181px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 			  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
 
 		    	var imgRef = '';
@@ -219,41 +210,7 @@ var sendConnectionRequest = function(){
 			    document.getElementById('UNO_Table').innerHTML = req.responseText;
 			};
 		};
-// =======
-// 	        var comments = JSON.parse(req.responseText);
-	        
 
-// 	        userCards = comments.userCards; 
-// 	        cardOnDeck = comments.cardOnTable;
-// 	        if(comments.isEndOfGame){
-// 	        	if(!showedRanks) {
-// 	        		alert('Game End..!!');
-// 	        		showedRanks = true;
-// 		        	window.location = 'winners.html';
-// 	        	};
-// 	        };
-// 	       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
-// 	        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
-
-// 		  	document.getElementById('user_card_information').innerHTML = generateTable(comments.allUsersCardsLength);
-	        
-// 		  	document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="150px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
-// 		  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
-
-// 	    	var imgRef = '';
-// 	    	for(var i=0; i < comments.userCards.length; i++){
-// 	    		var num = comments.userCards[i].number ? ' '+comments.userCards[i].number : '#';
-// 	    		var colour = comments.userCards[i].colour ? comments.userCards[i].colour : 'gray'
-// 	    		imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" class="user_cards" onclick="make_request_to_play_the_card(this.id)" >' + createCard(comments.userCards[i]) + '</div>';
-// 	    	};			
-
-//         	document.getElementById('table_deck').className = comments.runningColour;
-// 		  	document.getElementById('cards').innerHTML = imgRef;
-// 			document.getElementById('message_box').innerHTML = generateMessage(comments);
-
-// 			previous_player = comments.currentPlayer;
-// 	    };
-// >>>>>>> 37a7d016a8963f9df49370e1f839b2c191684fef
 	};
 
 	req.open('GET', 'all_information_on_table', true);
