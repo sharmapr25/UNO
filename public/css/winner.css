@@ -1,45 +1,81 @@
-#table{
-	width: 650px;
-	height: 550px;
-	margin-left: 395px;
-	margin-top: 70px;
-	border: 1px solid darkblue;
-	text-align: center;
-	background-color: #E8B4A2;			
-	color:#FF8000;
-	border-spacing: 15px;
+#list{
+	display: none;
+	width: 539px;
+	margin: 0 auto;
+	margin-top: 6%;
+	font-family: helvetica;
+ 	font-weight: 200;
+ 	padding-bottom: 20px;
 }
 
-tr{
-	background-color:#FADED4;
-	font-size: 30px;
-	border: 1px solid black;
-}
-td{
-	color:black;
-	font-size: 30px;
-	border: 1px solid black;
-
-}
-th{
-	color:black;
-	border: 1px solid black;
-
+#winner{
+	width: 385px;
+	margin: 0 auto;
+	margin-top: 6%;
+	font-family: helvetica;
+ 	font-weight: 200;
 }
 
-#congratulation{
-	width:500px;
-	height: 50px;
-	background-color:#0066CC;
-	color: white;
-	border: 1px white solid;
-	font-size:35px;
-	font-weight:bold;
-}
 button{
-	margin-left: 640px;
-    margin-top: 20px;
-    height: 30px;
-	width: 150px;
-	font-size: 17px;
-};
+	font-size: 16px;
+	width: 218px;
+	margin: 0 auto;
+	height: 29px;
+	font-family: helvetica;
+	font-weight: 200;
+	border: none;
+	border-radius: 3px;
+	background-color: lightgray;
+	}
+
+.congratulate{
+	font-size: -webkit-xxx-large;
+}
+
+#winnerName{
+	margin-left: 60px;
+ 	font-size: larger;
+ 	width: 213px;
+}
+
+.message{
+	margin-left: 60px;
+ 	font-size: 26px;
+}
+
+.listButton{
+	margin-left: 59px;
+
+}
+
+.home{
+	width: 265px;
+	margin: 0 auto;
+}
+
+.spaceBetweenTwoClass{
+	margin-bottom: 20px;
+}
+
+.points_heading{
+	text-align: right;
+}
+
+.inline{
+	display: inline-block;
+	width: 50%;
+    margin-bottom: 20px;
+
+}
+
+.points{
+	text-align: right;
+}
+
+.heading{
+	font-size: x-large;
+}
+
+.userInfo{
+	font-size: x-large;
+}
