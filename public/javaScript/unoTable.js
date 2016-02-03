@@ -229,7 +229,7 @@ var createCard = function(card){
 			case 'Reverse':
 				num = ' R';break;
 			case 'Skip':
-				num = ' S';break;
+				num = '⊘';break;
 			case 'DrawTwo':
 				num = '+2';break;
 			case 'Wild':
