@@ -89,6 +89,17 @@ var make_request_to_draw_a_card = function(){
   };
 }
 var sayUnoRequest = function(comments){
+	var cookie = document.cookie.split(' ');
+ 	var name = cookie[0].substring(10,cookie[0].length-1);
+ 	var cookie = document.cookie.split(';');
+ 	var name;
+ 	if(cookie[0].substr(10).indexOf('%20') == -1){
+ 		name = cookie[0].substring(10,cookie[0].length);
+ 	}
+ 	else{
+ 		name = cookie[0].substr(10).split('%20').join(' ');
+ 	}
+
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -96,7 +107,8 @@ var sayUnoRequest = function(comments){
 		    	console.log('said uno');
 	    };
 	};
-	if(userCards.length == 1){
+	if(userCards.length == 1 || (userCards.length == 2 && comments.currentPlayer == name)){
+		console.log('ewww in say uno req')
 		req.open('POST', 'say_uno', true);
 		req.send();
 	};
@@ -191,7 +203,7 @@ var sendConnectionRequest = function(){
 		        	};
 		        };
 
-		       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
+		       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(comments);};
 		        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
 
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
