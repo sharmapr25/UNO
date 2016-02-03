@@ -92,6 +92,17 @@ var make_request_to_draw_a_card = function(){
   };
 }
 var sayUnoRequest = function(comments){
+	var cookie = document.cookie.split(' ');
+ 	var name = cookie[0].substring(10,cookie[0].length-1);
+ 	var cookie = document.cookie.split(';');
+ 	var name;
+ 	if(cookie[0].substr(10).indexOf('%20') == -1){
+ 		name = cookie[0].substring(10,cookie[0].length);
+ 	}
+ 	else{
+ 		name = cookie[0].substr(10).split('%20').join(' ');
+ 	}
+
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -99,7 +110,8 @@ var sayUnoRequest = function(comments){
 		    	console.log('said uno');
 	    };
 	};
-	if(userCards.length == 1){
+	if(userCards.length == 1 || (userCards.length == 2 && comments.currentPlayer == name)){
+		console.log('ewww in say uno req')
 		req.open('POST', 'say_uno', true);
 		req.send();
 	};
@@ -143,7 +155,6 @@ var generateMessage = function(allInfo){
 	var playedCardInfo = '';
 	var a=allInfo.allUsersCardsLength
 	var user_info = a.map(function (eachUser) {
-		console.log('confirm man',eachUser.name)
 		return '<div id="'+eachUser.name+'">'+eachUser.name+' ('+eachUser.noOfCards+' cards)</div>';
 	});
 	if(allInfo.noOfDiscardCards > 1){
@@ -166,6 +177,15 @@ var generateMessage = function(allInfo){
 var isVisibleChangeTurnButton;
 var showedRanks = false;
 
+var resetUnoField = function(unoList,cardLength,currentPlayer) {
+	for (var i = 0; i < unoList.length; i++) {
+		console.log()
+		if(cardLength[i].noOfCards > 2 || (cardLength[i].noOfCards == 2 && currentPlayer !=unoList[i].name)){
+			unoList[i].said_uno = false;
+		}
+	}
+}
+
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -186,7 +206,7 @@ var sendConnectionRequest = function(){
 		        	};
 		        };
 
-		       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(userCards);};
+		       	document.getElementById('say_UNO').onclick = function(){ sayUnoRequest(comments);};
 		        document.getElementById('catch_UNO').onclick = function(){ catchUnoRequest(); };
 
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
@@ -194,6 +214,8 @@ var sendConnectionRequest = function(){
 		        
 			  	// document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="131px" height="181px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 			  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
+
+			  	resetUnoField(comments.UNOregistry,comments.allUsersCardsLength,comments.currentPlayer);
 
 		    	var imgRef = '';
 		    	for(var i=0; i < comments.userCards.length; i++){
