@@ -3,6 +3,7 @@ body{
 	/*width: 98%;*/
 	font-size: 18px;
     font-weight: 100;
+    background-color: #f4f4f4;
     font-family: helvetica;
 }
 
@@ -29,11 +30,11 @@ body{
 #table_deck{
     font-weight: 200;
     text-align: center;
-    width: 800px;
+    width: 550px;
     display: inline-block;
     height: 260px;
     border-radius: 15px;
-    margin-left: 23%;
+    margin-left: 30%;
 }
 
 #message_box{
@@ -42,7 +43,7 @@ body{
 	border-spacing: 50px;
     height: 245px;
     display: inline-block;
-    width: 200px;
+    width: 300px;
     overflow: scroll;
     font-size: 18px;
     font-weight: 200;
@@ -54,7 +55,7 @@ body{
 	text-align: center;
 	border-radius: 15px;
 	width: auto;
-    height: 300px;
+    height: 330px;
     overflow: scroll;
     padding: 10px;
     margin:1%; 
@@ -86,7 +87,7 @@ body{
 	border-radius: 10px;
 	display: inline-block;
 	float: left;
-	margin-left: 207px;
+	margin-left: 112px;
 	width: 130px;
 	height: 181px;
 	color: white;
@@ -96,7 +97,7 @@ body{
 #discard_pile_deck{
 	float: right;
 	margin-top: 20px;
-	margin-right: 262px;
+	margin-right: 107px;
     display: inline-block;
 }
 
@@ -200,7 +201,7 @@ button{
 	/*display: inherit;*/
 	width: 300px;
 	float: left;
-	margin-left: 200px;
+	margin-left: 130px;
 
 }
 
