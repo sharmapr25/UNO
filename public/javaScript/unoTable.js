@@ -212,7 +212,6 @@ var sendConnectionRequest = function(){
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
 			  	document.getElementById('RunningColorContainer').className = comments.runningColour;
 		        
-			  	// document.getElementById('draw_pile_deck').innerHTML = '<img id="draw_pile" width="131px" height="181px" src="/images/allCards/close_face.png" onclick="make_request_to_draw_a_card()">';
 			  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
 
 			  	resetUnoField(comments.UNOregistry,comments.allUsersCardsLength,comments.currentPlayer);
@@ -264,6 +263,30 @@ var createCard = function(card){
 		};
 	};
 	return '<div class = "'+ colour +' myCards"><div id="num">'+num+'</div></div>';
+};
+
+window.addEventListener("keypress", checkKeyPressed, false);
+ 
+function checkKeyPressed(e) {
+	var data = JSON.parse(stateOfGame);
+    switch(e.charCode){
+     	case 115:
+     		//sayUNO
+     		sayUnoRequest(data);
+     		break;
+     	case 99:
+     		//catch UNO
+     		catchUnoRequest();
+     		break;
+     	case 100:
+     		//draw
+     		make_request_to_draw_a_card();
+     		break;
+     	case 112:
+     		//pass_turn
+     		make_request_to_pass_turn();
+     		break;
+    };
 };
 
 var interval = setInterval(sendConnectionRequest, 500);
