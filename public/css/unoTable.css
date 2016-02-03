@@ -1,6 +1,6 @@
 body{
-	margin: 0 auto;
-	width: 98%;
+	/*margin: 0 auto;*/
+	/*width: 98%;*/
 	font-size: 18px;
     font-weight: 100;
     font-family: helvetica;
@@ -14,8 +14,8 @@ body{
 
 #Table_information{
 	height: 270px;
-	width: 95%;
-	margin: 0 auto;
+	/*width: 95%;
+	margin: 0 auto;*/
 }
 
 .user_cards{
@@ -29,7 +29,7 @@ body{
 #table_deck{
     font-weight: 200;
     text-align: center;
-    width: 46%;
+    width: 800px;
     display: inline-block;
     height: 260px;
     border-radius: 15px;
@@ -42,7 +42,7 @@ body{
 	border-spacing: 50px;
     height: 245px;
     display: inline-block;
-    width: 27%;
+    width: 200px;
     overflow: scroll;
     font-size: 18px;
     font-weight: 200;
@@ -72,12 +72,21 @@ body{
 	margin-left: 490;
 }
 
+.unoText{
+	text-align: center;
+    padding-top: 30px;
+    font-size: 90px;
+    font-family: helvetica;
+    font-weight: 400;
+}
+
 #draw_pile_deck{
-	margin-top: 8px;
+	margin-top: 20px;
 	margin-bottom: 7px;
 	border-radius: 10px;
 	display: inline-block;
-	margin-left: 120px;
+	float: left;
+	margin-left: 207px;
 	width: 130px;
 	height: 181px;
 	color: white;
@@ -86,8 +95,8 @@ body{
 
 #discard_pile_deck{
 	float: right;
-	margin-top: 6px;
-	margin-right: 80px;
+	margin-top: 20px;
+	margin-right: 262px;
     display: inline-block;
 }
 
@@ -160,10 +169,14 @@ body{
 }
 
 button{
-	height: 27px;
-	width: 140px;
 	font-size: 16px;
+	width: 137px;
+	height: 29px;
+	font-family: helvetica;
+	font-weight: 200;
+	border: none;
 	border-radius: 3px;
+	background-color: lightgray;
 }
 
 .lightgray{
@@ -183,18 +196,26 @@ button{
     display: inline-block;
 }
 
+#run_colour{
+	/*display: inherit;*/
+	width: 300px;
+	float: left;
+	margin-left: 200px;
+
+}
+
 #RunningColorContainer {
-	display: inline;
 	color: white;
 	border-radius: 4px;
 	padding: 5px;
+	display: inline-block;
 	text-align: center; 
 }
 
 #runningColour {
-	display: inline;
-	margin-left: 82px;
+	display: inline-block;
 }
+
 
 #num{
 	padding-top: 30px;
