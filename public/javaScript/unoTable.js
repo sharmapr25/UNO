@@ -7,9 +7,11 @@ var send_request = function(dataToSend){
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
+	    		document.querySelector('#soundForPlayCard').play();
         	}else if(req.responseText == 'can_not_play_the_card')
         	{
       			document.getElementById('change_turn').className = '';
+      			document.querySelector('#soundForAlert').play();
 	    		alert('Invalid Card..!!!');	
         	}
 	    	else if(req.responseText == 'not_your_turn')
@@ -48,6 +50,7 @@ var make_request_to_play_the_card = function(id){
 		send_request(JSON.stringify(dataToSend));
 	}
 };
+
 
 var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
 	return userCards.some(function(card){
