@@ -6,24 +6,40 @@
 	<script type="text/javascript" src = '/javaScript/unoTable.js'></script>
 </head>
 <body>
-	<div id="UNO_Table">
-		<div id="Table_information">
-			<div id="table_deck">
-				<div id = "run_colour">
-					<div id="runningColour">
-						Running Color is
-					</div> 
-					<span id = "RunningColorContainer">
-					</span>
-				</div>
-				<div id="draw_pile_deck" onclick = "make_request_to_draw_a_card()">
+	<div class = "section">
+		<div class = "top_three">
+			<div class = "player_1 player"></div>
+			<div class = "player_2 player "></div>
+			<div class = "player_3 player"></div>
+		</div>
+		<div class = "lefty">
+			<div class = "player_4 player"></div>
+		</div>
+		<div class = "righty">
+			<div class = "player_5 player"></div>
+		</div>
+		<div class = "table_deck">
+			<div id = "run_colour">
+				<div id="runningColour">
+					Running Color is
+				</div> 
+				<span id = "RunningColorContainer">
+				</span>
+			</div>
+			<div class = "pile">
+				<div class = "draw_pile" onclick = "make_request_to_draw_a_card()">
 					<div class = "unoText">U</div>
 				</div>
-				<div id="discard_pile_deck"></div>
+				<div class ="discard_Pile"></div>
 			</div>
-			<div id="message_box"></div>
+			<div class = "pile_name">
+				<div class ="draw_pile_name">Draw pile</div>
+				<div class = "discard_pile_name">Discard pile</div>
+			</div>
+			<!-- <div id="message_box"></div> -->
 		</div>
-		<div id="user_selection">
+		<div id="user_cards"></div>
+		<div class = "button_container">
 			<div id="change_colour_menu" class='hidden'>
 				<select id="colour_group">
 					<option value="Red">Red</option>
@@ -41,14 +57,11 @@
 				Pass Turn
 			</button>
 		</div>
-		
-		<div id="cards"></div>
-	</div>
-		<audio id ="soundForPlayCard" preload ="auto">
+		<!-- <audio id ="soundForPlayCard" preload ="auto">
 			<source src = "/audioFiles/playCard.wav">
 		</audio>
 		<audio id = "soundForAlert" preload = "auto">
 			<source src = "/audioFiles/alert.wav">
-		</audio>
+		</audio> -->
+	</div>
 </body>
-</html>
