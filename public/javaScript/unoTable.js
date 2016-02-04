@@ -7,7 +7,7 @@ var send_request = function(dataToSend){
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
-	    		document.querySelector('#soundForPlayCard').play();
+	    		// document.querySelector('#soundForPlayCard').play();
         	}else if(req.responseText == 'can_not_play_the_card')
         	{
       			document.getElementById('change_turn').className = '';
@@ -212,7 +212,7 @@ var sendConnectionRequest = function(){
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
 			  	document.getElementById('RunningColorContainer').className = comments.runningColour;
 		        
-			  	document.getElementById('discard_pile_deck').innerHTML = createCard(comments.cardOnTable);
+			  	document.getElementsByClassName("discard_Pile")[0].innerHTML = createCard(comments.cardOnTable);
 
 			  	resetUnoField(comments.UNOregistry,comments.allUsersCardsLength,comments.currentPlayer);
 
@@ -223,10 +223,10 @@ var sendConnectionRequest = function(){
 		    		imgRef += '<div id="card_num:'+i+'" height="270px" width="200px" class="user_cards" onclick="make_request_to_play_the_card(this.id)" >' + createCard(comments.userCards[i]) + '</div>';
 		    	};			
 
-			  	document.getElementById('cards').innerHTML = imgRef;
-			  	document.getElementById('message_box').innerHTML = generateMessage(comments);
+			  	document.getElementById('user_cards').innerHTML = imgRef;
+			  	// document.getElementById('message_box').innerHTML = generateMessage(comments);
 
-		        document.getElementById(comments.currentPlayer).className = 'current_player';
+		        // document.getElementById(comments.currentPlayer).className = 'current_player';
 				previous_player = comments.currentPlayer;
 		    };
 
