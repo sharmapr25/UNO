@@ -38,14 +38,4 @@ server.removeCardFromTheUsersCards = function (cardToremove,userCards) {
 	});
 };
 
-// server.validateCard = function (player_card,card_on_deck) {
-// 	var matches = [ ((player_card.number == card_on_deck.number) && (player_card.number != null)), 
-// 					((player_card.colour == card_on_deck.colour) && (player_card.colour != null)),
-// 					((player_card.speciality == card_on_deck.speciality) && (player_card.speciality != null)),
-// 					player_card.speciality == 'Wild',
-// 					player_card.speciality == 'WildDrawFour'						
-// 				  ];
-// 	return (matches.indexOf(true) >= 0);
-// };
-
 exports.server = server;
