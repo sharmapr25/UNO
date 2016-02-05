@@ -6,30 +6,18 @@ var no_of_player = function(){
 	return players;
 };
 
-var sendConnectionRequest = function(){ 
-	var req = new XMLHttpRequest();
-	console.log('request toh kiya h')
-	req.onreadystatechange = function() {
-	    if (req.readyState == 4 && req.status == 200) {
-	    	window.location = req.responseText;
-	    };
-	};
-
-	var info = { name : document.querySelector('input[name="user_name"]').value, setNoOfPlayer : no_of_player()};
-	req.open('POST', 'login_user', true);
-	req.send(JSON.stringify(info));
-	document.querySelector('input[name="user_name"]').value = "";
+var sendConnectionRequest = function(){
+	var info = $('input[name="user_name"]').val()+'~/'+ no_of_player();
+	$.post('login_user', info,function(data, status){
+		window.location.href = data;
+	})
 };
 
 var sendJoinRequest = function(id){
-	var req = new XMLHttpRequest();
-	req.onreadystatechange = function(){
-		window.location = req.responseText;
-	};
-	var game_id = id;
-	var join_game = {name : document.querySelector('input[name="user_name"]').value, id : game_id};
-	req.open('POST','join_game',true);
-	req.send(JSON.stringify(join_game));
+	var join_game = $('input[name="user_name"]').val()+"~/"+ id;
+	$.post('join_game', join_game, function(data, status){
+		window.location.href = data;
+	})
 };
 
 var giveList = function(gameList) {
@@ -56,7 +44,6 @@ var existing_game_info = function(){
 };
 
 var changePage = function(shown, hidden){
-	console.log("funciton yaha hai");
 	document.getElementById(shown).style.display = 'block';
 	document.getElementById(hidden).style.display = 'none';
 }
