@@ -7,14 +7,20 @@ var no_of_player = function(){
 };
 
 var sendConnectionRequest = function(){
-	var info = $('input[name="user_name"]').val()+'~/'+ no_of_player();
-	$.post('login_user', info,function(data, status){
+	var data_to_send = {};
+	data_to_send.name = $('input[name="user_name"]').val();
+	data_to_send.no_of_players = no_of_player();
+
+	$.post('login_user', data_to_send, function(data, status){
 		window.location.href = data;
 	})
 };
 
 var sendJoinRequest = function(id){
-	var join_game = $('input[name="user_name"]').val()+"~/"+ id;
+	var join_game = {};
+	join_game.name= $('input[name="user_name"]').val();
+	join_game.id = id;
+	console.log('join_game',join_game);
 	$.post('join_game', join_game, function(data, status){
 		window.location.href = data;
 	})
@@ -33,7 +39,7 @@ var giveList = function(gameList) {
 
 var existing_game_info = function(){
 	$.get('give_list_of_game',function(data, status){
-		$('#list_of_joinGame').html = giveList(data);
+		$('#list_of_joinGame').html(giveList(data));
 	})
 };
 
