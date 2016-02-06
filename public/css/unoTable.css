@@ -3,6 +3,7 @@ body{
     font-weight: 100;
     background-color: #f4f4f4;
     font-family: helvetica;
+    width: 99%;
 }
 
 .unoText{
@@ -141,38 +142,35 @@ audio {
 
 
 .player{
-	background-color: #e7eaee;
-	border: 1px solid #d1d1d1;
+	height: 103%;
+    width: 200px;
 }
 
 .top_three{
 	position:absolute;
-	width: 71%;
-    height: 25%;
+	width: 98%;
+    height: 27%;
     /*background-color: black;*/
-    margin-left: 15%;
-    margin-top: 1%;
+    margin-left: 3%;
 }
-.top_three div {
-	border-radius: 50%;
+/*.top_three  {
 	height: 100%;
 	width: 20%;
 	display: inline-block;
-}
+}*/
 
 .player_1{
 	position: absolute;
 	display: inline-block;
-	margin-left: 15%;
 }
 
 .player_2{
-	margin-left: 40%;
+	margin-left: 20%;
 	position: absolute;
 	display: inline-block;
 }
 .player_3{
-	margin-left: 65%;
+	margin-left: 40%;
 	position: absolute;
 	display: inline-block;
 }
@@ -185,12 +183,18 @@ audio {
 	margin-top: 16%;
 }
 
-.lefty div{
-	border-radius: 50%;
+/*.lefty div{
 	margin-top: 9%;
 	margin-left: 45%;
 	height: 70%;
 	width: 50%;
+}*/
+
+.player_4{
+	/*margin-top: 9%;*/
+	position: absolute;
+	display: inline-block;
+	margin-left: 60%;
 }
 
 .righty{
@@ -202,28 +206,32 @@ audio {
 	margin-top: 16%;
 }
 
-.righty div{
+/*.righty div{
 	margin-top: 9%;
 	height: 71%;
 	width: 49%;
-	border-radius: 50%;
 	margin-left: 2%;
+}*/
+.player_5{
+	position: absolute;
+	display: inline-block;
+	/*margin-top: 9%;*/
+	margin-left: 80%;
 }
 
 .section{
-	background-color: aliceblue;
 	height: 99%;
 	width: 99%;
 	position: absolute;
 }
 
 .table_deck{
-	border-radius: 15%;
-	width: 40%;
-	height: 40%;
+	border-radius: 12px;
+	width: 41%;
+	height: 32%;
 	position: absolute;
 	margin-left: 30%;
-	margin-top: 16%;
+	margin-top: 19%;
 	background-color: lightgray;
 }
 
@@ -244,11 +252,10 @@ audio {
 }
 .pile{
 	width: 57%;
-	height: 65%;
+	height: 57%;
 	margin-top: 8%;
 	margin-left: 22%;
 	position: absolute;
-	/*background-color: black;*/
 }
 
 .discard_pile{
@@ -260,9 +267,9 @@ audio {
 .draw_pile{
 	margin-left: 57%;
 	height: 165px;
-    width: 133px;
+    width: 131px;
     border-radius: 10px;
-	background-color: #424242;
+	background-color: gray;
 	position: absolute;
 	font-size: 50px;
 	color: white
@@ -270,10 +277,10 @@ audio {
 
 .pile_name{
 	position: absolute;
-	margin-top: 42%;
+	margin-top: 38%;
 	margin-left: 27%;
 	width: 50%;
-	height: 10%;
+	height: 5%;
 	font-size: 20px;
 }
 
@@ -286,12 +293,12 @@ audio {
 }
 
 #user_cards{
-	width: 70%;
-	height: 30%;
+	width: 78%;
+	height: 28%;
 	/*background-color: black;*/
 	position: absolute;
-	margin-top: 38%;
-	margin-left: 15%;
+	margin-top: 40%;
+	margin-left: 10%;
 	overflow: scroll;
 	border: 1px solid;
 	border-radius: 20px;
@@ -311,7 +318,7 @@ audio {
 	height: 30%;
 	position: absolute;
 	margin-top:38%;
-	margin-left: 86%;
+	margin-left: 89%;
 	/*background-color: black;*/
 }
 
@@ -327,4 +334,22 @@ audio {
 
 .Gray{
 	background-color: black;
+}
+
+.close_face{
+	height:146px;
+    width: 133px;
+	border-radius: 10px;
+	margin-left: 34px;
+	position: absolute;
+	background-color: gray;
+	color: white;
+}
+
+.other_name{
+	background-color: lightgray;
+	width: 200px;
+	height:43px;
+	margin-top: 185px;
+	border-radius: 7px;
 }
