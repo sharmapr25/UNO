@@ -91,6 +91,7 @@ var make_request_to_draw_a_card = function(){
   	req.send();
   };
 }
+
 var sayUnoRequest = function(comments){
 	var cookie = document.cookie.split(' ');
  	var name = cookie[0].substring(10,cookie[0].length-1);
@@ -185,6 +186,72 @@ var resetUnoField = function(unoList,cardLength,currentPlayer) {
 	}
 }
 
+var opponentInfo = function(players){
+	var playerPosition = [];
+	var cookie = document.cookie.split(' ');
+ 	var name = cookie[0].substring(10,cookie[0].length-1);
+ 	var counter = 0,count = 0;
+ 	while(counter <= 2){
+ 		if(players[count].name == name)
+ 			counter++;
+ 		if(counter == 1 && players[count].name != name){
+ 			playerPosition.push(players[count].name+"("+players[count].noOfCards+"cards)");
+ 		}
+ 		count++;
+ 		if(count == players.length)
+ 			count = 0;
+ 	}
+ 	return playerPosition.reverse();
+};
+
+var selectDiv = function(playersInfo){
+	switch(playersInfo.length){
+		case 1: break;
+		case 2:
+			document.querySelector('#player_3 .other_name').innerHTML = opponentInfo(playersInfo)[0];
+			document.querySelector('#player_3').className = 'player';
+			break;
+		case 3:
+			document.querySelector('#player_2 .other_name').innerHTML = opponentInfo(playersInfo)[0];
+			document.querySelector('#player_2').className = 'player';
+
+			document.querySelector('#player_4 .other_name').innerHTML = opponentInfo(playersInfo)[1];
+			document.querySelector('#player_4').className = 'player';
+			break;
+		case 4:
+			document.querySelector('#player_2 .other_name').innerHTML = opponentInfo(playersInfo)[0];
+			document.querySelector('#player_2').className = 'player';
+			document.querySelector('#player_3 .other_name').innerHTML = opponentInfo(playersInfo)[1];
+			document.querySelector('#player_3').className = 'player';
+			document.querySelector('#player_4 .other_name').innerHTML = opponentInfo(playersInfo)[2];
+			document.querySelector('#player_4').className = 'player';
+			break;
+		case 5: 
+			document.querySelector('#player_1 .other_name').innerHTML = opponentInfo(playersInfo)[0];
+			document.querySelector('#player_1').className = 'player';
+			document.querySelector('#player_2 .other_name').innerHTML = opponentInfo(playersInfo)[1];
+			document.querySelector('#player_2').className = 'player';
+			document.querySelector('#player_4 .other_name').innerHTML = opponentInfo(playersInfo)[2];
+			document.querySelector('#player_4').className = 'player';
+			document.querySelector('#player_5 .other_name').innerHTML = opponentInfo(playersInfo)[3];
+			document.querySelector('#player_5').className = 'player';
+			break;
+		case 6:
+			document.querySelector('#player_1 .other_name').innerHTML = opponentInfo(playersInfo)[0];
+			document.querySelector('#player_1').className = 'player';
+			document.querySelector('#player_2 .other_name').innerHTML = opponentInfo(playersInfo)[1];
+			document.querySelector('#player_2').className = 'player';
+			document.querySelector('#player_3 .other_name').innerHTML = opponentInfo(playersInfo)[2];
+			document.querySelector('#player_3').className = 'player';
+			document.querySelector('#player_4 .other_name').innerHTML = opponentInfo(playersInfo)[3];
+			document.querySelector('#player_4').className = 'player';
+			document.querySelector('#player_5 .other_name').innerHTML = opponentInfo(playersInfo)[4];
+			document.querySelector('#player_5').className = 'player';
+			break;
+
+	}
+}
+
 var sendConnectionRequest = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -223,9 +290,9 @@ var sendConnectionRequest = function(){
 		    	};			
 
 			  	document.getElementById('user_cards').innerHTML = imgRef;
-			  	document.getElementById('message_box').innerHTML = generateMessage(comments);
-
-		        document.getElementById(comments.currentPlayer).className = 'current_player';
+			  	// document.getElementById('message_box').innerHTML = generateMessage(comments);
+			  	selectDiv(comments.allUsersCardsLength);
+		        // document.getElementById(comments.currentPlayer).className = 'current_player';
 				previous_player = comments.currentPlayer;
 		    };
 

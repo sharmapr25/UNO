@@ -10,7 +10,7 @@ allRules.areSameNumberedCards = function(cardPlayed, discardedCard){
 	return ((cardPlayed.number == discardedCard.number) && (cardPlayed.number != null));	
 };
 
-allRules.isWildCardPlayed = function(cardPlayed, discardedCard){
+allRules.isWildCardPlayed = function(cardPlayed, discardedCard){gst
 	return ((cardPlayed.speciality == 'Wild') || (cardPlayed.speciality == 'WildDrawFour'));
 };
 
