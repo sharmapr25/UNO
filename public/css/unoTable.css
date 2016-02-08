@@ -1,7 +1,6 @@
 body{
 	font-size: 18px;
     font-weight: 100;
-    background-color: #f4f4f4;
     font-family: helvetica;
     width: 99%;
 }
@@ -114,33 +113,6 @@ button{
 	display: inline-block;
 }
 
-/*
-#num{
-	padding-top: 30px;
-}
-
-.playerList{
-	color : gray;
-}
-
-.current_player{
-	color: black;
-	font-size: 20px;
-}*/
-
-/*audio:not([controls]) {
-    display: none;
-}
-
-audio {
-    width: 300px;
-    height: 30px;
-}
-
-*/
-
-
-
 .player{
 	height: 103%;
     width: 200px;
@@ -150,73 +122,39 @@ audio {
 	position:absolute;
 	width: 98%;
     height: 27%;
-    /*background-color: black;*/
     margin-left: 3%;
 }
-/*.top_three  {
-	height: 100%;
-	width: 20%;
-	display: inline-block;
-}*/
 
-.player_1{
+#player_1{
 	position: absolute;
 	display: inline-block;
 }
 
-.player_2{
+#player_2{
 	margin-left: 20%;
 	position: absolute;
 	display: inline-block;
 }
-.player_3{
+#player_3{
 	margin-left: 40%;
 	position: absolute;
 	display: inline-block;
 }
 
-.lefty{
-	width: 29%;
-	height: 37%;
-	/*background-color: yellow;*/
-	position: absolute;
-	margin-top: 16%;
-}
-
-/*.lefty div{
-	margin-top: 9%;
-	margin-left: 45%;
-	height: 70%;
-	width: 50%;
-}*/
-
-.player_4{
-	/*margin-top: 9%;*/
+#player_4{
 	position: absolute;
 	display: inline-block;
 	margin-left: 60%;
 }
 
-.righty{
-	width: 29%;
-	height: 37%;
-	position: absolute;
-	/*background-color: yellow;*/
-	margin-left: 71%;
-	margin-top: 16%;
-}
-
-/*.righty div{
-	margin-top: 9%;
-	height: 71%;
-	width: 49%;
-	margin-left: 2%;
-}*/
-.player_5{
+#player_5{
 	position: absolute;
 	display: inline-block;
-	/*margin-top: 9%;*/
 	margin-left: 80%;
+}
+
+.hidden{
+	visibility: hidden;
 }
 
 .section{
@@ -319,7 +257,6 @@ audio {
 	position: absolute;
 	margin-top:38%;
 	margin-left: 89%;
-	/*background-color: black;*/
 }
 
 .button_container div{
@@ -352,4 +289,5 @@ audio {
 	height:43px;
 	margin-top: 185px;
 	border-radius: 7px;
+	text-align: center;
 }
