@@ -7,7 +7,7 @@ var send_request = function(dataToSend){
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
-	    		// document.querySelector('#soundForPlayCard').play();
+	    		document.querySelector('#soundForPlayCard').play();
         	}else if(req.responseText == 'can_not_play_the_card')
         	{
       			document.getElementById('change_turn').className = '';
@@ -179,7 +179,6 @@ var showedRanks = false;
 
 var resetUnoField = function(unoList,cardLength,currentPlayer) {
 	for (var i = 0; i < unoList.length; i++) {
-		console.log()
 		if(cardLength[i].noOfCards > 2 || (cardLength[i].noOfCards == 2 && currentPlayer !=unoList[i].name)){
 			unoList[i].said_uno = false;
 		}
@@ -224,9 +223,9 @@ var sendConnectionRequest = function(){
 		    	};			
 
 			  	document.getElementById('user_cards').innerHTML = imgRef;
-			  	// document.getElementById('message_box').innerHTML = generateMessage(comments);
+			  	document.getElementById('message_box').innerHTML = generateMessage(comments);
 
-		        // document.getElementById(comments.currentPlayer).className = 'current_player';
+		        document.getElementById(comments.currentPlayer).className = 'current_player';
 				previous_player = comments.currentPlayer;
 		    };
 
