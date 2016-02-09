@@ -4,15 +4,16 @@ var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
+	    	console.log("req.responseText",req.responseText);
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
 	    		document.querySelector('#soundForPlayCard').play();
         	}else if(req.responseText == 'can_not_play_the_card')
         	{
+	    		alert('Invalid Card..!!!');	
       			document.getElementById('change_turn').className = '';
       			document.querySelector('#soundForAlert').play();
-	    		alert('Invalid Card..!!!');	
         	}
 	    	else if(req.responseText == 'not_your_turn')
 	    		alert('Not Your Turn..!!');
@@ -250,6 +251,30 @@ var selectDiv = function(playersInfo){
 			break;
 
 	}
+};
+
+var showCurrentPlayer = function(currentPlayer){
+	var cookie = document.cookie.split(' ');
+ 	var name = cookie[0].substring(10,cookie[0].length-1);
+ 	if(name == currentPlayer){
+ 		document.getElementById('user_cards').style.border = "3px solid #7ed097";
+ 	}
+ 	else{
+ 		document.getElementById('user_cards').style.border = "1px solid black";
+ 	}
+	var divs = document.querySelectorAll('.player');
+ 	for(var i = 1; i <= 6; i++){
+ 		var value = document.querySelector('#player_'+i+' .other_name').textContent;
+		var name = value.split("(")[0];
+ 		if(name.length > 0){
+	 		if(name == currentPlayer){
+	 			document.querySelector('#player_'+i).style.border = "3px solid #7ed097";
+	 		}
+	 		else{
+	 			document.querySelector('#player_'+i).style.border = "3px solid white";
+	 		}
+ 		}
+ 	}
 }
 
 var sendConnectionRequest = function(){
@@ -279,7 +304,6 @@ var sendConnectionRequest = function(){
 			  	document.getElementById('RunningColorContainer').className = comments.runningColour;
 		        
 			  	document.getElementsByClassName("discard_Pile")[0].innerHTML = createCard(comments.cardOnTable);
-
 			  	resetUnoField(comments.UNOregistry,comments.allUsersCardsLength,comments.currentPlayer);
 
 		    	var imgRef = '';
@@ -290,9 +314,8 @@ var sendConnectionRequest = function(){
 		    	};			
 
 			  	document.getElementById('user_cards').innerHTML = imgRef;
-			  	// document.getElementById('message_box').innerHTML = generateMessage(comments);
 			  	selectDiv(comments.allUsersCardsLength);
-		        // document.getElementById(comments.currentPlayer).className = 'current_player';
+			  	showCurrentPlayer(comments.currentPlayer);
 				previous_player = comments.currentPlayer;
 		    };
 

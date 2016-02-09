@@ -60,7 +60,7 @@ body{
 }*/
 
 #change_turn{
-	margin-top: 17%;
+	margin-top: 25%;
 	margin-left: 6px;
 }
 
@@ -73,6 +73,12 @@ button{
 	border: none;
 	border-radius: 3px;
 	background-color: lightgray;
+	margin-bottom: 10px;
+}
+
+button:hover{
+	cursor: pointer;
+	transform:scale(1.1);
 }
 
 .lightgray{
@@ -90,6 +96,11 @@ button{
     font-family: helvetica;
     font-weight: 400;
     display: inline-block;
+}
+
+.myCards:hover{
+	cursor: pointer;
+	transform: scale(1.1);
 }
 
 #run_colour{
@@ -286,7 +297,7 @@ button{
 .other_name{
 	background-color: lightgray;
 	width: 200px;
-	height:43px;
+	height:35px;
 	margin-top: 185px;
 	border-radius: 7px;
 	text-align: center;
