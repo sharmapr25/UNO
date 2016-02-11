@@ -129,11 +129,12 @@ button:hover{
     width: 200px;
 }
 
-.top_three{
+.top_five{
 	position:absolute;
 	width: 98%;
     height: 27%;
     margin-left: 3%;
+    display: none;
 }
 
 #player_1{
@@ -174,7 +175,17 @@ button:hover{
 	position: absolute;
 }
 
-.table_deck{
+#single_user{
+	border-radius: 12px;
+	width: 41%;
+	height: 32%;
+	position: absolute;
+	margin-left: 30%;
+	margin-top: 3%;
+
+}
+
+#multi_user{
 	border-radius: 12px;
 	width: 41%;
 	height: 32%;
@@ -227,24 +238,35 @@ button:hover{
 .pile_name{
 	position: absolute;
 	margin-top: 38%;
-	margin-left: 27%;
-	width: 50%;
+	margin-left: 26%;
+	width: 52%;
 	height: 5%;
 	font-size: 20px;
 }
 
 .draw_pile_name{
 	position: absolute;
+	margin-left: 144px;
 }
 
 .discard_pile_name{
-	float: right;
+	position: absolute;
 }
 
-#user_cards{
+.single_user_cards{
 	width: 78%;
 	height: 28%;
-	/*background-color: black;*/
+	position: absolute;
+	margin-left: 10%;
+	margin-top: 32%;
+	overflow: scroll;
+	border: 1px solid;
+	border-radius: 20px;
+}
+
+.multi_user_cards{
+	width: 78%;
+	height: 28%;
 	position: absolute;
 	margin-top: 40%;
 	margin-left: 10%;
@@ -262,7 +284,15 @@ button:hover{
 	text-align: center;
 }
 
-.button_container{
+#my_button{
+	width: 12%;
+	height: 30%;
+	position: absolute;
+	margin-left: 89%;
+	margin-top: 32%;
+}
+
+#mutli_button{
 	width: 12%;
 	height: 30%;
 	position: absolute;

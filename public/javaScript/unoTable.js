@@ -264,9 +264,10 @@ var showCurrentPlayer = function(currentPlayer){
  	}
 	var divs = document.querySelectorAll('.player');
  	for(var i = 1; i <= 6; i++){
- 		var value = document.querySelector('#player_'+i+' .other_name').textContent;
+ 		var value = document.querySelector('#player_'+i+' .other_name');
+ 		if(value){
+ 			value = value.textContent;
 		var name = value.split("(")[0];
- 		if(name.length > 0){
 	 		if(name == currentPlayer){
 	 			document.querySelector('#player_'+i).style.border = "3px solid #7ed097";
 	 		}
@@ -275,6 +276,22 @@ var showCurrentPlayer = function(currentPlayer){
 	 		}
  		}
  	}
+}
+
+var checkTheNoOfuser = function(info){
+	console.log(info.length);
+	if(info.length == 1){
+		$('.table_deck').attr('id','single_user');
+		$('#user_cards').attr('class','single_user_cards');
+		$('.button_container').attr('id','my_button');
+	}
+
+	else{
+		$('.top_five').show();
+		$('.table_deck').attr('id','multi_user'); 
+		$('#user_cards').attr('class','multi_user_cards');
+		$('.button_container').attr('id','multi_button');
+	}
 }
 
 var sendConnectionRequest = function(){
@@ -289,6 +306,7 @@ var sendConnectionRequest = function(){
 				};
 		        userCards = comments.userCards; 
 		        cardOnDeck = comments.cardOnTable;
+				checkTheNoOfuser(comments.allUsersCardsLength);		        
 		        if(comments.isEndOfGame){
 		        	if(!showedRanks) {
 		        		alert('Game End..!!');
@@ -302,7 +320,7 @@ var sendConnectionRequest = function(){
 
 			  	document.getElementById('RunningColorContainer').innerHTML = comments.runningColour;
 			  	document.getElementById('RunningColorContainer').className = comments.runningColour;
-		        
+
 			  	document.getElementsByClassName("discard_Pile")[0].innerHTML = createCard(comments.cardOnTable);
 			  	resetUnoField(comments.UNOregistry,comments.allUsersCardsLength,comments.currentPlayer);
 
@@ -354,28 +372,28 @@ var createCard = function(card){
 	return '<div class = "'+ colour +' myCards"><div id="num">'+num+'</div></div>';
 };
 
-window.addEventListener("keypress", checkKeyPressed, false);
+// window.addEventListener("keypress", checkKeyPressed, false);
  
-function checkKeyPressed(e) {
-	var data = JSON.parse(stateOfGame);
-    switch(e.charCode){
-     	case 115:
-     		//sayUNO
-     		sayUnoRequest(data);
-     		break;
-     	case 99:
-     		//catch UNO
-     		catchUnoRequest();
-     		break;
-     	case 100:
-     		//draw
-     		make_request_to_draw_a_card();
-     		break;
-     	case 112:
-     		//pass_turn
-     		make_request_to_pass_turn();
-     		break;
-    };
-};
+// function checkKeyPressed(e) {
+// 	var data = JSON.parse(stateOfGame);
+//     switch(e.charCode){
+//      	case 115:
+//      		//sayUNO
+//      		sayUnoRequest(data);
+//      		break;
+//      	case 99:
+//      		//catch UNO
+//      		catchUnoRequest();
+//      		break;
+//      	case 100:
+//      		//draw
+//      		make_request_to_draw_a_card();
+//      		break;
+//      	case 112:
+//      		//pass_turn
+//      		make_request_to_pass_turn();
+//      		break;
+//     };
+// };
 
 var interval = setInterval(sendConnectionRequest, 500);
