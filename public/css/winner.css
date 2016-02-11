@@ -1,6 +1,6 @@
 #list{
 	display: none;
-	width: 539px;
+	width: 380px;
 	margin: 0 auto;
 	margin-top: 6%;
 	font-family: helvetica;
@@ -29,6 +29,7 @@ button{
 	}
 
 .congratulate{
+	color: #444444;
 	font-size: -webkit-xxx-large;
 }
 
@@ -38,21 +39,17 @@ button{
 }
 
 .message{
-	margin-left: 60px;
+	color: #454545;
  	font-size: 26px;
 }
 
-.listButton{
-	margin-left: 59px;
-
-}
-
 .home{
-	width: 265px;
+	width: 220px;
 	margin: 0 auto;
 }
 
 .spaceBetweenTwoClass{
+	text-align: center;
 	margin-bottom: 20px;
 }
 
@@ -61,14 +58,11 @@ button{
 }
 
 .inline{
+	text-align: center;
 	display: inline-block;
 	width: 50%;
     margin-bottom: 20px;
 
-}
-
-.points{
-	text-align: right;
 }
 
 .heading{
