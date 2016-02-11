@@ -11,8 +11,15 @@ var sendConnectionRequest = function(){
 	data_to_send.name = $('input[name="user_name"]').val();
 	data_to_send.no_of_players = no_of_player();
 
+	console.log('gaurav.........',data_to_send)
+
 	$.post('login_user', data_to_send, function(data, status){
-		window.location.href = data;
+		if(data != 'Invalid')
+			window.location.href = data;
+		else{
+			alert('Invalid name or no_of_players\nLogin your name without giving space');
+			window.location.href = 'index.html'
+		}
 	})
 };
 
@@ -44,6 +51,7 @@ var existing_game_info = function(){
 };
 
 var changePage = function(shown, hidden){
+	// alert('hhihi')
 	document.getElementById(shown).style.display = 'block';
 	document.getElementById(hidden).style.display = 'none';
 }
