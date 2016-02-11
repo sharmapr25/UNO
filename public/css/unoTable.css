@@ -292,12 +292,12 @@ button:hover{
 	margin-top: 32%;
 }
 
-#mutli_button{
+#multi_button{
 	width: 12%;
 	height: 30%;
 	position: absolute;
-	margin-top:38%;
 	margin-left: 89%;
+	margin-top:38%;
 }
 
 .button_container div{
@@ -307,7 +307,6 @@ button:hover{
 	font-size: 22px;
 	text-align: center;
 	margin: 4%;
-
 }
 
 .Gray{
