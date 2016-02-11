@@ -11,7 +11,6 @@ var sendConnectionRequest = function(){
 	data_to_send.name = $('input[name="user_name"]').val();
 	data_to_send.no_of_players = no_of_player();
 
-	console.log('gaurav.........',data_to_send)
 
 	$.post('login_user', data_to_send, function(data, status){
 		if(data != 'Invalid')
@@ -27,9 +26,13 @@ var sendJoinRequest = function(id){
 	var join_game = {};
 	join_game.name= $('input[name="user_name"]').val();
 	join_game.id = id;
-	console.log('join_game',join_game);
 	$.post('join_game', join_game, function(data, status){
-		window.location.href = data;
+		if(data != 'Invalid')
+				window.location.href = data;
+		else{
+			alert('Invalid name\nLogin your name without giving space');
+			window.location.href = 'index.html'
+		}
 	})
 };
 
