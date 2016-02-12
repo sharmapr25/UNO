@@ -235,18 +235,19 @@ button:hover{
 .pile_name{
 	position: absolute;
 	margin-top: 38%;
-	margin-left: 26%;
-	width: 52%;
+	margin-left: 23%;
+	width: 56%;
 	height: 5%;
 	font-size: 20px;
 }
 
 .draw_pile_name{
 	position: absolute;
-	margin-left: 144px;
+	margin-left: 208px;
 }
 
 .discard_pile_name{
+	margin-left: 2px;
 	position: absolute;
 }
 
@@ -272,7 +273,11 @@ button:hover{
 	border-radius: 20px;
 }
 
-#user_cards div{
+#user_cards{
+	text-align: center;
+}
+
+#user_cards > div{
 	margin-top: 2%;
 	margin-left: 2%;
 	display: inline-block;
