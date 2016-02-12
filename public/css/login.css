@@ -23,22 +23,25 @@
   width: 20px;
   height: 14px;
   display: inline-block;
-  float: left;
-  margin-right: 8px;
+  margin-right: 4px;
+  margin-left: 4px;
   border-radius: 50%;
 }
 
 .underline_container {
-  width: 200px;
+  text-align: center;
+  width: 201px;
   margin: 0 auto;
 }
 
 .logo_container {
   width: 200px;
   margin: 0 auto;
+  margin-bottom: 7%;
 }
 
 .logo_text {
+  text-align: center;
   width: 200px;
   font-family: helvetica;
   font-size: 60px;
@@ -48,8 +51,12 @@
 }
 
 #login{
+  border-radius: 7px;
+  background-color: #efefef;
+  text-align: center;
   width: 300px;
-  padding-top: 10%;
+  padding-top: 2%;
+  padding-bottom: 3%;
   margin: 0 auto;
 }
 
@@ -83,10 +90,12 @@ body {
 
 #next{
   display: none;
-  width: 600px;
+  width: 550px;
   margin: 0 auto;
   clear: both;
-  padding-top: 8%;
+  height: 480px;
+  padding: 5px;
+  overflow: scroll;
 }
 
 #createGame{

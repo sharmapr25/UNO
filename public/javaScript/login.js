@@ -54,9 +54,14 @@ var existing_game_info = function(){
 };
 
 var changePage = function(shown, hidden){
-	// alert('hhihi')
-	document.getElementById(shown).style.display = 'block';
-	document.getElementById(hidden).style.display = 'none';
+	var name = $('input[name="user_name"]').val();
+	if(name && name.split(' ').length == 1 ) {
+		document.getElementById(shown).style.display = 'block';
+		document.getElementById(hidden).style.display = 'none';
+	}
+	else {
+		alert('Please give valid name');
+	}
 }
 
 window.onload = function(){
