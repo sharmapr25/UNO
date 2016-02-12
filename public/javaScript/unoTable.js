@@ -23,7 +23,14 @@ var send_request = function(dataToSend){
 	req.send(dataToSend);
 };
 
+var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
+	return userCards.some(function(card){
+		return (card.colour == colour)
+	});
+};
+
 var type_of_wild;
+
 var make_request_to_play_the_card = function(id){	
 	if(document.getElementById('change_turn').className == ''){
 		if(isVisibleChangeTurnButton != false){
@@ -40,6 +47,7 @@ var make_request_to_play_the_card = function(id){
 		type_of_wild = playedCard;
 	}
 	else if(playedCard.speciality == 'WildDrawFour'){
+		dataToSend.userCards = userCards;
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
 			alert('You Have Card To play..!!');
 		}else{
@@ -50,13 +58,6 @@ var make_request_to_play_the_card = function(id){
 		dataToSend.colour = playedCard.colour;
 		send_request(JSON.stringify(dataToSend));
 	}
-};
-
-
-var doesThePlayerHaveSpecifiedColourCard = function(userCards, colour){
-	return userCards.some(function(card){
-		return (card.colour == colour)
-	});
 };
 
 var send_request_for_wild_card = function(){
@@ -376,10 +377,6 @@ function checkKeyPressed(e) {
      	case 100:
      		//draw
      		make_request_to_draw_a_card();
-     		break;
-     	case 112:
-     		//pass_turn
-     		make_request_to_pass_turn();
      		break;
     };
 };
