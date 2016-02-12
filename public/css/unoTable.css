@@ -24,7 +24,7 @@ body{
 }
 
 #submit_colour{
-	margin-top: 82%;
+	margin-top: 12%;
 	margin-left: -10%;
 }
 
@@ -53,7 +53,7 @@ body{
 }*/
 
 #change_turn{
-	margin-top: 25%;
+	margin-top: 24%;
 	margin-left: 6px;
 }
 
@@ -272,7 +272,7 @@ button:hover{
 	border-radius: 20px;
 }
 
-#user_cards > div{
+#user_cards div{
 	margin-top: 2%;
 	margin-left: 2%;
 	display: inline-block;

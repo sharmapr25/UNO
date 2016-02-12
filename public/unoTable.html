@@ -51,6 +51,13 @@
 		</div>
 		<div id="user_cards"></div>
 		<div class = "button_container">
+			<div id="say_and_catch_uno">
+				<button type="button" id="say_UNO">Say UNO</button>
+				<button type="button" id="catch_UNO">Catch UNO</button>
+			</div>
+				<button type="button" id="change_turn" onclick="make_request_to_pass_turn()" class="hidden">
+				Pass Turn
+			</button>
 			<div id="change_colour_menu" class='hidden'>
 				<select id="colour_group">
 					<option value="Red">Red</option>
@@ -60,13 +67,6 @@
 				</select>
 				<button type="button" id="submit_colour" onclick="send_request_for_wild_card()">Submit</button>	
 			</div>
-			<div id="say_and_catch_uno">
-				<button type="button" id="say_UNO">Say UNO</button>
-				<button type="button" id="catch_UNO">Catch UNO</button>
-			</div>
-			<button type="button" id="change_turn" onclick="make_request_to_pass_turn()" class="hidden">
-				Pass Turn
-			</button>
 		</div>
 		<audio id ="soundForPlayCard" preload ="auto">
 			<source src = "/audioFiles/playCard.wav">

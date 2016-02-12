@@ -47,8 +47,8 @@ var make_request_to_play_the_card = function(id){
 		type_of_wild = playedCard;
 	}
 	else if(playedCard.speciality == 'WildDrawFour'){
-		dataToSend.userCards = userCards;
-		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck.colour)){
+		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck)){
+			console.log("runningColour",cardOnDeck);
 			alert('You Have Card To play..!!');
 		}else{
 			document.getElementById('change_colour_menu').className = '';
@@ -246,7 +246,7 @@ var showCurrentPlayer = function(currentPlayer){
 	var cookie = document.cookie.split(' ');
  	var name = cookie[0].substring(10,cookie[0].length-1);
  	if(name == currentPlayer){
- 		document.getElementById('user_cards').style.border = "3px solid #7ed097";
+ 		document.getElementById('user_cards').style.border = "5px solid #7ed097";
  	}
  	else{
  		document.getElementById('user_cards').style.border = "1px solid black";
@@ -258,10 +258,10 @@ var showCurrentPlayer = function(currentPlayer){
  			value = value.textContent;
 		var name = value.split("(")[0];
 	 		if(name == currentPlayer){
-	 			document.querySelector('#player_'+i).style.border = "3px solid #7ed097";
+	 			document.querySelector('#player_'+i).style.border = "5px solid #7ed097";
 	 		}
 	 		else{
-	 			document.querySelector('#player_'+i).style.border = "3px solid white";
+	 			document.querySelector('#player_'+i).style.border = "5px solid white";
 	 		}
  		}
  	}
@@ -294,7 +294,8 @@ var sendConnectionRequest = function(){
 					window.location = comments.location;
 				};
 		        userCards = comments.userCards; 
-		        cardOnDeck = comments.cardOnTable;
+		        console.log("comments",comments.runningColour);
+		        cardOnDeck = comments.runningColour;
 				checkTheNoOfuser(comments.allUsersCardsLength);		        
 		        if(comments.isEndOfGame){
 		        	if(!showedRanks) {
