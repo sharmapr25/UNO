@@ -4,7 +4,6 @@ var send_request = function(dataToSend){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	console.log("req.responseText",req.responseText);
 	    	if(req.responseText == 'successful'){
           		isVisibleChangeTurnButton = false;
 	    		sendConnectionRequest();
@@ -48,7 +47,6 @@ var make_request_to_play_the_card = function(id){
 	}
 	else if(playedCard.speciality == 'WildDrawFour'){
 		if(doesThePlayerHaveSpecifiedColourCard(userCards, cardOnDeck)){
-			console.log("runningColour",cardOnDeck);
 			alert('You Have Card To play..!!');
 		}else{
 			document.getElementById('change_colour_menu').className = '';
@@ -268,7 +266,6 @@ var showCurrentPlayer = function(currentPlayer){
 }
 
 var checkTheNoOfuser = function(info){
-	console.log(info.length);
 	if(info.length == 1){
 		$('.table_deck').attr('id','single_user');
 		$('#user_cards').attr('class','single_user_cards');
@@ -294,7 +291,6 @@ var sendConnectionRequest = function(){
 					window.location = comments.location;
 				};
 		        userCards = comments.userCards; 
-		        console.log("comments",comments.runningColour);
 		        cardOnDeck = comments.runningColour;
 				checkTheNoOfuser(comments.allUsersCardsLength);		        
 		        if(comments.isEndOfGame){
