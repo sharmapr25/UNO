@@ -9,10 +9,6 @@ body{
 	text-align: center;
     padding-top: 30px;
     font-size: 40px;
-
-/*    padding-top: 50px;
-    font-size: 54px;*/
-
     font-family: helvetica;
     font-weight: 400;
 }
@@ -30,9 +26,6 @@ body{
 #submit_colour{
 	margin-top: 82%;
 	margin-left: -10%;
-	/*height: 28px;
-	width: 140px;
-	font-size: 17px;*/
 }
 
 .hidden{
@@ -87,15 +80,19 @@ button:hover{
 
 .myCards {
 	text-align: center;
-	margin: 0 auto;
 	height: 165px;
-    width: 133px;
-    font-size: 90px;
+    width: 126px;
+    font-size: 65px;
     color: white;
     border-radius: 10px;
     font-family: helvetica;
     font-weight: 400;
     display: inline-block;
+    position: inline;
+}
+
+.myCards div{
+	margin-top: 30px;
 }
 
 .myCards:hover{
@@ -188,10 +185,10 @@ button:hover{
 #multi_user{
 	border-radius: 12px;
 	width: 41%;
-	height: 32%;
+	height: 250px;
 	position: absolute;
 	margin-left: 30%;
-	margin-top: 19%;
+	margin-top: 17%;
 	background-color: lightgray;
 }
 
@@ -221,7 +218,7 @@ button:hover{
 .discard_pile{
 	height: 100%;
 	margin-left: 55%;
-	position: absolute;	
+	position: absolute;
 }
 
 .draw_pile{
@@ -265,22 +262,20 @@ button:hover{
 }
 
 .multi_user_cards{
-	width: 78%;
+	width: 74%;
 	height: 28%;
 	position: absolute;
-	margin-top: 40%;
-	margin-left: 10%;
+	margin-top: 36%;
+	margin-left: 13%;
 	overflow: scroll;
 	border: 1px solid;
 	border-radius: 20px;
 }
 
-#user_cards div{
+#user_cards > div{
 	margin-top: 2%;
 	margin-left: 2%;
 	display: inline-block;
-	height: 86%;
-	font-size: 60px;
 	text-align: center;
 }
 
@@ -296,7 +291,7 @@ button:hover{
 	width: 12%;
 	height: 30%;
 	position: absolute;
-	margin-left: 89%;
+	margin-left: 88%;
 	margin-top:38%;
 }
 

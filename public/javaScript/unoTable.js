@@ -104,7 +104,6 @@ var sayUnoRequest = function(comments){
  	else{
  		name = cookie[0].substr(10).split('%20').join(' ');
  	}
-
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
@@ -135,12 +134,14 @@ var make_request_to_pass_turn = function(){
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 	    if (req.readyState == 4 && req.status == 200) {
-	    	if(req.responseText == 'turn_passed'){
+	    	if(req.responseText == 'not_your_turn'){
+	    		alert('Not your turn\n You can not passs the turn');
+	    		return;
+	    	}
+	    	else if(req.responseText == 'turn_passed'){
 	    		console.log('passed turn to next player');
 	    		document.getElementById('change_turn').className = 'hidden';
 	    	}
-
-
 	    	else if(isVisibleChangeTurnButton == true){
       			document.getElementById('change_turn').className = '';
 	    	}
@@ -152,28 +153,15 @@ var make_request_to_pass_turn = function(){
 	req.send();
 };
 
-var generateMessage = function(allInfo){
-	var UNO_info = '';
-	var playedCardInfo = '';
-	var a=allInfo.allUsersCardsLength
-	var user_info = a.map(function (eachUser) {
-		return '<div id="'+eachUser.name+'">'+eachUser.name+' ('+eachUser.noOfCards+' cards)</div>';
-	});
-	if(allInfo.noOfDiscardCards > 1){
-		playedCardInfo = allInfo.previousPlayer+' played '+
-						(allInfo.cardOnTable.colour||'')+' '+
-						(allInfo.cardOnTable.number||allInfo.cardOnTable.speciality);
-	}
+var saidUNOInfo = function(allInfo){
+	var UNO_info = [];
+
 	for (var i = 0; i < allInfo.UNOregistry.length; i++) {
 		if(allInfo.UNOregistry[i].said_uno)
-			UNO_info+=allInfo.UNOregistry[i].name+' said UNO</br>'
+			UNO_info.push(allInfo.UNOregistry[i].name+' said UNO</br>')
 	};
 	
-	var template = ['<div class="playerList">'+user_info.join('')+'</div>',
-				   	playedCardInfo,
-				   	'<p class = "unoInfoOnMsgBox">'+UNO_info+'</p>'
-				   ].join('<br>')+'</br>';
-	return template;
+	return '<p class = "unoInfoOnMsgBox">'+UNO_info.join(' ')+'</p>'
 };
 
 var isVisibleChangeTurnButton;
@@ -372,28 +360,28 @@ var createCard = function(card){
 	return '<div class = "'+ colour +' myCards"><div id="num">'+num+'</div></div>';
 };
 
-// window.addEventListener("keypress", checkKeyPressed, false);
+window.addEventListener("keypress", checkKeyPressed, false);
  
-// function checkKeyPressed(e) {
-// 	var data = JSON.parse(stateOfGame);
-//     switch(e.charCode){
-//      	case 115:
-//      		//sayUNO
-//      		sayUnoRequest(data);
-//      		break;
-//      	case 99:
-//      		//catch UNO
-//      		catchUnoRequest();
-//      		break;
-//      	case 100:
-//      		//draw
-//      		make_request_to_draw_a_card();
-//      		break;
-//      	case 112:
-//      		//pass_turn
-//      		make_request_to_pass_turn();
-//      		break;
-//     };
-// };
+function checkKeyPressed(e) {
+	var data = JSON.parse(stateOfGame);
+    switch(e.charCode){
+     	case 115:
+     		//sayUNO
+     		sayUnoRequest(data);
+     		break;
+     	case 99:
+     		//catch UNO
+     		catchUnoRequest();
+     		break;
+     	case 100:
+     		//draw
+     		make_request_to_draw_a_card();
+     		break;
+     	case 112:
+     		//pass_turn
+     		make_request_to_pass_turn();
+     		break;
+    };
+};
 
 var interval = setInterval(sendConnectionRequest, 500);
